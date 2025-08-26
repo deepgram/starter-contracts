@@ -1,0 +1,52 @@
+openapi: 3.0.3
+info: { title: STT, version: 1.0.0 }
+paths:
+  /stt:transcribe:
+    post:
+      summary: Transcribe audio
+      parameters:
+        - in: query
+          name: model
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          audio/wav: { schema: { type: string, format: binary } }
+          audio/mpeg: { schema: { type: string, format: binary } }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transcript'
+        '4XX':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+components:
+  schemas:
+    Transcript:
+      type: object
+      required: [transcript]
+      properties:
+        transcript: { type: string }
+        words:
+          type: array
+          items:
+            type: object
+            properties:
+              text: { type: string }
+              start: { type: number }
+              end: { type: number }
+              speaker: { type: string }
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          required: [type, code, message]
+          properties:
+            type: { type: string }
+            code: { type: string }
+            message: { type: string }
+            details: { type: object }

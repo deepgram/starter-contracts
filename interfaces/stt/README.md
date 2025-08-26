@@ -1,14 +1,22 @@
 # Speech-to-Text REST Contract
 
-one sentence: what it does and for whom.
+Send audio, get a transcript JSON.
 
 ## Transport
 
-HTTP or Websocket
+HTTP
 
 ## Endpoint
 
-URL path(s), method(s), query params.
+```txt
+POST /stt:transcribe
+Content-Type: application/octet-stream
+Accept: application/json
+```
+
+### Query Parameters
+
+`model`, `language`, `punctuate` (bool), `diarize` (bool)
 
 ## Auth
 
@@ -24,15 +32,22 @@ JSON Schema for JSON inputs; for binary, state the allowed MIME types.
 
 ## Output
 
-JSON Schema or binary type, plus any metadata headers.
+### 200 OK:
+
+```json
+{
+  "transcript": "string",
+  "words": [
+    { "text": "hello", "start": 0.12, "end": 0.45, "speaker": "A" }
+  ],
+  "duration": 3.21,
+  "metadata": { "any": "object" }
+}
+```
 
 ## Errors
 
-list the possible error.code values for this interface.
- 
-## State and Sequencing
-
-only for WebSocket: message types, allowed order, and state transitions.
+`UNSUPPORTED_MEDIA_TYPE`, `AUDIO_TOO_LONG`, `BAD_AUDIO`, `MODEL_NOT_FOUND`
 
 ## Examples
 
@@ -40,7 +55,9 @@ only for WebSocket: message types, allowed order, and state transitions.
 
 ## Conformance Tests
 
-bullet list of assertions; link to fixtures.
+- Reject non-audio `Content-Type` with `415` and `UNSUPPORTED_MEDIA_TYPE`.
+- Echo `X-Request-Id`.
+- Produce `transcript` non-empty for valid audio.
  
 ## Breaking Change Rules
  
