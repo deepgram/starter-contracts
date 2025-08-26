@@ -1,0 +1,23 @@
+{
+  "title": "RequestBody",
+  "description": "The request body may be either a JSON object with a URL, or binary audio data.",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Publicly accessible URL pointing to the audio file."
+        }
+      },
+      "required": ["url"]
+    },
+    {
+      "type": "string",
+      "contentEncoding": "base64",
+      "description": "Binary audio data, sent as a base64-encoded string."
+    }
+  ]
+}

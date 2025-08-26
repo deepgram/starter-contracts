@@ -1,0 +1,365 @@
+{
+  "title": "ResponsePayload",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["metadata", "results"],
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "request_id",
+        "sha256",
+        "created",
+        "duration",
+        "channels",
+        "models",
+        "model_info"
+      ],
+      "properties": {
+        "request_id": { "type": "string" },
+        "sha256": { "type": "string" },
+        "created": { "type": "string", "format": "date-time" },
+        "duration": { "type": "number" },
+        "channels": { "type": "number" },
+        "models": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "model_info": {
+          "type": "object",
+          "description": "Arbitrary model metadata.",
+          "additionalProperties": true
+        },
+        "summary_info": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "properties": {
+            "model_uuid": { "type": ["string", "null"] },
+            "input_tokens": { "type": ["number", "null"] },
+            "output_tokens": { "type": ["number", "null"] }
+          }
+        },
+        "sentiment_info": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "properties": {
+            "model_uuid": { "type": ["string", "null"] },
+            "input_tokens": { "type": ["number", "null"] },
+            "output_tokens": { "type": ["number", "null"] }
+          }
+        },
+        "topics_info": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "properties": {
+            "model_uuid": { "type": ["string", "null"] },
+            "input_tokens": { "type": ["number", "null"] },
+            "output_tokens": { "type": ["number", "null"] }
+          }
+        },
+        "intents_info": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "properties": {
+            "model_uuid": { "type": ["string", "null"] },
+            "input_tokens": { "type": ["number", "null"] },
+            "output_tokens": { "type": ["number", "null"] }
+          }
+        },
+        "tags": {
+          "type": ["array", "null"],
+          "items": { "type": "string" }
+        },
+        "transaction_key": {
+          "type": ["string", "null"],
+          "default": "deprecated",
+          "description": "Deprecated; retained for backward compatibility."
+        }
+      }
+    },
+    "results": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "channels": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "search": {
+                "type": ["array", "null"],
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "query": { "type": ["string", "null"] },
+                    "hits": {
+                      "type": ["array", "null"],
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "confidence": { "type": ["number", "null"] },
+                          "start": { "type": ["number", "null"] },
+                          "end": { "type": ["number", "null"] },
+                          "snippet": { "type": ["string", "null"] }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "alternatives": {
+                "type": ["array", "null"],
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "transcript": { "type": ["string", "null"] },
+                    "confidence": { "type": ["number", "null"] },
+                    "words": {
+                      "type": ["array", "null"],
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "word": { "type": ["string", "null"] },
+                          "confidence": { "type": ["number", "null"] },
+                          "start": { "type": ["number", "null"] },
+                          "end": { "type": ["number", "null"] }
+                        }
+                      }
+                    },
+                    "paragraphs": {
+                      "type": ["object", "null"],
+                      "additionalProperties": false,
+                      "properties": {
+                        "transcript": { "type": ["string", "null"] },
+                        "paragraphs": {
+                          "type": ["array", "null"],
+                          "items": {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "properties": {
+                              "sentences": {
+                                "type": ["array", "null"],
+                                "items": {
+                                  "type": "object",
+                                  "additionalProperties": false,
+                                  "properties": {
+                                    "text": { "type": ["string", "null"] },
+                                    "start": { "type": ["number", "null"] },
+                                    "end": { "type": ["number", "null"] }
+                                  }
+                                }
+                              },
+                              "speaker": { "type": ["integer", "null"] },
+                              "num_words": { "type": ["integer", "null"] },
+                              "start": { "type": ["number", "null"] },
+                              "end": { "type": ["number", "null"] }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "summaries": {
+                      "type": ["array", "null"],
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "summary": { "type": ["string", "null"] },
+                          "start_word": { "type": ["integer", "null"] },
+                          "end_word": { "type": ["integer", "null"] }
+                        }
+                      }
+                    },
+                    "topics": {
+                      "type": ["array", "null"],
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "text": { "type": ["string", "null"] },
+                          "start_word": { "type": ["integer", "null"] },
+                          "end_word": { "type": ["integer", "null"] },
+                          "topics": {
+                            "type": ["array", "null"],
+                            "items": { "type": "string" }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "detected_language": { "type": ["string", "null"] }
+            }
+          }
+        },
+        "utterances": {
+          "type": ["array", "null"],
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "start": { "type": ["number", "null"] },
+              "end": { "type": ["number", "null"] },
+              "confidence": { "type": ["number", "null"] },
+              "channel": { "type": ["integer", "null"] },
+              "transcript": { "type": ["string", "null"] },
+              "words": {
+                "type": ["array", "null"],
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "word": { "type": ["string", "null"] },
+                    "start": { "type": ["number", "null"] },
+                    "end": { "type": ["number", "null"] },
+                    "confidence": { "type": ["number", "null"] },
+                    "speaker": { "type": ["integer", "null"] },
+                    "speaker_confidence": { "type": ["integer", "null"] },
+                    "punctuated_word": { "type": ["string", "null"] }
+                  }
+                }
+              },
+              "speaker": { "type": ["integer", "null"] },
+              "id": {
+                "anyOf": [
+                  { "type": "string", "format": "uuid" },
+                  { "type": "null" }
+                ]
+              }
+            }
+          }
+        },
+        "summary": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "properties": {
+            "result": { "type": ["string", "null"] },
+            "short": { "type": ["string", "null"] }
+          }
+        },
+        "topics": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "properties": {
+            "results": {
+              "type": ["object", "null"],
+              "additionalProperties": false,
+              "properties": {
+                "topics": {
+                  "type": ["object", "null"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "segments": {
+                      "type": ["array", "null"],
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "text": { "type": ["string", "null"] },
+                          "start_word": { "type": ["string", "null"] },
+                          "end_word": { "type": ["string", "null"] },
+                          "topics": {
+                            "type": ["array", "null"],
+                            "items": {
+                              "type": "object",
+                              "additionalProperties": false,
+                              "properties": {
+                                "topic": { "type": ["string", "null"] },
+                                "confidence_score": {
+                                  "type": ["number", "null"]
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "intents": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "properties": {
+            "results": {
+              "type": ["object", "null"],
+              "additionalProperties": false,
+              "properties": {
+                "intents": {
+                  "type": ["object", "null"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "segments": {
+                      "type": ["array", "null"],
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "text": { "type": ["string", "null"] },
+                          "start_word": { "type": ["string", "null"] },
+                          "end_word": { "type": ["string", "null"] },
+                          "intents": {
+                            "type": ["array", "null"],
+                            "items": {
+                              "type": "object",
+                              "additionalProperties": false,
+                              "properties": {
+                                "intent": { "type": ["string", "null"] },
+                                "confidence_score": {
+                                  "type": ["number", "null"]
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "sentiments": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "properties": {
+            "segments": {
+              "type": ["array", "null"],
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "text": { "type": ["string", "null"] },
+                  "start_word": { "type": ["string", "null"] },
+                  "end_word": { "type": ["string", "null"] },
+                  "topics": { "type": ["array", "null"], "items": { "type": "object" } },
+                  "sentiment": { "type": ["string", "null"] },
+                  "sentiment_score": { "type": ["number", "null"] }
+                }
+              }
+            },
+            "average": {
+              "type": ["object", "null"],
+              "additionalProperties": false,
+              "properties": {
+                "sentiment": { "type": ["string", "null"] },
+                "sentiment_score": { "type": ["number", "null"] }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

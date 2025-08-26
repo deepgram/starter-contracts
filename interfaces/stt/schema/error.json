@@ -1,0 +1,20 @@
+{
+  "title": "ErrorResponse",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["err_code", "err_msg", "request_id"],
+  "properties": {
+    "err_code": {
+      "type": ["string", "null"],
+      "description": "Machine-readable error code."
+    },
+    "err_msg": {
+      "type": ["string", "null"],
+      "description": "Human-readable error message."
+    },
+    "request_id": {
+      "type": ["string", "null"],
+      "description": "Unique request identifier for tracing."
+    }
+  }
+}

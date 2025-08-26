@@ -9,18 +9,14 @@ HTTP
 ## Endpoint
 
 ```txt
-POST /stt:transcribe
+POST /v1/listen
 Content-Type: application/octet-stream
 Accept: application/json
 ```
 
-### Query Parameters
-
-`model`, `language`, `punctuate` (bool), `diarize` (bool)
-
 ## Auth
 
-Authorization: Bearer <token>
+`Authorization: Bearer <token>`
 
 ## Content Types
 
@@ -28,26 +24,30 @@ request and response (and any alternates).
 
 ## Input 
 
-JSON Schema for JSON inputs; for binary, state the allowed MIME types.
+### Body
+
+`$/schema/request.json`
+
+### Query Parameters
+
+`$/schema/query.json`
 
 ## Output
 
 ### 200 OK:
 
-```json
-{
-  "transcript": "string",
-  "words": [
-    { "text": "hello", "start": 0.12, "end": 0.45, "speaker": "A" }
-  ],
-  "duration": 3.21,
-  "metadata": { "any": "object" }
-}
-```
+`$/schema/transcript.json`
 
 ## Errors
 
-`UNSUPPORTED_MEDIA_TYPE`, `AUDIO_TOO_LONG`, `BAD_AUDIO`, `MODEL_NOT_FOUND`
+`$/schema/error.json`
+
+`err_code` is one of:
+
+- `UNSUPPORTED_MEDIA_TYPE`
+- `AUDIO_TOO_LONG`
+- `BAD_AUDIO`
+- `MODEL_NOT_FOUND`
 
 ## Examples
 
