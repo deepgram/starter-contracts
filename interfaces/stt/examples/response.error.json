@@ -1,5 +1,16 @@
 {
-  "err_code": "INVALID_AUTH",
-  "err_msg": "Invalid credentials.",
-  "request_id": "2479c8c8-8185-40ac-9ac6-f0874419f793"
+  "error": {
+    "type": "validation_error",
+    "code": "UNSUPPORTED_MEDIA_TYPE",
+    "message": "Content-Type 'application/json' is not supported. Supported types are: audio/wav, audio/mpeg, audio/webm",
+    "details": {
+      "received_content_type": "application/json",
+      "supported_content_types": [
+        "audio/wav",
+        "audio/mpeg",
+        "audio/webm"
+      ],
+      "request_id": "req_123abc"
+    }
+  }
 }

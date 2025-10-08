@@ -1,100 +1,250 @@
 {
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "QueryParameters",
+  "description": "Complete set of query parameters for STT transcription - starter apps can implement any subset they need",
   "type": "object",
   "additionalProperties": false,
   "properties": {
-    "callback": { "type": "string" },
-    "callback_method": { "type": "string", "enum": ["POST", "PUT"] },
+    "callback": {
+      "type": "string"
+    },
+    "callback_method": {
+      "type": "string",
+      "enum": [
+        "POST",
+        "PUT"
+      ]
+    },
     "custom_topic": {
       "oneOf": [
-        { "type": "string" },
-        { "type": "array", "items": { "type": "string" } }
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
       ]
     },
-    "custom_topic_mode": { "type": "string", "enum": ["extended", "strict"] },
+    "custom_topic_mode": {
+      "type": "string",
+      "enum": [
+        "extended",
+        "strict"
+      ]
+    },
     "custom_intent": {
       "oneOf": [
-        { "type": "string" },
-        { "type": "array", "items": { "type": "string" } }
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
       ]
     },
-    "custom_intent_mode": { "type": "string", "enum": ["extended", "strict"] },
-    "detect_entites": { "type": "boolean" },
+    "custom_intent_mode": {
+      "type": "string",
+      "enum": [
+        "extended",
+        "strict"
+      ]
+    },
+    "detect_entites": {
+      "type": "boolean"
+    },
     "detect_language": {
       "oneOf": [
-        { "type": "boolean" },
-        { "type": "array", "items": { "type": "string" } }
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
       ]
     },
-    "diarize": { "type": "boolean" },
-    "dictation": { "type": "boolean" },
+    "diarize": {
+      "type": "boolean"
+    },
+    "dictation": {
+      "type": "boolean"
+    },
     "encoding": {
       "type": "string",
-      "enum": ["linear16", "flac", "mulaw", "amr-nb", "amr-wb", "opus", "speex", "g729"]
+      "enum": [
+        "linear16",
+        "flac",
+        "mulaw",
+        "amr-nb",
+        "amr-wb",
+        "opus",
+        "speex",
+        "g729"
+      ]
     },
     "extra": {
       "oneOf": [
-        { "type": "string" },
-        { "type": "array", "items": { "type": "string" } }
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
       ]
     },
-    "filler_words": { "type": "boolean" },
-    "intents": { "type": "boolean" },
-    "keyterm": { "type": "array", "items": { "type": "string" } },
+    "filler_words": {
+      "type": "boolean"
+    },
+    "intents": {
+      "type": "boolean"
+    },
+    "keyterm": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
     "keywords": {
       "oneOf": [
-        { "type": "string" },
-        { "type": "array", "items": { "type": "string" } }
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
       ]
     },
-    "language": { "type": "string", "description": "BCP-47 language tag" },
-    "measurements": { "type": "boolean" },
-    "mip_opt_out": { "type": "boolean" },
-    "model": { "type": "string" },
-    "multichannel": { "type": "boolean" },
-    "numerals": { "type": "boolean" },
-    "paragraphs": { "type": "boolean" },
-    "profanity_filter": { "type": "boolean" },
-    "punctuate": { "type": "boolean" },
+    "language": {
+      "type": "string",
+      "description": "BCP-47 language tag"
+    },
+    "measurements": {
+      "type": "boolean"
+    },
+    "mip_opt_out": {
+      "type": "boolean"
+    },
+    "model": {
+      "type": "string"
+    },
+    "multichannel": {
+      "type": "boolean"
+    },
+    "numerals": {
+      "type": "boolean"
+    },
+    "paragraphs": {
+      "type": "boolean"
+    },
+    "profanity_filter": {
+      "type": "boolean"
+    },
+    "punctuate": {
+      "type": "boolean"
+    },
     "redact": {
       "oneOf": [
-        { "type": "string" },
-        { "type": "array", "items": { "type": "string" } }
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
       ]
     },
     "replace": {
       "oneOf": [
-        { "type": "string" },
-        { "type": "array", "items": { "type": "string" } }
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
       ]
     },
     "search": {
       "oneOf": [
-        { "type": "string" },
-        { "type": "array", "items": { "type": "string" } }
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
       ]
     },
-    "sentiment": { "type": "boolean" },
-    "smart_format": { "type": "boolean" },
+    "sentiment": {
+      "type": "boolean"
+    },
+    "smart_format": {
+      "type": "boolean"
+    },
     "summarize": {
       "oneOf": [
-        { "type": "boolean" },
-        { "type": "string", "enum": ["v1", "v2"] }
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "v1",
+            "v2"
+          ]
+        }
       ]
     },
     "tag": {
       "oneOf": [
-        { "type": "string" },
-        { "type": "array", "items": { "type": "string" } }
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
       ]
     },
-    "topics": { "type": "boolean" },
-    "utterances": { "type": "boolean" },
-    "utt_split": { "type": "number" },
+    "topics": {
+      "type": "boolean"
+    },
+    "utterances": {
+      "type": "boolean"
+    },
+    "utt_split": {
+      "type": "number"
+    },
     "version": {
       "oneOf": [
-        { "type": "string" },
-        { "const": "latest" }
+        {
+          "type": "string"
+        },
+        {
+          "const": "latest"
+        }
       ]
     }
   }

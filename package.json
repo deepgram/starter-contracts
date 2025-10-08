@@ -6,7 +6,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "test:stt": "vitest run interfaces/stt/conformance/*.spec.js"
+    "test:stt": "vitest run interfaces/stt/conformance/transcribe.spec.js"
   },
   "keywords": [],
   "author": "",

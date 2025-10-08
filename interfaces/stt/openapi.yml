@@ -1,16 +1,19 @@
 openapi: 3.1.0
 info:
-  title: Speech to Text API
+  title: STT
   version: 1.0.0
   description: >
-    Submit audio (by URL or raw binary) with rich query parameters to receive
-    transcription and analysis results.
+    Speech-to-Text interface for Deepgram starter applications.
+    Send audio, get a transcript JSON with standardized format.
 
 paths:
-  /v1/listen:
+  /stt/transcribe:
+    # NOTE: Changed from /stt:transcribe to /stt/transcribe for framework compatibility
+    # The colon syntax, while aesthetically pleasing, causes issues with Express.js routing
+    # and other web frameworks. Standard REST conventions work universally.
     post:
-      summary: Create a transcription
-      description: Accepts either a JSON body or raw binary audio; returns transcription results.
+      summary: Transcribe audio
+      description: Accepts binary audio and returns transcription with word-level timing and speaker information.
       parameters:
         - name: callback
           in: query
@@ -199,318 +202,106 @@ paths:
             oneOf:
               - { type: string }
               - { const: latest }
+        - name: X-Request-Id
+          in: header
+          required: false
+          schema:
+            type: string
+            description: Request identifier for tracing
       requestBody:
         required: true
         content:
-          application/json:
+          audio/wav:
             schema:
-              oneOf:
-                - type: object
-                  additionalProperties: false
-                  required: [url]
-                  properties:
-                    url:
-                      type: string
-                      format: uri
-                      description: Publicly accessible URL pointing to the audio file.
-                - type: string
-                  contentEncoding: base64
-                  description: Binary audio data encoded as base64 inside a JSON string.
-          application/octet-stream:
+              type: string
+              format: binary
+          audio/mpeg:
+            schema:
+              type: string
+              format: binary
+          audio/webm:
             schema:
               type: string
               format: binary
       responses:
         "200":
           description: Successful transcription response
+          headers:
+            X-Request-Id:
+              description: Request identifier (echoed from request header)
+              schema:
+                type: string
           content:
             application/json:
               schema:
-                type: object
-                additionalProperties: false
-                required: [metadata, results]
-                properties:
-                  metadata:
-                    type: object
-                    additionalProperties: false
-                    required:
-                      - request_id
-                      - sha256
-                      - created
-                      - duration
-                      - channels
-                      - models
-                      - model_info
-                    properties:
-                      request_id: { type: string }
-                      sha256: { type: string }
-                      created: { type: string, format: date-time }
-                      duration: { type: number, format: double }
-                      channels: { type: number, format: double }
-                      models:
-                        type: array
-                        items: { type: string }
-                      model_info:
-                        type: object
-                        description: Arbitrary model metadata.
-                        additionalProperties: true
-                      summary_info:
-                        type: [object, "null"]
-                        additionalProperties: false
-                        properties:
-                          model_uuid: { type: [string, "null"] }
-                          input_tokens: { type: [number, "null"], format: double }
-                          output_tokens: { type: [number, "null"], format: double }
-                      sentiment_info:
-                        type: [object, "null"]
-                        additionalProperties: false
-                        properties:
-                          model_uuid: { type: [string, "null"] }
-                          input_tokens: { type: [number, "null"], format: double }
-                          output_tokens: { type: [number, "null"], format: double }
-                      topics_info:
-                        type: [object, "null"]
-                        additionalProperties: false
-                        properties:
-                          model_uuid: { type: [string, "null"] }
-                          input_tokens: { type: [number, "null"], format: double }
-                          output_tokens: { type: [number, "null"], format: double }
-                      intents_info:
-                        type: [object, "null"]
-                        additionalProperties: false
-                        properties:
-                          model_uuid: { type: [string, "null"] }
-                          input_tokens: { type: [number, "null"], format: double }
-                          output_tokens: { type: [number, "null"], format: double }
-                      tags:
-                        type: ["array", "null"]
-                        items: { type: string }
-                      transaction_key:
-                        type: [string, "null"]
-                        default: deprecated
-                        description: Deprecated; retained for backward compatibility.
-                  results:
-                    type: object
-                    additionalProperties: false
-                    properties:
-                      channels:
-                        type: array
-                        items:
-                          type: object
-                          additionalProperties: false
-                          properties:
-                            search:
-                              type: ["array", "null"]
-                              items:
-                                type: object
-                                additionalProperties: false
-                                properties:
-                                  query: { type: [string, "null"] }
-                                  hits:
-                                    type: ["array", "null"]
-                                    items:
-                                      type: object
-                                      additionalProperties: false
-                                      properties:
-                                        confidence: { type: [number, "null"], format: double }
-                                        start: { type: [number, "null"], format: double }
-                                        end: { type: [number, "null"], format: double }
-                                        snippet: { type: [string, "null"] }
-                            alternatives:
-                              type: ["array", "null"]
-                              items:
-                                type: object
-                                additionalProperties: false
-                                properties:
-                                  transcript: { type: [string, "null"] }
-                                  confidence: { type: [number, "null"], format: double }
-                                  words:
-                                    type: ["array", "null"]
-                                    items:
-                                      type: object
-                                      additionalProperties: false
-                                      properties:
-                                        word: { type: [string, "null"] }
-                                        confidence: { type: [number, "null"], format: double }
-                                        start: { type: [number, "null"], format: double }
-                                        end: { type: [number, "null"], format: double }
-                                  paragraphs:
-                                    type: [object, "null"]
-                                    additionalProperties: false
-                                    properties:
-                                      transcript: { type: [string, "null"] }
-                                      paragraphs:
-                                        type: ["array", "null"]
-                                        items:
-                                          type: object
-                                          additionalProperties: false
-                                          properties:
-                                            sentences:
-                                              type: ["array", "null"]
-                                              items:
-                                                type: object
-                                                additionalProperties: false
-                                                properties:
-                                                  text: { type: [string, "null"] }
-                                                  start: { type: [number, "null"], format: double }
-                                                  end: { type: [number, "null"], format: double }
-                                            speaker: { type: [integer, "null"] }
-                                            num_words: { type: [integer, "null"] }
-                                            start: { type: [number, "null"], format: double }
-                                            end: { type: [number, "null"], format: double }
-                                  summaries:
-                                    type: ["array", "null"]
-                                    items:
-                                      type: object
-                                      additionalProperties: false
-                                      properties:
-                                        summary: { type: [string, "null"] }
-                                        start_word: { type: [integer, "null"] }
-                                        end_word: { type: [integer, "null"] }
-                                  topics:
-                                    type: ["array", "null"]
-                                    items:
-                                      type: object
-                                      additionalProperties: false
-                                      properties:
-                                        text: { type: [string, "null"] }
-                                        start_word: { type: [integer, "null"] }
-                                        end_word: { type: [integer, "null"] }
-                                        topics:
-                                          type: ["array", "null"]
-                                          items: { type: string }
-                            detected_language: { type: [string, "null"] }
-                      utterances:
-                        type: ["array", "null"]
-                        items:
-                          type: object
-                          additionalProperties: false
-                          properties:
-                            start: { type: [number, "null"], format: double }
-                            end: { type: [number, "null"], format: double }
-                            confidence: { type: [number, "null"], format: double }
-                            channel: { type: [integer, "null"] }
-                            transcript: { type: [string, "null"] }
-                            words:
-                              type: ["array", "null"]
-                              items:
-                                type: object
-                                additionalProperties: false
-                                properties:
-                                  word: { type: [string, "null"] }
-                                  start: { type: [number, "null"], format: double }
-                                  end: { type: [number, "null"], format: double }
-                                  confidence: { type: [number, "null"], format: double }
-                                  speaker: { type: [integer, "null"] }
-                                  speaker_confidence: { type: [integer, "null"] }
-                                  punctuated_word: { type: [string, "null"] }
-                            speaker: { type: [integer, "null"] }
-                            id:
-                              anyOf:
-                                - { type: string, format: uuid }
-                                - { type: "null" }
-                      summary:
-                        type: [object, "null"]
-                        additionalProperties: false
-                        properties:
-                          result: { type: [string, "null"] }
-                          short: { type: [string, "null"] }
-                      topics:
-                        type: [object, "null"]
-                        additionalProperties: false
-                        properties:
-                          results:
-                            type: [object, "null"]
-                            additionalProperties: false
-                            properties:
-                              topics:
-                                type: [object, "null"]
-                                additionalProperties: false
-                                properties:
-                                  segments:
-                                    type: ["array", "null"]
-                                    items:
-                                      type: object
-                                      additionalProperties: false
-                                      properties:
-                                        text: { type: [string, "null"] }
-                                        start_word: { type: [string, "null"] }
-                                        end_word: { type: [string, "null"] }
-                                        topics:
-                                          type: ["array", "null"]
-                                          items:
-                                            type: object
-                                            additionalProperties: false
-                                            properties:
-                                              topic: { type: [string, "null"] }
-                                              confidence_score: { type: [number, "null"], format: double }
-                      intents:
-                        type: [object, "null"]
-                        additionalProperties: false
-                        properties:
-                          results:
-                            type: [object, "null"]
-                            additionalProperties: false
-                            properties:
-                              intents:
-                                type: [object, "null"]
-                                additionalProperties: false
-                                properties:
-                                  segments:
-                                    type: ["array", "null"]
-                                    items:
-                                      type: object
-                                      additionalProperties: false
-                                      properties:
-                                        text: { type: [string, "null"] }
-                                        start_word: { type: [string, "null"] }
-                                        end_word: { type: [string, "null"] }
-                                        intents:
-                                          type: ["array", "null"]
-                                          items:
-                                            type: object
-                                            additionalProperties: false
-                                            properties:
-                                              intent: { type: [string, "null"] }
-                                              confidence_score: { type: [number, "null"], format: double }
-                      sentiments:
-                        type: [object, "null"]
-                        additionalProperties: false
-                        properties:
-                          segments:
-                            type: ["array", "null"]
-                            items:
-                              type: object
-                              additionalProperties: false
-                              properties:
-                                text: { type: [string, "null"] }
-                                start_word: { type: [string, "null"] }
-                                end_word: { type: [string, "null"] }
-                                topics: { type: ["array", "null"], items: { type: object } }
-                                sentiment: { type: [string, "null"] }
-                                sentiment_score: { type: [number, "null"], format: double }
-                          average:
-                            type: [object, "null"]
-                            additionalProperties: false
-                            properties:
-                              sentiment: { type: [string, "null"] }
-                              sentiment_score: { type: [number, "null"], format: double }
+                $ref: "#/components/schemas/Transcript"
         "4XX":
-          description: Error
+          description: Error response
+          headers:
+            X-Request-Id:
+              description: Request identifier (echoed from request header)
+              schema:
+                type: string
           content:
             application/json:
               schema:
-                type: object
-                additionalProperties: false
-                required: [err_code, err_msg, request_id]
-                properties:
-                  err_code:
-                    type: [string, "null"]
-                    description: Machine-readable error code.
-                  err_msg:
-                    type: [string, "null"]
-                    description: Human-readable error message.
-                  request_id:
-                    type: [string, "null"]
-                    description: Unique request identifier for tracing.
- 
+                $ref: "#/components/schemas/Error"
+
+components:
+  schemas:
+    Transcript:
+      type: object
+      required: [transcript]
+      properties:
+        transcript:
+          type: string
+          description: Full transcribed text
+        words:
+          type: array
+          description: Word-level timing and speaker information
+          items:
+            type: object
+            required: [text, start, end]
+            properties:
+            text:
+              type: string
+              description: The transcribed word
+            start:
+              type: number
+              description: Start time in seconds
+            end:
+              type: number
+              description: End time in seconds
+            speaker:
+              type: string
+              description: Speaker identifier (when diarization is enabled)
+        duration:
+          type: number
+          description: Total audio duration in seconds
+        metadata:
+          type: object
+          description: Additional transcription metadata
+          additionalProperties: true
+
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [type, code, message]
+          properties:
+            type:
+              type: string
+              description: Error category
+            code:
+              type: string
+              description: Machine-readable error code
+              enum: [UNSUPPORTED_MEDIA_TYPE, AUDIO_TOO_LONG, BAD_AUDIO, MODEL_NOT_FOUND]
+            message:
+              type: string
+              description: Human-readable error message
+            details:
+              type: object
+              description: Additional error context
+              additionalProperties: true
