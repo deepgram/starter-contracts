@@ -1,0 +1,182 @@
+openapi: 3.1.0
+info:
+  title: TTS
+  version: 1.0.0
+  description: >
+    Text-to-Speech interface for Deepgram starter applications.
+    Send text, get audio with standardized format.
+
+paths:
+  /tts/synthesize:
+    # NOTE: Using /tts/synthesize instead of /tts:synthesize for framework compatibility
+    # Standard REST conventions work universally across all web frameworks
+    post:
+      summary: Synthesize speech from text
+      description: Accepts JSON text input and returns binary audio with voice synthesis.
+      parameters:
+        - name: model
+          in: query
+          required: false
+          schema:
+            type: string
+            default: aura-asteria-en
+            description: AI model used to process submitted text (63+ models available)
+        - name: callback
+          in: query
+          required: false
+          schema:
+            type: string
+            description: URL to which callback request will be made
+        - name: callback_method
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [POST, PUT]
+            default: POST
+            description: HTTP method for callback request
+        - name: mip_opt_out
+          in: query
+          required: false
+          schema:
+            type: boolean
+            default: false
+            description: Opt out of Deepgram Model Improvement Program
+        - name: bit_rate
+          in: query
+          required: false
+          schema:
+            oneOf:
+              - type: integer
+              - type: string
+            default: 48000
+            description: Audio bitrate in bits per second (default 48000 bps for mp3)
+        - name: container
+          in: query
+          required: false
+          schema:
+            type: string
+            default: wav
+            description: File format wrapper for output audio (default wav)
+        - name: encoding
+          in: query
+          required: false
+          schema:
+            type: string
+            default: mp3
+            description: Expected encoding of audio output (default mp3)
+        - name: sample_rate
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 24000
+            description: Sample rate for output audio in Hz (default 24000)
+        - name: X-Request-Id
+          in: header
+          required: false
+          schema:
+            type: string
+            description: Request identifier for tracing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TextRequest"
+      responses:
+        "200":
+          description: Successful audio synthesis
+          headers:
+            Content-Type:
+              description: Audio MIME type
+              schema:
+                type: string
+                enum: [audio/mpeg, audio/wav, audio/ogg, audio/flac, audio/mulaw, audio/opus]
+            Content-Length:
+              description: Audio file size in bytes
+              schema:
+                type: integer
+            X-Request-Id:
+              description: Request identifier (echoed from request header)
+              schema:
+                type: string
+            X-Audio-Duration:
+              description: Audio duration in seconds
+              schema:
+                type: number
+          content:
+            audio/mpeg:
+              schema:
+                type: string
+                format: binary
+            audio/wav:
+              schema:
+                type: string
+                format: binary
+            audio/ogg:
+              schema:
+                type: string
+                format: binary
+            audio/flac:
+              schema:
+                type: string
+                format: binary
+            audio/mulaw:
+              schema:
+                type: string
+                format: binary
+            audio/opus:
+              schema:
+                type: string
+                format: binary
+        "4XX":
+          description: Error response
+          headers:
+            X-Request-Id:
+              description: Request identifier (echoed from request header)
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  schemas:
+    TextRequest:
+      type: object
+      required: [text]
+      additionalProperties: false
+      properties:
+        text:
+          type: string
+          description: Text to synthesize into speech
+          maxLength: 5000
+        ssml:
+          type: boolean
+          description: Whether the text contains SSML markup
+          default: false
+
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [type, code, message]
+          properties:
+            type:
+              type: string
+              description: Error category
+            code:
+              type: string
+              description: Machine-readable error code
+              enum: [INVALID_REQUEST_BODY, TEXT_TOO_LONG, UNSUPPORTED_MODEL, UNSUPPORTED_CONTAINER, UNSUPPORTED_ENCODING, TEXT_PROCESSING_FAILED]
+            message:
+              type: string
+              description: Human-readable error message
+            details:
+              type: object
+              description: Additional error context
+              additionalProperties: true

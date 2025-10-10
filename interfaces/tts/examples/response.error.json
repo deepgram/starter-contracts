@@ -1,0 +1,16 @@
+{
+  "error": {
+    "type": "validation_error",
+    "code": "UNSUPPORTED_MODEL",
+    "message": "The requested model 'invalid-model-name' is not available",
+    "details": {
+      "requested_model": "invalid-model-name",
+      "available_models": [
+        "aura-asteria-en",
+        "aura-luna-en",
+        "aura-stella-en"
+      ],
+      "fallback_model": "aura-asteria-en"
+    }
+  }
+}

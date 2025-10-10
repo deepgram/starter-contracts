@@ -1,0 +1,17 @@
+HTTP/1.1 200 OK
+Content-Type: audio/mpeg
+Content-Length: 23456
+X-Request-Id: example-request-123
+X-Audio-Duration: 2.85
+
+[Binary MP3 audio data would be here]
+
+Note: This file shows the HTTP response headers. The actual response body
+would be binary audio data (MP3, WAV, etc.) that can be played directly
+in browsers or audio players.
+
+Example audio characteristics for "Hello world, this is a test.":
+- Duration: ~2.85 seconds
+- Format: MP3, 44.1kHz sample rate
+- Bitrate: ~64 kbps
+- File size: ~23KB

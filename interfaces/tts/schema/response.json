@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AudioResponse",
+  "description": "Binary audio response from TTS synthesis - this schema describes the response headers and structure, the actual response body is binary audio data",
+  "type": "object",
+  "properties": {
+    "headers": {
+      "type": "object",
+      "required": [
+        "Content-Type"
+      ],
+      "properties": {
+        "Content-Type": {
+          "type": "string",
+          "enum": [
+            "audio/mpeg",
+            "audio/wav",
+            "audio/ogg",
+            "audio/flac"
+          ],
+          "description": "MIME type of the audio response"
+        },
+        "Content-Length": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Size of audio data in bytes"
+        },
+        "X-Request-Id": {
+          "type": "string",
+          "description": "Request identifier echoed from request header"
+        },
+        "X-Audio-Duration": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Audio duration in seconds"
+        }
+      }
+    },
+    "body": {
+      "type": "string",
+      "format": "binary",
+      "description": "Binary audio data"
+    }
+  }
+}

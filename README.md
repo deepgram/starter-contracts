@@ -46,11 +46,6 @@ cd starter-apps/starter-contracts
  pnpm i
  ```
 
-3. Verify installation by running conformance tests:
-
-```bash
-pnpm run test:stt
-```
 ## 📁 Repository Structure
 
 ```
@@ -70,7 +65,32 @@ Each interface directory contains:
 - `conformance/` - Conformance tests and documentation
 - `README.md` - Interface-specific documentation
 
-## 🔧 Development
+## 🧪 Testing Starter Apps
+
+### Overview
+
+This repository includes comprehensive conformance tests for validating that your starter applications correctly implement Deepgram API interfaces. Tests ensure your apps work consistently across the ecosystem.
+
+### Available Test Suites
+
+Refer to individual READMEs for the test suites.
+
+- [STT](./interfaces/stt/README.md)
+- STT Live (coming soon)
+- [TTS](./interfaces/tts/README.md)
+- TTS Live (coming soon)
+- Flux (coming soon)
+- Agent (coming soon)
+- Intelligence(Coming Soon)
+
+```bash
+# Test Speech-to-Text interface
+pnpm test:stt
+
+# Test Text-to-Speech interface
+pnpm test:tts
+
+```
 
 ### Adding New Interface Specifications
 
