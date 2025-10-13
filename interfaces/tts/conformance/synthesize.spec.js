@@ -214,23 +214,6 @@ describe("TTS Interface Conformance", () => {
     });
   });
 
-  describe("SSML Support", () => {
-    it("should accept SSML markup when ssml flag is true", async () => {
-      const ssmlText = '<speak><prosody rate="slow">Hello world</prosody></speak>';
-
-      const response = await fetch(`${BASE_URL}${ENDPOINT}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Request-Id": "test-ssml-support"
-        },
-        body: JSON.stringify({ text: ssmlText, ssml: true })
-      });
-
-      expect([200, 400]).toContain(response.status); // Some implementations might not support SSML
-    });
-  });
-
   describe("Error Handling", () => {
     it("should return structured error response", async () => {
       // Send malformed JSON to trigger error
@@ -278,6 +261,79 @@ describe("TTS Interface Conformance", () => {
       const result = await response.json();
       expect(result.error).toBeDefined();
       expect(result.error.code).toBeDefined();
+    });
+
+    it("should handle missing text field in JSON", async () => {
+      const response = await fetch(`${BASE_URL}${ENDPOINT}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Request-Id": "test-missing-text-field"
+        },
+        body: JSON.stringify({})
+      });
+
+      expect(response.status).toBeGreaterThanOrEqual(400);
+
+      const result = await response.json();
+      expect(result.error).toBeDefined();
+      expect(result.error.code).toBe("INVALID_REQUEST_BODY");
+    });
+
+    it("should handle invalid model parameter gracefully", async () => {
+      const response = await fetch(`${BASE_URL}${ENDPOINT}?model=invalid-model-name`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Request-Id": "test-invalid-model"
+        },
+        body: JSON.stringify({ text: "Hello world" })
+      });
+
+      // Backend may reject with error or ignore and use default
+      if (response.status >= 400) {
+        const result = await response.json();
+        expect(result.error).toBeDefined();
+        expect(result.error.code).toBe("UNSUPPORTED_MODEL");
+      } else {
+        expect(response.status).toBe(200);
+      }
+    });
+
+    it("should handle unknown query parameters", async () => {
+      const response = await fetch(`${BASE_URL}${ENDPOINT}?unknownParam=value&anotherBadParam=123`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Request-Id": "test-unknown-params"
+        },
+        body: JSON.stringify({ text: "Hello world" })
+      });
+
+      // Unknown params should be ignored (not cause errors)
+      // This allows for backward/forward compatibility
+      expect([200, 400]).toContain(response.status);
+    });
+
+    it("should reject JSON with additional unknown properties", async () => {
+      const response = await fetch(`${BASE_URL}${ENDPOINT}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Request-Id": "test-additional-properties"
+        },
+        body: JSON.stringify({
+          text: "Hello world",
+          unknownField: "should be rejected"
+        })
+      });
+
+      // Schema has additionalProperties: false, so should reject
+      expect(response.status).toBeGreaterThanOrEqual(400);
+
+      const result = await response.json();
+      expect(result.error).toBeDefined();
+      expect(result.error.code).toBe("INVALID_REQUEST_BODY");
     });
   });
 });

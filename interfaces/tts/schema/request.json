@@ -11,13 +11,8 @@
     "text": {
       "type": "string",
       "description": "Text to synthesize into speech",
-      "maxLength": 5000,
+      "maxLength": 2000,
       "minLength": 1
-    },
-    "ssml": {
-      "type": "boolean",
-      "description": "Whether the text contains SSML markup",
-      "default": false
     }
   }
 }

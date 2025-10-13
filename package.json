@@ -8,6 +8,7 @@
   "scripts": {
     "test:stt:schema": "vitest run interfaces/stt/tests/schema_validation.test.js",
     "test:stt": "vitest run interfaces/stt/conformance/transcribe.spec.js",
+    "test:tts:schema": "vitest run interfaces/tts/tests/schema_validation.test.js",
     "test:tts": "vitest run interfaces/tts/conformance/synthesize.spec.js"
   },
   "keywords": [],

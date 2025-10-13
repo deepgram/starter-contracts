@@ -16,7 +16,11 @@
             "audio/mpeg",
             "audio/wav",
             "audio/ogg",
-            "audio/flac"
+            "audio/flac",
+            "audio/mulaw",
+            "audio/alaw",
+            "audio/opus",
+            "audio/aac"
           ],
           "description": "MIME type of the audio response"
         },
