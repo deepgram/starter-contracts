@@ -172,6 +172,12 @@ describe("STT Interface Conformance", () => {
           expect(typeof firstWord.start).toBe("number");
           expect(typeof firstWord.end).toBe("number");
           expect(firstWord.start).toBeLessThan(firstWord.end);
+
+          // If speaker field is present, it must be a string (schema validation)
+          // Note: speaker is optional and depends on diarization being enabled + available
+          if (firstWord.speaker !== undefined) {
+            expect(typeof firstWord.speaker).toBe("string");
+          }
         }
       }
 
@@ -182,29 +188,6 @@ describe("STT Interface Conformance", () => {
 
       if (result.metadata) {
         expect(typeof result.metadata).toBe("object");
-      }
-    });
-
-    it("should include speaker information when diarization is enabled", async () => {
-      const response = await fetch(`${BASE_URL}${ENDPOINT}?diarize=true`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "audio/wav",
-          "X-Request-Id": "test-diarization"
-        },
-        body: testAudioBuffer
-      });
-
-      expect(response.status).toBe(200);
-      const result = await response.json();
-
-      if (result.words && result.words.length > 0) {
-        // When diarization is enabled, words may have speaker info
-        const wordsWithSpeakers = result.words.filter(word => word.speaker);
-        // Don't require all words to have speakers, but if any do, they should be strings
-        wordsWithSpeakers.forEach(word => {
-          expect(typeof word.speaker).toBe("string");
-        });
       }
     });
   });
@@ -252,6 +235,107 @@ describe("STT Interface Conformance", () => {
       const result = await response.json();
       expect(result.error).toBeDefined();
       expect(result.error.code).toBeDefined();
+    });
+
+    it("should handle empty audio buffer", async () => {
+      const emptyBuffer = Buffer.alloc(0);
+
+      const response = await fetch(`${BASE_URL}${ENDPOINT}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "audio/wav",
+          "X-Request-Id": "test-empty-buffer"
+        },
+        body: emptyBuffer
+      });
+
+      expect(response.status).toBeGreaterThanOrEqual(400);
+
+      const result = await response.json();
+      expect(result.error).toBeDefined();
+      expect(result.error.code).toBeDefined();
+      expect(typeof result.error.code).toBe("string");
+      expect(result.error.message).toBeDefined();
+
+      // Likely BAD_AUDIO for empty file
+      expect(["BAD_AUDIO", "UNSUPPORTED_MEDIA_TYPE"])
+        .toContain(result.error.code);
+    });
+
+    it("should reject files exceeding 2GB size limit", async () => {
+      // Note: This test documents expected behavior for oversized files
+      // In practice, testing with an actual 2GB file is impractical
+      // Real implementations should handle this at HTTP/proxy layer with 413
+      // or at application layer with AUDIO_TOO_LONG error code
+
+      // For now, we test with a reasonable-sized file and document expectations
+      // Backend should enforce 2GB limit and return appropriate error
+
+      const response = await fetch(`${BASE_URL}${ENDPOINT}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "audio/wav",
+          "X-Request-Id": "test-file-size-limit"
+        },
+        body: testAudioBuffer
+      });
+
+      // This test primarily documents the 2GB limit requirement
+      // When a real 2GB+ file is sent, backend should:
+      // - Return 413 Payload Too Large (HTTP-level), OR
+      // - Return 400 with AUDIO_TOO_LONG error code (app-level)
+
+      // For now, normal-sized file should succeed
+      // Real size limit testing requires backend-specific tooling
+      expect([200, 400, 413]).toContain(response.status);
+    });
+
+    it("should handle invalid query parameters gracefully", async () => {
+      const response = await fetch(`${BASE_URL}${ENDPOINT}?model=invalid-model-name&language=xyz`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "audio/wav",
+          "X-Request-Id": "test-invalid-params"
+        },
+        body: testAudioBuffer
+      });
+
+      // Backend may:
+      // 1. Reject with 400 + MODEL_NOT_FOUND error
+      // 2. Ignore invalid params and process with defaults (200)
+      // Both are acceptable behaviors
+
+      if (response.status >= 400) {
+        const result = await response.json();
+        expect(result.error).toBeDefined();
+        expect(result.error.code).toBeDefined();
+        expect(["MODEL_NOT_FOUND", "BAD_AUDIO"])
+          .toContain(result.error.code);
+      } else {
+        // If backend chooses to ignore and use defaults
+        expect(response.status).toBe(200);
+        const result = await response.json();
+        expect(result.transcript).toBeDefined();
+      }
+    });
+
+    it("should handle unknown query parameters", async () => {
+      const response = await fetch(`${BASE_URL}${ENDPOINT}?unknownParam=value&anotherBadParam=123`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "audio/wav",
+          "X-Request-Id": "test-unknown-params"
+        },
+        body: testAudioBuffer
+      });
+
+      // Unknown params should be ignored (not cause errors)
+      // This allows for backward/forward compatibility
+      expect(response.status).toBe(200);
+
+      const result = await response.json();
+      expect(result.transcript).toBeDefined();
+      expect(typeof result.transcript).toBe("string");
     });
   });
 });

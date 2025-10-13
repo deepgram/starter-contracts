@@ -6,6 +6,7 @@
   "type": "module",
   "private": true,
   "scripts": {
+    "test:stt:schema": "vitest run interfaces/stt/tests/schema_validation.test.js",
     "test:stt": "vitest run interfaces/stt/conformance/transcribe.spec.js",
     "test:tts": "vitest run interfaces/tts/conformance/synthesize.spec.js"
   },
@@ -14,6 +15,8 @@
   "license": "",
   "packageManager": "pnpm@10.15.0",
   "devDependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
     "vitest": "3.2.4"
   }
 }

@@ -127,6 +127,8 @@ Starter applications implementing this interface MUST:
 
 These conformance tests validate that your starter application correctly implements the STT interface contract. They ensure your app will work consistently with frontends and other starter apps in the Deepgram ecosystem.
 
+✅ "Does the backend implementation follow the contract?"
+
 ### Prerequisites
 
 1. **Your starter app must be running** and accessible via HTTP/HTTPS
