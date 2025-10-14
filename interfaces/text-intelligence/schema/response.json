@@ -1,0 +1,240 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Text Intelligence Response",
+  "description": "Schema for successful Text Intelligence API response",
+  "type": "object",
+  "required": [
+    "metadata",
+    "results"
+  ],
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "required": [
+        "request_id",
+        "created",
+        "language"
+      ],
+      "properties": {
+        "request_id": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Unique identifier for the request"
+        },
+        "created": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when the request was created"
+        },
+        "language": {
+          "type": "string",
+          "description": "Language of the analyzed text"
+        },
+        "summary_info": {
+          "type": "object",
+          "properties": {
+            "model_uuid": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "input_tokens": {
+              "type": "integer"
+            },
+            "output_tokens": {
+              "type": "integer"
+            }
+          }
+        },
+        "sentiment_info": {
+          "type": "object",
+          "properties": {
+            "model_uuid": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "input_tokens": {
+              "type": "integer"
+            },
+            "output_tokens": {
+              "type": "integer"
+            }
+          }
+        },
+        "topics_info": {
+          "type": "object",
+          "properties": {
+            "model_uuid": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "input_tokens": {
+              "type": "integer"
+            },
+            "output_tokens": {
+              "type": "integer"
+            }
+          }
+        },
+        "intents_info": {
+          "type": "object",
+          "properties": {
+            "model_uuid": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "input_tokens": {
+              "type": "integer"
+            },
+            "output_tokens": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "results": {
+      "type": "object",
+      "properties": {
+        "summary": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string",
+              "description": "The summary of the text submitted"
+            }
+          }
+        },
+        "sentiments": {
+          "type": "object",
+          "properties": {
+            "segments": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "text",
+                  "start_word",
+                  "end_word",
+                  "sentiment"
+                ],
+                "properties": {
+                  "text": {
+                    "type": "string",
+                    "description": "The text segment"
+                  },
+                  "start_word": {
+                    "type": "number",
+                    "description": "Starting word index"
+                  },
+                  "end_word": {
+                    "type": "number",
+                    "description": "Ending word index"
+                  },
+                  "sentiment": {
+                    "type": "string",
+                    "enum": [
+                      "positive",
+                      "negative",
+                      "neutral"
+                    ],
+                    "description": "Detected sentiment"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "topics": {
+          "type": "object",
+          "properties": {
+            "segments": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "text",
+                  "topics"
+                ],
+                "properties": {
+                  "text": {
+                    "type": "string",
+                    "description": "The text segment"
+                  },
+                  "topics": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "topic",
+                        "confidence_score"
+                      ],
+                      "properties": {
+                        "topic": {
+                          "type": "string",
+                          "description": "Detected topic"
+                        },
+                        "confidence_score": {
+                          "type": "number",
+                          "description": "Confidence score for the topic"
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "intents": {
+          "type": "object",
+          "properties": {
+            "segments": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "text",
+                  "intents"
+                ],
+                "properties": {
+                  "text": {
+                    "type": "string",
+                    "description": "The text segment"
+                  },
+                  "intents": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "intent",
+                        "confidence_score"
+                      ],
+                      "properties": {
+                        "intent": {
+                          "type": "string",
+                          "description": "Detected intent"
+                        },
+                        "confidence_score": {
+                          "type": "number",
+                          "description": "Confidence score for the intent"
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

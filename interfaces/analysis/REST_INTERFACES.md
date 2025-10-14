@@ -1,14 +1,14 @@
 # ♻️ Cross-Interface Consistency Analysis
 
-**Interfaces Analyzed:** STT, TTS
-**Date:** 2025-10-13
+**Interfaces Analyzed:** STT, TTS, Text Intelligence
+**Date:** 2025-10-14
 **Status:** ✅ High Consistency
 
 > Temp file to be used for validating our work.
 
 ## 📊 Summary
 
-Both STT and TTS interfaces follow consistent patterns with only expected, domain-specific differences.
+All three REST interfaces (STT, TTS, and Text Intelligence) follow consistent patterns with only expected, domain-specific differences.
 
 **Overall Grade:** ✅ **A** (Highly Consistent)
 
@@ -52,9 +52,10 @@ Both interfaces:
 
 
 ### **4. Endpoint Naming Pattern** ✅
-Both follow `/interface/action` pattern:
+All follow `/interface/action` pattern:
 - STT: `/stt/transcribe`
 - TTS: `/tts/synthesize`
+- Text Intelligence: `/text-intelligence/analyze`
 
 **Consistency Score:** ✅ **100%**
 
@@ -131,6 +132,15 @@ These differences are **domain-specific and appropriate**:
 
 **Analysis:** Different fields for different purposes. ✅ This is correct.
 
+**Text Intelligence has:**
+- `text` or `url` input (oneOf pattern)
+- Multiple optional intelligence features (`sentiment`, `summarize`, `topics`, `intents`)
+- Feature-specific metadata (`summary_info`, `sentiment_info`, `topics_info`, `intents_info`)
+- Structured results with segments for each intelligence feature
+- `language` parameter for text analysis
+
+**Analysis:** Text Intelligence combines JSON request/response like TTS but with multiple optional analysis features. ✅ This is correct.
+
 ## 🟡 Minor Inconsistencies (Low Priority)
 
 ### **1. Error Type Values**
@@ -185,16 +195,16 @@ Both interfaces have **identical test coverage patterns**:
 
 ## 📋 Checklist: Cross-Interface Consistency
 
-| Category                             | STT | TTS | Consistent? |
-|--------------------------------------|-----|-----|-------------|
-| Error schema structure               | ✅   | ✅   | ✅ Yes       |
-| Field naming (snake_case)            | ✅   | ✅   | ✅ Yes       |
-| X-Request-Id support                 | ✅   | ✅   | ✅ Yes       |
-| Endpoint pattern                     | ✅   | ✅   | ✅ Yes       |
-| Error `additionalProperties: false`  | ✅   | ✅   | ✅ Yes       |
-| Details `additionalProperties: true` | ✅   | ✅   | ✅ Yes       |
-| Callback parameters                  | ✅   | ✅   | ✅ Yes       |
-| Test coverage patterns               | ✅   | ✅   | ✅ Yes       |
+| Category                             | STT | TTS | Text Intelligence | Consistent? |
+|--------------------------------------|-----|-----|-------------------|-------------|
+| Error schema structure               | ✅   | ✅   | ✅                 | ✅ Yes       |
+| Field naming (snake_case)            | ✅   | ✅   | ✅                 | ✅ Yes       |
+| X-Request-Id support                 | ✅   | ✅   | ✅                 | ✅ Yes       |
+| Endpoint pattern                     | ✅   | ✅   | ✅                 | ✅ Yes       |
+| Error `additionalProperties: false`  | ✅   | ✅   | ✅                 | ✅ Yes       |
+| Details `additionalProperties: true` | ✅   | ✅   | ✅                 | ✅ Yes       |
+| Callback parameters                  | ✅   | ✅   | ✅                 | ✅ Yes       |
+| Test coverage patterns               | ✅   | ✅   | ✅                 | ✅ Yes       |
 
 
 ## 🎯 Recommendations
@@ -216,22 +226,15 @@ Consider for future iterations:
 
 ### **Consistency Grade: A (Excellent)**
 
-The STT and TTS interfaces demonstrate **strong cross-interface consistency**:
+All three REST interfaces (STT, TTS, and Text Intelligence) demonstrate **strong cross-interface consistency**:
 - Core patterns are identical (errors, headers, naming)
 - Differences are intentional and domain-appropriate
-- Both follow the same validation framework
+- All follow the same validation framework
 - Developer experience will be consistent across interfaces
+- Text Intelligence adds multiple optional features while maintaining consistency
 
 **No breaking inconsistencies found.** ✅
 
-## 🚀 Next Steps
-
-1. ✅ Document this analysis for reference
-2. ⏳ Apply same patterns to remaining interfaces (Live STT, Live TTS, Agent)
-3. ⏳ Consider optional enhancements
-4. ⏳ Update testing guide with consistency requirements
 
 
-**Validated By:** Cross-interface schema and spec analysis
-**Interfaces Validated:** STT (25 schema tests + 14 conformance tests), TTS (18 schema tests)
 

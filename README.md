@@ -75,13 +75,17 @@ This repository includes comprehensive conformance tests for validating that you
 
 Refer to individual READMEs for the test suites.
 
+**REST**
 - [STT](./interfaces/stt/README.md)
-- STT Live (coming soon)
+- [Text-intelligence](./interfaces/text-intelligence/README.md)
 - [TTS](./interfaces/tts/README.md)
+
+**Websockets**
+- STT Live (coming soon)
 - TTS Live (coming soon)
 - Flux (coming soon)
 - Agent (coming soon)
-- Intelligence(Coming Soon)
+
 
 ```bash
 # Test Speech-to-Text interface

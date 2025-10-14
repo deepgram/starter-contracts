@@ -1,0 +1,7 @@
+{
+  "error": {
+    "type": "VALIDATION_ERROR",
+    "code": "MISSING_TEXT_OR_URL",
+    "message": "Request must include either 'text' or 'url' field"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Text Intelligence Error Response",
+  "description": "Schema for Text Intelligence API error responses",
+  "type": "object",
+  "required": [
+    "error"
+  ],
+  "properties": {
+    "error": {
+      "type": "object",
+      "required": [
+        "type",
+        "code",
+        "message"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Error type category"
+        },
+        "code": {
+          "type": "string",
+          "enum": [
+            "INVALID_REQUEST",
+            "MISSING_TEXT_OR_URL",
+            "TEXT_PROCESSING_FAILED",
+            "UNSUPPORTED_LANGUAGE",
+            "INVALID_URL",
+            "URL_FETCH_FAILED"
+          ],
+          "description": "Specific error code"
+        },
+        "message": {
+          "type": "string",
+          "description": "Human-readable error message"
+        },
+        "details": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "Additional error details"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

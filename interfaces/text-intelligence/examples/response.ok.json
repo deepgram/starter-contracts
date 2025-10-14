@@ -1,0 +1,106 @@
+{
+  "metadata": {
+    "request_id": "d04af392-db11-4c1d-83e1-20e34f0b8999",
+    "created": "2024-11-18T23:47:44.674Z",
+    "language": "en",
+    "summary_info": {
+      "model_uuid": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "input_tokens": 150,
+      "output_tokens": 45
+    },
+    "sentiment_info": {
+      "model_uuid": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+      "input_tokens": 150,
+      "output_tokens": 12
+    },
+    "topics_info": {
+      "model_uuid": "c3d4e5f6-a7b8-9012-cdef-123456789012",
+      "input_tokens": 150,
+      "output_tokens": 20
+    },
+    "intents_info": {
+      "model_uuid": "d4e5f6a7-b8c9-0123-def1-234567890123",
+      "input_tokens": 150,
+      "output_tokens": 18
+    }
+  },
+  "results": {
+    "summary": {
+      "text": "AI is transforming business through efficiency gains and improved customer experience, though ethical concerns about privacy and job displacement must be addressed."
+    },
+    "sentiments": {
+      "segments": [
+        {
+          "text": "Artificial intelligence is rapidly transforming the business landscape. Companies are investing heavily in AI technologies to improve efficiency and customer experience.",
+          "start_word": 0,
+          "end_word": 23,
+          "sentiment": "positive"
+        },
+        {
+          "text": "However, the adoption of AI also raises important ethical questions about privacy, bias, and job displacement.",
+          "start_word": 48,
+          "end_word": 65,
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Organizations must carefully consider these implications as they integrate AI into their operations.",
+          "start_word": 66,
+          "end_word": 79,
+          "sentiment": "neutral"
+        }
+      ]
+    },
+    "topics": {
+      "segments": [
+        {
+          "text": "Artificial intelligence is rapidly transforming the business landscape. Companies are investing heavily in AI technologies to improve efficiency and customer experience.",
+          "topics": [
+            {
+              "topic": "Artificial Intelligence",
+              "confidence_score": 0.95
+            },
+            {
+              "topic": "Business Technology",
+              "confidence_score": 0.89
+            }
+          ]
+        },
+        {
+          "text": "Machine learning algorithms can analyze vast amounts of data to identify patterns and make predictions.",
+          "topics": [
+            {
+              "topic": "Machine Learning",
+              "confidence_score": 0.93
+            },
+            {
+              "topic": "Data Analysis",
+              "confidence_score": 0.87
+            }
+          ]
+        }
+      ]
+    },
+    "intents": {
+      "segments": [
+        {
+          "text": "Companies are investing heavily in AI technologies to improve efficiency and customer experience.",
+          "intents": [
+            {
+              "intent": "Inform about AI adoption",
+              "confidence_score": 0.91
+            }
+          ]
+        },
+        {
+          "text": "Organizations must carefully consider these implications as they integrate AI into their operations.",
+          "intents": [
+            {
+              "intent": "Advise on AI implementation",
+              "confidence_score": 0.88
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

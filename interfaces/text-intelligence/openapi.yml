@@ -1,0 +1,141 @@
+openapi: 3.1.0
+info:
+  title: Text Intelligence API
+  version: 1.0.0
+  description: API for analyzing text content to extract intelligence including summary, sentiment, topics, and intents
+
+servers:
+  - url: https://api.deepgram.com
+    description: Deepgram Production API
+
+security:
+  - ApiKeyAuth: []
+
+paths:
+  /text-intelligence/analyze:
+    post:
+      summary: Analyze text content
+      description: Analyze text content using Deepgram's Text Intelligence API
+      operationId: analyzeText
+      parameters:
+        - name: sentiment
+          in: query
+          required: false
+          description: Recognizes the sentiment throughout the text
+          schema:
+            type: boolean
+            default: false
+        - name: summarize
+          in: query
+          required: false
+          description: Summarize content
+          schema:
+            type: boolean
+            default: false
+        - name: topics
+          in: query
+          required: false
+          description: Detect topics throughout the text
+          schema:
+            type: boolean
+            default: false
+        - name: intents
+          in: query
+          required: false
+          description: Recognizes speaker intent throughout the text
+          schema:
+            type: boolean
+            default: false
+        - name: custom_topic
+          in: query
+          required: false
+          description: Custom topics you want the model to detect within your input text if present. Submit up to 100.
+          style: form
+          explode: true
+          schema:
+            oneOf:
+              - type: string
+              - type: array
+                items:
+                  type: string
+                maxItems: 100
+        - name: custom_intent
+          in: query
+          required: false
+          description: Custom intents you want the model to detect within your input text if present. Submit up to 100.
+          style: form
+          explode: true
+          schema:
+            oneOf:
+              - type: string
+              - type: array
+                items:
+                  type: string
+                maxItems: 100
+        - name: callback
+          in: query
+          required: false
+          description: URL to which we'll make the callback request
+          schema:
+            type: string
+            format: uri
+        - name: callback_method
+          in: query
+          required: false
+          description: HTTP method by which the callback request will be made
+          schema:
+            type: string
+            enum:
+              - POST
+              - PUT
+            default: POST
+      requestBody:
+        description: Text content to analyze
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Request"
+            examples:
+              url_request:
+                summary: URL-based request
+                value:
+                  url: "https://example.com/article.txt"
+              text_request:
+                summary: Text-based request
+                value:
+                  text: "Artificial intelligence is rapidly transforming the business landscape."
+      responses:
+        "200":
+          description: Successful text analysis
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Response"
+        "400":
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: "API key authentication. Format: 'Token YOUR_DEEPGRAM_API_KEY'"
+
+  schemas:
+    Request:
+      $ref: "./schema/request.json"
+
+    Query:
+      $ref: "./schema/query.json"
+
+    Response:
+      $ref: "./schema/response.json"
+
+    Error:
+      $ref: "./schema/error.json"

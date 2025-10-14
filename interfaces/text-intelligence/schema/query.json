@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Text Intelligence Query Parameters",
+  "description": "Schema for Text Intelligence API query parameters",
+  "type": "object",
+  "properties": {
+    "sentiment": {
+      "type": "boolean",
+      "default": false,
+      "description": "Recognizes the sentiment throughout the text"
+    },
+    "summarize": {
+      "type": "boolean",
+      "default": false,
+      "description": "Summarize content"
+    },
+    "topics": {
+      "type": "boolean",
+      "default": false,
+      "description": "Detect topics throughout the text"
+    },
+    "intents": {
+      "type": "boolean",
+      "default": false,
+      "description": "Recognizes speaker intent throughout the text"
+    },
+    "custom_topic": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 100
+        }
+      ],
+      "description": "Custom topics you want the model to detect within your input text if present. Submit up to 100."
+    },
+    "custom_intent": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 100
+        }
+      ],
+      "description": "Custom intents you want the model to detect within your input text if present. Submit up to 100."
+    },
+    "callback": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL to which we'll make the callback request"
+    },
+    "callback_method": {
+      "type": "string",
+      "enum": [
+        "POST",
+        "PUT"
+      ],
+      "default": "POST",
+      "description": "HTTP method by which the callback request will be made"
+    }
+  },
+  "additionalProperties": false
+}
