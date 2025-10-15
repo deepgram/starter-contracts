@@ -147,119 +147,15 @@ npm run dev  # Runs on http://localhost:3000
 
 # In another terminal, run conformance tests
 cd starter-contracts
-STARTER_APP_URL=http://localhost:3000 pnpm test:tts
+BASE_URL=http://localhost:3000 npm run test:tts
 ```
 
 #### Against Your Deployed Starter App
 
 ```bash
 # Test your production deployment
-STARTER_APP_URL=https://my-tts-app.vercel.app pnpm test:tts
+BASE_URL=https://my-tts-app.vercel.app npm run test:tts
 
 # Or test a staging environment
-STARTER_APP_URL=https://staging.my-app.com pnpm test:tts
+BASE_URL=https://staging.my-app.com npm run test:tts
 ```
-
-### Understanding Test Results
-
-#### ✅ **All Tests Pass** - Your app is compliant!
-```
-✓ TTS Interface Conformance > Request Body Validation > should accept valid JSON text request
-✓ TTS Interface Conformance > Header Handling > should echo X-Request-Id header
-✓ TTS Interface Conformance > Audio Response > should return audio with correct content type
-```
-
-Your starter app correctly implements the TTS interface and will work with any frontend expecting this contract.
-
-#### ❌ **Tests Fail** - Implementation needs fixes
-
-**Common failure patterns:**
-
-**Wrong Content-Type Handling:**
-```
-expected 200 to be 415
-```
-**Fix:** Your `/tts/synthesize` endpoint should reject non-JSON requests with `415 INVALID_REQUEST_BODY`
-
-**Missing X-Request-Id Echo:**
-```
-expected null to be 'test-request-id-123'
-```
-**Fix:** Echo the `X-Request-Id` header from request to response
-
-**Wrong Audio Response:**
-```
-expected 'text/html; charset=utf-8' to match /^audio\/(mpeg|wav|ogg|flac|mulaw|opus)/
-```
-**Fix:** Return binary audio data with proper `Content-Type: audio/mpeg` header
-
-**JSON Instead of Audio:**
-```
-expected [object ArrayBuffer] to have property .byteLength > 0
-```
-**Fix:** Your endpoint is returning JSON instead of binary audio data
-
-### What the Tests Validate
-
-1. **Request Body Validation**
-   - Accept `application/json` with valid text
-   - Reject non-JSON content types with `415 INVALID_REQUEST_BODY`
-   - Validate text length limits if implemented
-
-2. **Audio Response Structure**
-   - Return binary audio data with correct `Content-Type`
-   - Include `Content-Length` and optional `X-Audio-Duration` headers
-   - Default to MP3 format when no format specified
-
-3. **Header Behavior**
-   - Echo `X-Request-Id` header for request tracing
-   - Return appropriate audio content type headers
-
-4. **Query Parameter Support**
-   - Accept Deepgram API parameters (`model`, `container`, `encoding`, `bit_rate`)
-   - Handle unknown parameters gracefully
-
-5. **Error Handling**
-   - Return structured JSON error responses
-   - Use standard error codes (`TEXT_TOO_LONG`, `UNSUPPORTED_MODEL`, etc.)
-   - Include helpful error messages
-
-### Integration with CI/CD
-
-Add conformance testing to your deployment pipeline:
-
-```yaml
-# .github/workflows/deploy.yml
-- name: Deploy Starter App
-  run: npm run deploy
-
-- name: Run Conformance Tests
-  run: |
-    cd ../starter-contracts
-    STARTER_APP_URL=${{ env.DEPLOYED_URL }} pnpm test:tts
-```
-
-### Debugging Failed Tests
-
-1. **Check your endpoint exists:** `curl -X POST https://your-app.com/tts/synthesize`
-2. **Test JSON handling:** Send `Content-Type: application/json` with valid text
-3. **Verify audio responses:** Ensure you're returning binary data, not JSON
-4. **Test with sample text:** Use simple text like `{"text": "Hello world"}`
-
-### Need Help?
-
-- **OpenAPI Spec:** See complete interface definition in `openapi.yml`
-- **Example Responses:** Check `examples/response.ok.txt` and `examples/response.error.json`
-- **Schema Validation:** Use JSON schemas in `schema/` directory to validate requests/responses
-
-## Architecture Notes
-
-This interface defines the **standardized contract** that all Deepgram starter applications should expose to frontends for text-to-speech functionality. It abstracts away Deepgram's TTS API complexity and provides a clean, consistent interface that enables frontend portability across different starter implementations.
-
-**Key Design Decisions:**
-- **Input**: JSON for structured text + parameters (not query strings)
-- **Output**: Binary audio for direct playback (not base64-encoded JSON)
-- **Endpoint**: `/tts/synthesize` for framework compatibility (not `/tts:synthesize`)
-- **Parameters**: Match actual Deepgram TTS API parameters exactly
-- **Defaults**: MP3 format for broad browser compatibility
-- **Error Handling**: Structured JSON errors with specific codes for different failure modes

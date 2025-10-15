@@ -150,105 +150,15 @@ npm run dev  # Runs on http://localhost:3000
 
 # In another terminal, run conformance tests
 cd starter-contracts
-STARTER_APP_URL=http://localhost:3000 pnpm test:stt
+BASE_URL=http://localhost:3000 npm run test:stt
 ```
 
 #### Against Your Deployed Starter App
 
 ```bash
 # Test your production deployment
-STARTER_APP_URL=https://my-stt-app.vercel.app pnpm test:stt
+BASE_URL=https://my-stt-app.vercel.app npm run test:stt
 
 # Or test a staging environment
-STARTER_APP_URL=https://staging.my-app.com pnpm test:stt
+BASE_URL=https://staging.my-app.com npm run test:stt
 ```
-
-### Understanding Test Results
-
-#### ✅ **All Tests Pass** - Your app is compliant!
-```
-✓ STT Interface Conformance > Content-Type Support > should accept audio/wav content type
-✓ STT Interface Conformance > Header Handling > should echo X-Request-Id header
-✓ STT Interface Conformance > Response Structure > should return required transcript field
-```
-
-Your starter app correctly implements the STT interface and will work with any frontend expecting this contract.
-
-#### ❌ **Tests Fail** - Implementation needs fixes
-
-**Common failure patterns:**
-
-**Wrong Content-Type Response:**
-```
-expected 'text/html; charset=utf-8' to match /application/json/
-```
-**Fix:** Your `/stt:transcribe` endpoint should return `Content-Type: application/json`
-
-**Missing X-Request-Id Echo:**
-```
-expected null to be 'test-request-id-123'
-```
-**Fix:** Echo the `X-Request-Id` header from request to response
-
-**Wrong Error Handling:**
-```
-expected 200 to be 415
-```
-**Fix:** Return `415` status for unsupported content types like `application/json`
-
-**HTML Instead of JSON:**
-```
-Unexpected token '<', "<!DOCTYPE "... is not valid JSON
-```
-**Fix:** Your endpoint is returning HTML (maybe a 404 page) instead of JSON
-
-### What the Tests Validate
-
-1. **Content-Type Handling**
-   - Accept `audio/wav`, `audio/mpeg`, `audio/webm`
-   - Reject non-audio types with `415 UNSUPPORTED_MEDIA_TYPE`
-
-2. **Required Response Structure**
-   - Return JSON with required `transcript` field
-   - Include word-level timing when available
-   - Proper error response format
-
-3. **Header Behavior**
-   - Echo `X-Request-Id` header for request tracing
-   - Return appropriate `Content-Type` headers
-
-4. **Query Parameter Support**
-   - Accept common parameters (`model`, `language`, `punctuate`, `diarize`)
-   - Handle unknown parameters gracefully
-
-### Integration with CI/CD
-
-Add conformance testing to your deployment pipeline:
-
-```yaml
-# .github/workflows/deploy.yml
-- name: Deploy Starter App
-  run: npm run deploy
-
-- name: Run Conformance Tests
-  run: |
-    cd ../starter-contracts
-    STARTER_APP_URL=${{ env.DEPLOYED_URL }} pnpm test:stt
-```
-
-### Debugging Failed Tests
-
-1. **Check your endpoint exists:** `curl https://your-app.com/stt:transcribe`
-2. **Test content-type handling:** Try sending different `Content-Type` headers
-3. **Verify JSON responses:** Ensure you're returning valid JSON, not HTML
-4. **Test with real audio:** Use the test audio file from `/examples/request.file.wav`
-
-### Need Help?
-
-- **OpenAPI Spec:** See complete interface definition in `openapi.yml`
-- **Example Responses:** Check `examples/response.ok.json` and `examples/response.error.json`
-- **Schema Validation:** Use JSON schemas in `schema/` directory to validate your responses
-
-## Architecture Notes
-
-This interface defines the **standardized contract** that all Deepgram starter applications should expose to frontends. It abstracts away Deepgram's complex API and provides a clean, consistent interface that enables frontend portability across different starter implementations.

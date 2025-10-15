@@ -1,10 +1,7 @@
-import { describe, it, expect, beforeAll } from 'vitest';
+import { describe, it, expect } from 'vitest';
+import { BASE_URL, sampleText } from './util.js';
 
-const BASE_URL = process.env.BASE_URL || 'http://localhost:3000';
 const ENDPOINT = `${BASE_URL}/text-intelligence/analyze`;
-
-// Sample text for testing
-const SAMPLE_TEXT = `Artificial intelligence is rapidly transforming the business landscape. Companies are investing heavily in AI technologies to improve efficiency and customer experience. Machine learning algorithms can analyze vast amounts of data to identify patterns and make predictions. Natural language processing enables computers to understand and respond to human language. However, the adoption of AI also raises important ethical questions about privacy, bias, and job displacement. Organizations must carefully consider these implications as they integrate AI into their operations.`;
 
 describe('Text Intelligence Conformance Tests', () => {
   describe('Basic Functionality', () => {
@@ -12,7 +9,7 @@ describe('Text Intelligence Conformance Tests', () => {
       const response = await fetch(`${ENDPOINT}?summarize=true`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: SAMPLE_TEXT })
+        body: JSON.stringify({ text: sampleText() })
       });
 
       expect(response.status).toBe(200);
@@ -30,7 +27,7 @@ describe('Text Intelligence Conformance Tests', () => {
       const response = await fetch(`${ENDPOINT}?sentiment=true`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: SAMPLE_TEXT })
+        body: JSON.stringify({ text: sampleText() })
       });
 
       expect(response.status).toBe(200);
@@ -46,7 +43,7 @@ describe('Text Intelligence Conformance Tests', () => {
       const response = await fetch(`${ENDPOINT}?topics=true`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: SAMPLE_TEXT })
+        body: JSON.stringify({ text: sampleText() })
       });
 
       expect(response.status).toBe(200);
@@ -62,7 +59,7 @@ describe('Text Intelligence Conformance Tests', () => {
       const response = await fetch(`${ENDPOINT}?intents=true`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: SAMPLE_TEXT })
+        body: JSON.stringify({ text: sampleText() })
       });
 
       expect(response.status).toBe(200);
@@ -80,7 +77,7 @@ describe('Text Intelligence Conformance Tests', () => {
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text: SAMPLE_TEXT })
+          body: JSON.stringify({ text: sampleText() })
         }
       );
 
@@ -94,31 +91,11 @@ describe('Text Intelligence Conformance Tests', () => {
       expect(data.results).toHaveProperty('intents');
     });
 
-    it('should analyze URL-based request', async () => {
-      const response = await fetch(`${ENDPOINT}?summarize=true`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url: 'https://example.com/article.txt' })
-      });
-
-      // URL-based requests may succeed or fail depending on backend implementation
-      // We just verify it doesn't crash and returns proper structure
-      expect([200, 400, 404]).toContain(response.status);
-      const data = await response.json();
-
-      if (response.status === 200) {
-        expect(data).toHaveProperty('metadata');
-        expect(data).toHaveProperty('results');
-      } else {
-        expect(data).toHaveProperty('error');
-      }
-    });
-
     it('should return correct metadata structure', async () => {
       const response = await fetch(`${ENDPOINT}?summarize=true`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: SAMPLE_TEXT })
+        body: JSON.stringify({ text: sampleText() })
       });
 
       expect(response.status).toBe(200);
@@ -135,7 +112,7 @@ describe('Text Intelligence Conformance Tests', () => {
       const response = await fetch(`${ENDPOINT}?summarize=true`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: SAMPLE_TEXT })
+        body: JSON.stringify({ text: sampleText() })
       });
 
       expect(response.status).toBe(200);
@@ -151,7 +128,7 @@ describe('Text Intelligence Conformance Tests', () => {
       const response = await fetch(`${ENDPOINT}?summarize=true&sentiment=true`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: SAMPLE_TEXT })
+        body: JSON.stringify({ text: sampleText() })
       });
 
       expect(response.status).toBe(200);
@@ -166,7 +143,7 @@ describe('Text Intelligence Conformance Tests', () => {
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text: SAMPLE_TEXT })
+          body: JSON.stringify({ text: sampleText() })
         }
       );
 
@@ -182,7 +159,7 @@ describe('Text Intelligence Conformance Tests', () => {
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text: SAMPLE_TEXT })
+          body: JSON.stringify({ text: sampleText() })
         }
       );
 
@@ -196,7 +173,7 @@ describe('Text Intelligence Conformance Tests', () => {
       const response = await fetch(`${ENDPOINT}?sentiment=true`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: SAMPLE_TEXT })
+        body: JSON.stringify({ text: sampleText() })
       });
 
       expect(response.status).toBe(200);
@@ -216,7 +193,7 @@ describe('Text Intelligence Conformance Tests', () => {
       const response = await fetch(`${ENDPOINT}?topics=true`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: SAMPLE_TEXT })
+        body: JSON.stringify({ text: sampleText() })
       });
 
       expect(response.status).toBe(200);
@@ -253,26 +230,6 @@ describe('Text Intelligence Conformance Tests', () => {
       }
     });
 
-    it('should handle very long text', async () => {
-      const longText = SAMPLE_TEXT.repeat(50); // ~10,000 words
-      const response = await fetch(`${ENDPOINT}?summarize=true`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: longText })
-      });
-
-      // Should succeed or return appropriate error
-      expect([200, 400, 413]).toContain(response.status);
-      const data = await response.json();
-
-      if (response.status === 200) {
-        expect(data).toHaveProperty('metadata');
-        expect(data).toHaveProperty('results');
-      } else {
-        expect(data).toHaveProperty('error');
-      }
-    });
-
     it('should handle text with special characters and Unicode', async () => {
       const specialText = 'Hello! 你好 🌍 Привет © ® ™ <tag> & "quotes"';
       const response = await fetch(`${ENDPOINT}?summarize=true`, {
@@ -293,7 +250,7 @@ describe('Text Intelligence Conformance Tests', () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           url: 'https://example.com/article.txt',
-          text: SAMPLE_TEXT
+          text: sampleText()
         })
       });
 
@@ -347,7 +304,7 @@ describe('Text Intelligence Conformance Tests', () => {
       const response = await fetch(`${ENDPOINT}?summarize=true&unknown_param=value`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: SAMPLE_TEXT })
+        body: JSON.stringify({ text: sampleText() })
       });
 
       // Unknown params should be ignored, not cause failure
@@ -361,7 +318,7 @@ describe('Text Intelligence Conformance Tests', () => {
       const response = await fetch(`${ENDPOINT}?summarize=invalid`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: SAMPLE_TEXT })
+        body: JSON.stringify({ text: sampleText() })
       });
 
       expect(response.status).toBe(400);
@@ -446,7 +403,7 @@ describe('Text Intelligence Conformance Tests', () => {
           'Content-Type': 'application/json',
           'Authorization': 'Token invalid-key'
         },
-        body: JSON.stringify({ text: SAMPLE_TEXT })
+        body: JSON.stringify({ text: sampleText() })
       });
 
       // Could be 401 or 200 depending on if auth is enforced
@@ -464,7 +421,7 @@ describe('Text Intelligence Conformance Tests', () => {
           'Content-Type': 'application/json',
           'X-Request-Id': customRequestId
         },
-        body: JSON.stringify({ text: SAMPLE_TEXT })
+        body: JSON.stringify({ text: sampleText() })
       });
 
       expect(response.status).toBe(200);

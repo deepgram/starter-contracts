@@ -25,6 +25,13 @@ paths:
           schema:
             type: boolean
             default: false
+        - name: language
+          in: query
+          required: false
+          description: BCP-47 language code for the text (e.g., 'en', 'es', 'fr')
+          schema:
+            type: string
+            default: en
         - name: summarize
           in: query
           required: false

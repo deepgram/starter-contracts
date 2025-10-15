@@ -1,7 +1,6 @@
-import { describe, it, expect, beforeAll } from "vitest";
+import { describe, it, expect } from "vitest";
+import { BASE_URL, requestId } from "./util.js";
 
-// Mock starter app base URL - this would be configured per implementation
-const BASE_URL = process.env.STARTER_APP_URL || "http://localhost:3000";
 const ENDPOINT = "/tts/synthesize";
 // NOTE: Using /tts/synthesize instead of /tts:synthesize for framework compatibility
 // While the colon syntax was proposed for namespace-like clarity, it causes routing
@@ -15,13 +14,12 @@ describe("TTS Interface Conformance", () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-Request-Id": "test-json-request"
+          "X-Request-Id": requestId()
         },
         body: JSON.stringify({ text: "Hello world, this is a test." })
       });
 
       expect([200, 400]).toContain(response.status); // 200 = success, 400 = processing error but valid format
-      expect(response.headers.get("X-Request-Id")).toBe("test-json-request");
     });
 
     it("should reject non-JSON content type with 415", async () => {
@@ -29,7 +27,7 @@ describe("TTS Interface Conformance", () => {
         method: "POST",
         headers: {
           "Content-Type": "text/plain",
-          "X-Request-Id": "test-invalid-content-type"
+          "X-Request-Id": requestId()
         },
         body: "Hello world"
       });
@@ -48,7 +46,7 @@ describe("TTS Interface Conformance", () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-Request-Id": "test-empty-text"
+          "X-Request-Id": requestId()
         },
         body: JSON.stringify({ text: "" })
       });
@@ -66,7 +64,7 @@ describe("TTS Interface Conformance", () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-Request-Id": "test-text-too-long"
+          "X-Request-Id": requestId()
         },
         body: JSON.stringify({ text: longText })
       });
@@ -80,17 +78,17 @@ describe("TTS Interface Conformance", () => {
 
   describe("Header Handling", () => {
     it("should echo X-Request-Id header", async () => {
-      const requestId = "test-request-id-123";
+      const testRequestId = requestId();
       const response = await fetch(`${BASE_URL}${ENDPOINT}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-Request-Id": requestId
+          "X-Request-Id": testRequestId
         },
         body: JSON.stringify({ text: "Hello world" })
       });
 
-      expect(response.headers.get("X-Request-Id")).toBe(requestId);
+      expect(response.headers.get("X-Request-Id")).toBe(testRequestId);
     });
   });
 
@@ -100,7 +98,7 @@ describe("TTS Interface Conformance", () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-Request-Id": "test-model-param"
+          "X-Request-Id": requestId()
         },
         body: JSON.stringify({ text: "Hello with custom model" })
       });
@@ -113,7 +111,7 @@ describe("TTS Interface Conformance", () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-Request-Id": "test-container-param"
+          "X-Request-Id": requestId()
         },
         body: JSON.stringify({ text: "Hello in WAV container" })
       });
@@ -130,7 +128,7 @@ describe("TTS Interface Conformance", () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-Request-Id": "test-bitrate-param"
+          "X-Request-Id": requestId()
         },
         body: JSON.stringify({ text: "Hello with custom bitrate" })
       });
@@ -143,7 +141,7 @@ describe("TTS Interface Conformance", () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-Request-Id": "test-callback-param"
+          "X-Request-Id": requestId()
         },
         body: JSON.stringify({ text: "Hello with callback" })
       });
@@ -158,7 +156,7 @@ describe("TTS Interface Conformance", () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-Request-Id": "test-audio-response"
+          "X-Request-Id": requestId()
         },
         body: JSON.stringify({ text: "Hello world" })
       });
@@ -184,7 +182,7 @@ describe("TTS Interface Conformance", () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-Request-Id": "test-default-format"
+          "X-Request-Id": requestId()
         },
         body: JSON.stringify({ text: "Hello world" })
       });
@@ -200,7 +198,7 @@ describe("TTS Interface Conformance", () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-Request-Id": "test-duration-header"
+          "X-Request-Id": requestId()
         },
         body: JSON.stringify({ text: "Hello world" })
       });
@@ -221,7 +219,7 @@ describe("TTS Interface Conformance", () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-Request-Id": "test-malformed-json"
+          "X-Request-Id": requestId()
         },
         body: "{ invalid json"
       });
@@ -251,7 +249,7 @@ describe("TTS Interface Conformance", () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-Request-Id": "test-missing-body"
+          "X-Request-Id": requestId()
         }
         // No body provided
       });
@@ -268,7 +266,7 @@ describe("TTS Interface Conformance", () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-Request-Id": "test-missing-text-field"
+          "X-Request-Id": requestId()
         },
         body: JSON.stringify({})
       });
@@ -285,7 +283,7 @@ describe("TTS Interface Conformance", () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-Request-Id": "test-invalid-model"
+          "X-Request-Id": requestId()
         },
         body: JSON.stringify({ text: "Hello world" })
       });
@@ -305,7 +303,7 @@ describe("TTS Interface Conformance", () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-Request-Id": "test-unknown-params"
+          "X-Request-Id": requestId()
         },
         body: JSON.stringify({ text: "Hello world" })
       });
@@ -320,7 +318,7 @@ describe("TTS Interface Conformance", () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-Request-Id": "test-additional-properties"
+          "X-Request-Id": requestId()
         },
         body: JSON.stringify({
           text: "Hello world",

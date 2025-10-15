@@ -94,20 +94,14 @@ pnpm test:stt
 # Test Text-to-Speech interface
 pnpm test:tts
 
+# Test Text Intelligence interface
+pnpm test:text-intelligence
 ```
 
 ### Adding New Interface Specifications
 
 1. Create a new directory under `interfaces/`
 2. Follow the established structure:
-   ```
-   new-interface/
-   ├── openapi.yml or asyncapi.yml
-   ├── schema/
-   ├── examples/
-   ├── conformance/
-   └── README.md
-   ```
 3. Add conformance tests
 4. Update this main README
 
@@ -125,4 +119,3 @@ pnpm test:tts
 ## 📄 License
 
 This project is licensed under the [LICENSE](./LICENSE) file in the repository root.
-

@@ -9,6 +9,11 @@
       "default": false,
       "description": "Recognizes the sentiment throughout the text"
     },
+    "language": {
+      "type": "string",
+      "default": "en",
+      "description": "BCP-47 language code for the text (e.g., 'en', 'es', 'fr')"
+    },
     "summarize": {
       "type": "boolean",
       "default": false,

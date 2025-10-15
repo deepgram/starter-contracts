@@ -1,23 +1,12 @@
-import { describe, it, expect, beforeAll } from "vitest";
-import { readFile } from "node:fs/promises";
-import { join } from "node:path";
+import { describe, it, expect } from "vitest";
+import { BASE_URL, audioBytes, badAudio, requestId } from "./util.js";
 
-// Mock starter app base URL - this would be configured per implementation
-const BASE_URL = process.env.STARTER_APP_URL || "http://localhost:3000";
 const ENDPOINT = "/stt/transcribe";
 // NOTE: Using /stt/transcribe instead of /stt:transcribe for framework compatibility
 // While the colon syntax was proposed for namespace-like clarity, it causes routing
 // issues in Express.js and other frameworks. Standard REST paths work universally.
 
 describe("STT Interface Conformance", () => {
-  let testAudioBuffer;
-
-  beforeAll(async () => {
-    // Load test audio file
-    testAudioBuffer = await readFile(
-      join(import.meta.dirname, "..", "examples", "request.file.wav")
-    );
-  });
 
   describe("Content-Type Support", () => {
     it("should accept audio/wav content type", async () => {
@@ -25,9 +14,9 @@ describe("STT Interface Conformance", () => {
         method: "POST",
         headers: {
           "Content-Type": "audio/wav",
-          "X-Request-Id": "test-wav-content-type"
+          "X-Request-Id": requestId()
         },
-        body: testAudioBuffer
+        body: audioBytes()
       });
 
       expect(response.status).toBe(200);
@@ -44,9 +33,9 @@ describe("STT Interface Conformance", () => {
         method: "POST",
         headers: {
           "Content-Type": "audio/mpeg",
-          "X-Request-Id": "test-mpeg-content-type"
+          "X-Request-Id": requestId()
         },
-        body: testAudioBuffer // Using WAV file as mock - real impl would need MP3
+        body: audioBytes() // Using WAV file as mock - real impl would need MP3
       });
 
       // Should accept the content type (may fail processing if wrong format, but that's OK)
@@ -58,9 +47,9 @@ describe("STT Interface Conformance", () => {
         method: "POST",
         headers: {
           "Content-Type": "audio/webm",
-          "X-Request-Id": "test-webm-content-type"
+          "X-Request-Id": requestId()
         },
-        body: testAudioBuffer // Using WAV file as mock
+        body: audioBytes() // Using WAV file as mock
       });
 
       // Should accept the content type
@@ -72,7 +61,7 @@ describe("STT Interface Conformance", () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-Request-Id": "test-invalid-content-type"
+          "X-Request-Id": requestId()
         },
         body: JSON.stringify({ test: "data" })
       });
@@ -89,17 +78,17 @@ describe("STT Interface Conformance", () => {
 
   describe("Header Handling", () => {
     it("should echo X-Request-Id header", async () => {
-      const requestId = "test-request-id-123";
+      const testRequestId = requestId();
       const response = await fetch(`${BASE_URL}${ENDPOINT}`, {
         method: "POST",
         headers: {
           "Content-Type": "audio/wav",
-          "X-Request-Id": requestId
+          "X-Request-Id": testRequestId
         },
-        body: testAudioBuffer
+        body: audioBytes()
       });
 
-      expect(response.headers.get("X-Request-Id")).toBe(requestId);
+      expect(response.headers.get("X-Request-Id")).toBe(testRequestId);
     });
   });
 
@@ -116,9 +105,9 @@ describe("STT Interface Conformance", () => {
         method: "POST",
         headers: {
           "Content-Type": "audio/wav",
-          "X-Request-Id": "test-query-params"
+          "X-Request-Id": requestId()
         },
-        body: testAudioBuffer
+        body: audioBytes()
       });
 
       expect(response.status).toBe(200);
@@ -134,9 +123,9 @@ describe("STT Interface Conformance", () => {
         method: "POST",
         headers: {
           "Content-Type": "audio/wav",
-          "X-Request-Id": "test-transcript-required"
+          "X-Request-Id": requestId()
         },
-        body: testAudioBuffer
+        body: audioBytes()
       });
 
       expect(response.status).toBe(200);
@@ -153,9 +142,9 @@ describe("STT Interface Conformance", () => {
         method: "POST",
         headers: {
           "Content-Type": "audio/wav",
-          "X-Request-Id": "test-word-timing"
+          "X-Request-Id": requestId()
         },
-        body: testAudioBuffer
+        body: audioBytes()
       });
 
       expect(response.status).toBe(200);
@@ -194,15 +183,13 @@ describe("STT Interface Conformance", () => {
 
   describe("Error Handling", () => {
     it("should return structured error response", async () => {
-      const badAudio = Buffer.from("not audio data");
-
       const response = await fetch(`${BASE_URL}${ENDPOINT}`, {
         method: "POST",
         headers: {
           "Content-Type": "audio/wav",
-          "X-Request-Id": "test-bad-audio"
+          "X-Request-Id": requestId()
         },
-        body: badAudio
+        body: badAudio()
       });
 
       if (response.status >= 400) {
@@ -225,7 +212,7 @@ describe("STT Interface Conformance", () => {
         method: "POST",
         headers: {
           "Content-Type": "audio/wav",
-          "X-Request-Id": "test-empty-body"
+          "X-Request-Id": requestId()
         }
         // No body provided
       });
@@ -238,15 +225,13 @@ describe("STT Interface Conformance", () => {
     });
 
     it("should handle empty audio buffer", async () => {
-      const emptyBuffer = Buffer.alloc(0);
-
       const response = await fetch(`${BASE_URL}${ENDPOINT}`, {
         method: "POST",
         headers: {
           "Content-Type": "audio/wav",
-          "X-Request-Id": "test-empty-buffer"
+          "X-Request-Id": requestId()
         },
-        body: emptyBuffer
+        body: Buffer.alloc(0)
       });
 
       expect(response.status).toBeGreaterThanOrEqual(400);
@@ -275,9 +260,9 @@ describe("STT Interface Conformance", () => {
         method: "POST",
         headers: {
           "Content-Type": "audio/wav",
-          "X-Request-Id": "test-file-size-limit"
+          "X-Request-Id": requestId()
         },
-        body: testAudioBuffer
+        body: audioBytes()
       });
 
       // This test primarily documents the 2GB limit requirement
@@ -295,9 +280,9 @@ describe("STT Interface Conformance", () => {
         method: "POST",
         headers: {
           "Content-Type": "audio/wav",
-          "X-Request-Id": "test-invalid-params"
+          "X-Request-Id": requestId()
         },
-        body: testAudioBuffer
+        body: audioBytes()
       });
 
       // Backend may:
@@ -324,9 +309,9 @@ describe("STT Interface Conformance", () => {
         method: "POST",
         headers: {
           "Content-Type": "audio/wav",
-          "X-Request-Id": "test-unknown-params"
+          "X-Request-Id": requestId()
         },
-        body: testAudioBuffer
+        body: audioBytes()
       });
 
       // Unknown params should be ignored (not cause errors)

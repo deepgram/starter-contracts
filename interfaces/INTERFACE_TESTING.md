@@ -22,13 +22,19 @@ Testing happens at three levels:
 ### STT
 ```bash
 # Runs STT schema validation
-"test:stt:schema": "vitest run interfaces/stt/tests/schema_validation.test.js"
+pnpm test:stt:schema
 ```
 ### TTS
 ```bash
 # Runs TTS schema validation
-"test:tts:schema": "vitest run interfaces/tts/tests/schema_validation.test.js"x
+pnpm test:tts:schema
 ```
+
+### Text Intelligence
+
+```bash
+# Runs Text Intelligence schema validation
+ pnpm test:text-intelligence:schema
 
 ## 🧩 1. Schema Validation (Contract Tests)
 

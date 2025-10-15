@@ -141,30 +141,48 @@ The API accepts two types of requests:
 | `INVALID_URL`            | URL format is invalid            |
 | `URL_FETCH_FAILED`       | Failed to fetch content from URL |
 
-## Testing
+## Conformance Requirements
 
-### Schema Validation Tests
+Starter applications implementing this interface MUST:
 
-Run schema validation tests to verify all schemas are correct:
+1. **Accept JSON requests** with either `text` or `url` (but not both)
+2. **Support at least one intelligence feature** (summarize, sentiment, topics, or intents)
+3. **Return structured JSON** with `metadata` and `results` sections
+4. **Follow error schema** exactly as defined in `error.json`
+5. **Handle invalid requests** with appropriate error codes
 
+## Testing Your Starter App Implementation
+
+### Prerequisites
+
+1. **Your starter app must be running** and accessible via HTTP/HTTPS
+2. **Implement the `/text-intelligence/analyze` endpoint** according to this specification
+3. **Install test dependencies** in this contracts repo:
+   ```bash
+   cd starter-contracts
+   npm install
+   ```
+
+### Running Tests
+
+#### Schema Validation (No backend required)
 ```bash
 npm run test:text-intelligence:schema
 ```
 
-
-### Conformance Tests
-
-Run conformance tests against a backend implementation:
-
+#### Conformance Tests (Requires backend)
 ```bash
+# Start your starter app
+cd my-text-intelligence-app
+npm run dev
+
+# In another terminal, run conformance tests
+cd starter-contracts
 BASE_URL=http://localhost:3000 npm run test:text-intelligence
 ```
 
-## Integration with Starter Apps
+### Need Help?
 
-To validate a starter app against this contract:
-
-1. Implement the `/text-intelligence/analyze` endpoint following the OpenAPI specification
-2. Add runtime schema validation using Ajv (see STT/TTS examples)
-3. Run conformance tests against your implementation
-4. Create a CONFORMANCE.md documenting any findings
+- **OpenAPI Spec:** See complete interface definition in `openapi.yml`
+- **Example Responses:** Check `examples/response.ok.json` and `examples/response.error.json`
+- **Schema Validation:** Use JSON schemas in `schema/` directory to validate requests/responses
