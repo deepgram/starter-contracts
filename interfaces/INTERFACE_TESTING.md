@@ -31,7 +31,6 @@ pnpm test:tts:schema
 ```
 
 ### Text Intelligence
-
 ```bash
 # Runs Text Intelligence schema validation
  pnpm test:text-intelligence:schema
@@ -73,7 +72,6 @@ For **Live STT**, **Live TTS**, and **Agent** interfaces:
 * States on the frontend can be derived entirely from backend messages.
 * Connection recovery, partial data, and duplicate message handling.
 
-
 ## ⚠️ 3. Error and Edge Case Testing
 
 Verify error handling and edge case test coverage.
@@ -102,46 +100,7 @@ Check for shared conventions across all interfaces:
 * Field naming and casing are identical (snake_case or camelCase)
 
 
-
-## 🧱 5. Mock Backend Validation (FUTURE)
-
-Each interface should have a **mock backend** that implements the contract exactly.
-
-**Goals**
-
-* Validate that the frontend or SDK can interact with the mock.
-* Detect mismatches between frontend expectations and the spec before integrating a real backend.
-
-**Test**
-
-* Start mock server (`npm run mock:stt` etc.).
-* Run the conformance test suite against the mock.
-* Confirm all responses are valid per schema.
-
-
-## 🌐 6. Real Backend Integration (Optional) (FUTURE)
-
-Run the same tests against the real backend.
-
-
-> Use this step to **verify that the interface contracts match the actual backend behavior**. Run conformance tests against staging or live APIs to catch mismatches, sequence issues, or runtime differences that a spec alone might not cover. It’s optional if the spec is fully accurate, but recommended for runtime validation and starter app confidence.
-
-
-**Test**
-
-* Point the tests at the live or staging backend:
-
-  ```bash
-  BACKEND_BASE_URL=https://api.staging.deepgram.com npm run test:conformance -- --interface=stt
-  ```
-* Compare outputs from the mock and real backend.
-* Confirm consistency in:
-
-  * Field naming
-  * Error responses
-  * Latency and sequence behavior
-
-## 🚀 7. Frontend Integration Testing (FUTURE)
+## 🚀 5. Frontend Integration Testing (FUTURE)
 
 Test that frontend applications work correctly with validated backends.
 
@@ -151,22 +110,7 @@ Test that frontend applications work correctly with validated backends.
 * App state transitions correctly.
 * No console or network errors.
 
-## ⚙️ 8. Continuous Integration (CI) Conformance Runs (FUTURE)
-
-Add to CI:
-
-```bash
-npm run test:conformance
-```
-
-**CI checks:**
-
-* Run tests against mock and staging environments.
-* Fail on schema mismatches.
-* Upload summary results (GitHub Actions summary, or similar).
-
-
-## 👩‍💻 9. Developer Experience Validation (FUTURE)
+## 👩‍💻 6. Developer Experience Validation (FUTURE)
 
 Conduct developer empathy tests:
 
@@ -175,13 +119,6 @@ Conduct developer empathy tests:
 * Record confusion points, unclear names, or missing docs.
 
 Iterate schema and examples based on feedback.
-
-## 🔁 10. Regression and Versioning (FUTURE)
-
-* Maintain backward-compatible schema versions.
-* Use semantic versioning (`v1.0.0`, `v1.1.0`, etc.).
-* Run old test suites against new versions to detect breaking changes.
-
 
 ## 📦 Outputs of Successful Testing
 

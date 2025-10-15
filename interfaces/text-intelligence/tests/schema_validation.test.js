@@ -161,88 +161,34 @@ describe('Text Intelligence Schema Validation', () => {
       expect(valid).toBe(true);
     });
 
-    it('should validate custom_topic as string', () => {
-      const validQuery = { custom_topic: 'Technology' };
+    it('should validate tag as string', () => {
+      const validQuery = { tag: 'test-tag' };
       const valid = validateQuery(validQuery);
       expect(valid).toBe(true);
     });
 
-    it('should validate custom_topic as array', () => {
+    it('should validate tag as array', () => {
       const validQuery = {
-        custom_topic: ['Technology', 'Business', 'AI']
+        tag: ['tag1', 'tag2', 'tag3']
       };
       const valid = validateQuery(validQuery);
       expect(valid).toBe(true);
     });
 
-    it('should validate custom_intent as string', () => {
-      const validQuery = { custom_intent: 'Purchase Intent' };
+    it('should validate language parameter', () => {
+      const validQuery = { language: 'es' };
       const valid = validateQuery(validQuery);
       expect(valid).toBe(true);
     });
 
-    it('should validate custom_intent as array', () => {
+    it('should validate query with all minimal parameters', () => {
       const validQuery = {
-        custom_intent: ['Inform', 'Request', 'Advise']
-      };
-      const valid = validateQuery(validQuery);
-      expect(valid).toBe(true);
-    });
-
-    it('should enforce custom_topic array maxItems (100)', () => {
-      const topics = Array(101).fill('Topic');
-      const invalidQuery = { custom_topic: topics };
-      const valid = validateQuery(invalidQuery);
-      expect(valid).toBe(false);
-    });
-
-    it('should enforce custom_intent array maxItems (100)', () => {
-      const intents = Array(101).fill('Intent');
-      const invalidQuery = { custom_intent: intents };
-      const valid = validateQuery(invalidQuery);
-      expect(valid).toBe(false);
-    });
-
-    it('should validate callback as URI', () => {
-      const validQuery = { callback: 'https://example.com/callback' };
-      const valid = validateQuery(validQuery);
-      expect(valid).toBe(true);
-    });
-
-    it('should reject invalid callback URI', () => {
-      const invalidQuery = { callback: 'not-a-valid-uri' };
-      const valid = validateQuery(invalidQuery);
-      expect(valid).toBe(false);
-    });
-
-    it('should validate callback_method enum (POST)', () => {
-      const validQuery = { callback_method: 'POST' };
-      const valid = validateQuery(validQuery);
-      expect(valid).toBe(true);
-    });
-
-    it('should validate callback_method enum (PUT)', () => {
-      const validQuery = { callback_method: 'PUT' };
-      const valid = validateQuery(validQuery);
-      expect(valid).toBe(true);
-    });
-
-    it('should reject invalid callback_method', () => {
-      const invalidQuery = { callback_method: 'GET' };
-      const valid = validateQuery(invalidQuery);
-      expect(valid).toBe(false);
-    });
-
-    it('should validate query with all parameters', () => {
-      const validQuery = {
+        language: 'en',
         sentiment: true,
         summarize: true,
         topics: true,
         intents: true,
-        custom_topic: ['AI', 'Business'],
-        custom_intent: ['Inform', 'Advise'],
-        callback: 'https://example.com/callback',
-        callback_method: 'POST'
+        tag: 'test'
       };
       const valid = validateQuery(validQuery);
       expect(valid).toBe(true);

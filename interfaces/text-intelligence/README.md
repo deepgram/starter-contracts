@@ -41,16 +41,16 @@ The API accepts two types of requests:
 
 ## Query Parameters
 
-| Parameter         | Type            | Default | Description                                |
-|-------------------|-----------------|---------|--------------------------------------------|
-| `sentiment`       | boolean         | `false` | Enable sentiment analysis                  |
-| `summarize`       | boolean         | `false` | Enable text summarization                  |
-| `topics`          | boolean         | `false` | Enable topic detection                     |
-| `intents`         | boolean         | `false` | Enable intent recognition                  |
-| `custom_topic`    | string or array | -       | Custom topics to detect (up to 100)        |
-| `custom_intent`   | string or array | -       | Custom intents to detect (up to 100)       |
-| `callback`        | string (uri)    | -       | Webhook callback URL                       |
-| `callback_method` | string          | `POST`  | HTTP method for callback (`POST` or `PUT`) |
+> Additional parameters are available in the Deepgram API. See the [API documentation](https://developers.deepgram.com/reference/text-intelligence/analyze) for additional features.
+
+All parameters are optional. This interface focuses on getting started functionality:
+
+- `language`: BCP-47 language code for the text (e.g., `en`, `es`, `fr`)
+- `sentiment`: Enable sentiment analysis throughout the text
+- `summarize`: Enable text summarization
+- `topics`: Enable topic detection throughout the text
+- `intents`: Enable intent recognition throughout the text
+- `tag`: Tag for categorizing requests
 
 ## Response Format
 
@@ -180,9 +180,3 @@ npm run dev
 cd starter-contracts
 BASE_URL=http://localhost:3000 npm run test:text-intelligence
 ```
-
-### Need Help?
-
-- **OpenAPI Spec:** See complete interface definition in `openapi.yml`
-- **Example Responses:** Check `examples/response.ok.json` and `examples/response.error.json`
-- **Schema Validation:** Use JSON schemas in `schema/` directory to validate requests/responses

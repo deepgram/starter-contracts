@@ -137,38 +137,6 @@ describe('Text Intelligence Conformance Tests', () => {
       expect(data.metadata).toHaveProperty('sentiment_info');
     });
 
-    it('should handle custom_topic parameter', async () => {
-      const response = await fetch(
-        `${ENDPOINT}?topics=true&custom_topic=Technology&custom_topic=Business`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text: sampleText() })
-        }
-      );
-
-      expect(response.status).toBe(200);
-      const data = await response.json();
-      expect(data).toHaveProperty('results');
-      expect(data.results).toHaveProperty('topics');
-    });
-
-    it('should handle custom_intent parameter', async () => {
-      const response = await fetch(
-        `${ENDPOINT}?intents=true&custom_intent=Inform&custom_intent=Advise`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text: sampleText() })
-        }
-      );
-
-      expect(response.status).toBe(200);
-      const data = await response.json();
-      expect(data).toHaveProperty('results');
-      expect(data.results).toHaveProperty('intents');
-    });
-
     it('should validate sentiment segment structure', async () => {
       const response = await fetch(`${ENDPOINT}?sentiment=true`, {
         method: 'POST',

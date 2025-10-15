@@ -18,13 +18,6 @@ paths:
       description: Analyze text content using Deepgram's Text Intelligence API
       operationId: analyzeText
       parameters:
-        - name: sentiment
-          in: query
-          required: false
-          description: Recognizes the sentiment throughout the text
-          schema:
-            type: boolean
-            default: false
         - name: language
           in: query
           required: false
@@ -32,31 +25,38 @@ paths:
           schema:
             type: string
             default: en
+        - name: sentiment
+          in: query
+          required: false
+          description: Enable sentiment analysis throughout the text
+          schema:
+            type: boolean
+            default: false
         - name: summarize
           in: query
           required: false
-          description: Summarize content
+          description: Enable text summarization
           schema:
             type: boolean
             default: false
         - name: topics
           in: query
           required: false
-          description: Detect topics throughout the text
+          description: Enable topic detection throughout the text
           schema:
             type: boolean
             default: false
         - name: intents
           in: query
           required: false
-          description: Recognizes speaker intent throughout the text
+          description: Enable intent recognition throughout the text
           schema:
             type: boolean
             default: false
-        - name: custom_topic
+        - name: tag
           in: query
           required: false
-          description: Custom topics you want the model to detect within your input text if present. Submit up to 100.
+          description: Tag for categorizing requests
           style: form
           explode: true
           schema:
@@ -65,37 +65,6 @@ paths:
               - type: array
                 items:
                   type: string
-                maxItems: 100
-        - name: custom_intent
-          in: query
-          required: false
-          description: Custom intents you want the model to detect within your input text if present. Submit up to 100.
-          style: form
-          explode: true
-          schema:
-            oneOf:
-              - type: string
-              - type: array
-                items:
-                  type: string
-                maxItems: 100
-        - name: callback
-          in: query
-          required: false
-          description: URL to which we'll make the callback request
-          schema:
-            type: string
-            format: uri
-        - name: callback_method
-          in: query
-          required: false
-          description: HTTP method by which the callback request will be made
-          schema:
-            type: string
-            enum:
-              - POST
-              - PUT
-            default: POST
       requestBody:
         description: Text content to analyze
         required: true
