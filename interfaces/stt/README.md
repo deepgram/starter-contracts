@@ -17,36 +17,15 @@ X-Request-Id: optional-request-id
 
 ## Query Parameters
 
-All parameters are optional. Starter applications can implement any subset based on their use case:
+> Additional parameters are available in the Deepgram API. See the [API documentation](https://developers.deepgram.com/reference/speech-to-text/transcribe) additional features.
 
-**Core Parameters:**
-- `model`: STT model to use for transcription
+All parameters are optional. This interface focuses on getting started functionality:
+
 - `language`: BCP-47 language tag (e.g., `en-US`, `es-ES`)
-- `punctuate`: Enable punctuation in transcript
-- `diarize`: Enable speaker diarization
-
-**Audio Processing:**
-- `encoding`: Audio encoding format (linear16, flac, opus, etc.)
-- `multichannel`: Enable multichannel processing
-- `sample_rate`: Audio sample rate
-
-**Advanced Features:**
-- `sentiment`: Enable sentiment analysis
-- `topics`: Enable topic detection
-- `intents`: Enable intent recognition
-- `summarize`: Enable AI summarization (v1/v2)
-- `smart_format`: Enable intelligent formatting
-
-**Content Filtering:**
-- `profanity_filter`: Filter profanity from transcript
-- `redact`: Redact sensitive information (PII, etc.)
-- `replace`: Replace specific terms
-
-**Real-time & Callbacks:**
-- `callback`: Webhook URL for results
-- `callback_method`: HTTP method for webhook (POST/PUT)
-
-**And many more...** - See complete list in `$/schema/query.json`
+- `model`: STT model to use for transcription (e.g., `nova-2`, `enhanced`)
+- `paragraphs`: Enable paragraph segmentation in transcript
+- `smart_format`: Enable intelligent formatting of transcript
+- `tag`: Tag for categorizing requests
 
 ## Request Body
 

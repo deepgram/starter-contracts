@@ -93,12 +93,13 @@ describe("STT Interface Conformance", () => {
   });
 
   describe("Query Parameters", () => {
-    it("should accept common parameters without errors", async () => {
+    it("should accept minimal parameters without errors", async () => {
       const queryParams = new URLSearchParams({
         model: "nova-2",
         language: "en-US",
-        punctuate: "true",
-        diarize: "false"
+        paragraphs: "true",
+        smart_format: "true",
+        tag: "test"
       });
 
       const response = await fetch(`${BASE_URL}${ENDPOINT}?${queryParams}`, {

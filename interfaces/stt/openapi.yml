@@ -8,174 +8,34 @@ info:
 
 paths:
   /stt/transcribe:
-    # NOTE: Changed from /stt:transcribe to /stt/transcribe for framework compatibility
-    # The colon syntax, while aesthetically pleasing, causes issues with Express.js routing
-    # and other web frameworks. Standard REST conventions work universally.
     post:
       summary: Transcribe audio
       description: Accepts binary audio and returns transcription with word-level timing and speaker information.
       parameters:
-        - name: callback
-          in: query
-          required: false
-          schema: { type: string }
-        - name: callback_method
-          in: query
-          required: false
-          schema:
-            type: string
-            enum: [POST, PUT]
-        - name: custom_topic
-          in: query
-          required: false
-          schema:
-            oneOf:
-              - { type: string }
-              - { type: array, items: { type: string } }
-        - name: custom_topic_mode
-          in: query
-          required: false
-          schema:
-            type: string
-            enum: [extended, strict]
-        - name: custom_intent
-          in: query
-          required: false
-          schema:
-            oneOf:
-              - { type: string }
-              - { type: array, items: { type: string } }
-        - name: custom_intent_mode
-          in: query
-          required: false
-          schema:
-            type: string
-            enum: [extended, strict]
-        - name: detect_entites
-          in: query
-          required: false
-          schema: { type: boolean }
-        - name: detect_language
-          in: query
-          required: false
-          schema:
-            oneOf:
-              - { type: boolean }
-              - { type: array, items: { type: string } }
-        - name: diarize
-          in: query
-          required: false
-          schema: { type: boolean }
-        - name: dictation
-          in: query
-          required: false
-          schema: { type: boolean }
-        - name: encoding
-          in: query
-          required: false
-          schema:
-            type: string
-            enum: [linear16, flac, mulaw, amr-nb, amr-wb, opus, speex, g729]
-        - name: extra
-          in: query
-          required: false
-          schema:
-            oneOf:
-              - { type: string }
-              - { type: array, items: { type: string } }
-        - name: filler_words
-          in: query
-          required: false
-          schema: { type: boolean }
-        - name: intents
-          in: query
-          required: false
-          schema: { type: boolean }
-        - name: keyterm
-          in: query
-          required: false
-          schema: { type: array, items: { type: string } }
-        - name: keywords
-          in: query
-          required: false
-          schema:
-            oneOf:
-              - { type: string }
-              - { type: array, items: { type: string } }
         - name: language
           in: query
           required: false
           schema:
             type: string
-            description: BCP-47 language tag
-        - name: measurements
-          in: query
-          required: false
-          schema: { type: boolean }
-        - name: mip_opt_out
-          in: query
-          required: false
-          schema: { type: boolean }
+            description: BCP-47 language tag (e.g., 'en-US', 'es-ES')
         - name: model
           in: query
           required: false
-          schema: { type: string }
-        - name: multichannel
-          in: query
-          required: false
-          schema: { type: boolean }
-        - name: numerals
-          in: query
-          required: false
-          schema: { type: boolean }
+          schema:
+            type: string
+            description: STT model to use for transcription (e.g., 'nova-2', 'enhanced')
         - name: paragraphs
           in: query
           required: false
-          schema: { type: boolean }
-        - name: profanity_filter
-          in: query
-          required: false
-          schema: { type: boolean }
-        - name: punctuate
-          in: query
-          required: false
-          schema: { type: boolean }
-        - name: redact
-          in: query
-          required: false
           schema:
-            oneOf:
-              - { type: string }
-              - { type: array, items: { type: string } }
-        - name: replace
-          in: query
-          required: false
-          schema:
-            oneOf:
-              - { type: string }
-              - { type: array, items: { type: string } }
-        - name: search
-          in: query
-          required: false
-          schema:
-            oneOf:
-              - { type: string }
-              - { type: array, items: { type: string } }
-        - name: sentiment
-          in: query
-          required: false
-          schema: { type: boolean }
+            type: boolean
+            description: Enable paragraph segmentation in transcript
         - name: smart_format
           in: query
           required: false
-          schema: { type: boolean }
-        - name: summarize
-          in: query
-          required: false
           schema:
-            oneOf:
-              - { type: boolean }
-              - { type: string, enum: [v1, v2] }
+            type: boolean
+            description: Enable intelligent formatting of transcript
         - name: tag
           in: query
           required: false
@@ -183,25 +43,7 @@ paths:
             oneOf:
               - { type: string }
               - { type: array, items: { type: string } }
-        - name: topics
-          in: query
-          required: false
-          schema: { type: boolean }
-        - name: utterances
-          in: query
-          required: false
-          schema: { type: boolean }
-        - name: utt_split
-          in: query
-          required: false
-          schema: { type: number, format: double }
-        - name: version
-          in: query
-          required: false
-          schema:
-            oneOf:
-              - { type: string }
-              - { const: latest }
+            description: Tag for categorizing requests
         - name: X-Request-Id
           in: header
           required: false
