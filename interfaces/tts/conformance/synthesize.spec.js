@@ -123,27 +123,27 @@ describe("TTS Interface Conformance", () => {
       }
     });
 
-    it("should accept bit_rate parameter", async () => {
-      const response = await fetch(`${BASE_URL}${ENDPOINT}?bit_rate=128000`, {
+    it("should accept encoding parameter", async () => {
+      const response = await fetch(`${BASE_URL}${ENDPOINT}?encoding=mp3`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "X-Request-Id": requestId()
         },
-        body: JSON.stringify({ text: "Hello with custom bitrate" })
+        body: JSON.stringify({ text: "Hello with custom encoding" })
       });
 
       expect([200, 400]).toContain(response.status);
     });
 
-    it("should accept callback parameter", async () => {
-      const response = await fetch(`${BASE_URL}${ENDPOINT}?callback=https://example.com/webhook`, {
+    it("should accept tag parameter", async () => {
+      const response = await fetch(`${BASE_URL}${ENDPOINT}?tag=test-tag`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "X-Request-Id": requestId()
         },
-        body: JSON.stringify({ text: "Hello with callback" })
+        body: JSON.stringify({ text: "Hello with tag" })
       });
 
       expect([200, 400]).toContain(response.status);

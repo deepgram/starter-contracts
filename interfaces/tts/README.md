@@ -17,27 +17,14 @@ X-Request-Id: optional-request-id
 
 ## Query Parameters
 
-All parameters are optional. Starter applications can implement any subset based on their capabilities.
+> Additional parameters are available in the Deepgram API. See the [API documentation](https://developers.deepgram.com/reference/text-to-speech/generate) for additional features.
 
-**Based on actual Deepgram TTS API parameters:**
+All parameters are optional. This interface focuses on getting started functionality:
 
-**Core Parameters:**
-- `model`: AI model used for synthesis (defaults to `aura-asteria-en`, 63+ models available)
-- `container`: File format wrapper for output audio
-- `encoding`: Expected encoding of audio output
-- `sample_rate`: Sample rate for output audio (depends on encoding)
-
-**Audio Quality:**
-- `bit_rate`: Audio bitrate in bits per second (integer or string)
-
-**Callback Support:**
-- `callback`: URL to which callback request will be made
-- `callback_method`: HTTP method for callback request (POST/PUT)
-
-**Privacy:**
-- `mip_opt_out`: Opt out of Deepgram Model Improvement Program (boolean)
-
-See complete list in `$/schema/query.json`
+- `model`: AI model used for synthesis (e.g., `aura-asteria-en`, `aura-luna-en`)
+- `encoding`: Expected encoding of audio output (mp3, opus, flac, mulaw, alaw, aac, linear16)
+- `container`: File format wrapper for output audio (wav, ogg, none)
+- `tag`: Tag for categorizing requests
 
 ## Request Body
 

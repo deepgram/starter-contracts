@@ -20,45 +20,7 @@ paths:
           schema:
             type: string
             default: aura-asteria-en
-            description: AI model used to process submitted text (63+ models available)
-        - name: callback
-          in: query
-          required: false
-          schema:
-            type: string
-            description: URL to which callback request will be made
-        - name: callback_method
-          in: query
-          required: false
-          schema:
-            type: string
-            enum: [POST, PUT]
-            default: POST
-            description: HTTP method for callback request
-        - name: mip_opt_out
-          in: query
-          required: false
-          schema:
-            type: boolean
-            default: false
-            description: Opt out of Deepgram Model Improvement Program
-        - name: bit_rate
-          in: query
-          required: false
-          schema:
-            oneOf:
-              - type: integer
-              - type: string
-            default: 48000
-            description: Audio bitrate in bits per second (default 48000 bps for mp3)
-        - name: container
-          in: query
-          required: false
-          schema:
-            type: string
-            enum: [wav, ogg, none]
-            default: wav
-            description: Container specifies the file format wrapper for the output audio. Available options depend on encoding type. Valid values are wav, ogg, or none.
+            description: AI model used for synthesis (e.g., 'aura-asteria-en', 'aura-luna-en')
         - name: encoding
           in: query
           required: false
@@ -66,14 +28,25 @@ paths:
             type: string
             enum: [mp3, opus, flac, mulaw, alaw, aac, linear16]
             default: mp3
-            description: Encoding allows you to specify the expected encoding of your audio output. Supported encodings are mp3 (default), opus, flac, mulaw, alaw, aac, and linear16.
-        - name: sample_rate
+            description: Expected encoding of audio output (mp3, opus, flac, mulaw, alaw, aac, linear16)
+        - name: container
           in: query
           required: false
           schema:
-            type: integer
-            default: 24000
-            description: Sample rate for output audio in Hz (default 24000)
+            type: string
+            enum: [wav, ogg, none]
+            default: wav
+            description: File format wrapper for output audio (wav, ogg, none)
+        - name: tag
+          in: query
+          required: false
+          schema:
+            oneOf:
+              - type: string
+              - type: array
+                items:
+                  type: string
+            description: Tag for categorizing requests
         - name: X-Request-Id
           in: header
           required: false

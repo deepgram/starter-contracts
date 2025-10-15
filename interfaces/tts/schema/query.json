@@ -1,54 +1,14 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "QueryParameters",
-  "description": "Query parameters for TTS synthesis - all actual Deepgram TTS API parameters",
+  "description": "Minimal query parameters for TTS synthesis - focused on essential starter app functionality",
   "type": "object",
   "additionalProperties": false,
   "properties": {
     "model": {
       "type": "string",
       "default": "aura-asteria-en",
-      "description": "AI model used to process submitted text (63+ models available)"
-    },
-    "callback": {
-      "type": "string",
-      "description": "URL to which callback request will be made"
-    },
-    "callback_method": {
-      "type": "string",
-      "enum": [
-        "POST",
-        "PUT"
-      ],
-      "default": "POST",
-      "description": "HTTP method for callback request"
-    },
-    "mip_opt_out": {
-      "type": "boolean",
-      "default": false,
-      "description": "Opt out of Deepgram Model Improvement Program"
-    },
-    "bit_rate": {
-      "oneOf": [
-        {
-          "type": "integer"
-        },
-        {
-          "type": "string"
-        }
-      ],
-      "default": 48000,
-      "description": "Audio bitrate in bits per second (default: 48000 bps for mp3)"
-    },
-    "container": {
-      "type": "string",
-      "enum": [
-        "wav",
-        "ogg",
-        "none"
-      ],
-      "default": "wav",
-      "description": "Container specifies the file format wrapper for the output audio. Available options depend on encoding type."
+      "description": "AI model used for synthesis (e.g., 'aura-asteria-en', 'aura-luna-en')"
     },
     "encoding": {
       "type": "string",
@@ -62,12 +22,31 @@
         "linear16"
       ],
       "default": "mp3",
-      "description": "Encoding allows you to specify the expected encoding of your audio output. Supported encodings: mp3 (default), opus, flac, mulaw, alaw, aac, linear16"
+      "description": "Expected encoding of audio output (mp3, opus, flac, mulaw, alaw, aac, linear16)"
     },
-    "sample_rate": {
-      "type": "integer",
-      "default": 24000,
-      "description": "Sample rate for output audio in Hz (default: 24000)"
+    "container": {
+      "type": "string",
+      "enum": [
+        "wav",
+        "ogg",
+        "none"
+      ],
+      "default": "wav",
+      "description": "File format wrapper for output audio (wav, ogg, none)"
+    },
+    "tag": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      ],
+      "description": "Tag for categorizing requests"
     }
   }
 }
