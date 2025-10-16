@@ -6,13 +6,19 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "test:stt": "vitest run interfaces/stt/conformance/*.spec.js"
+    "test:stt": "vitest run interfaces/stt/conformance/transcribe.spec.js",
+    "test:tts:schema": "vitest run interfaces/tts/tests/schema_validation.test.js",
+    "test:tts": "vitest run interfaces/tts/conformance/synthesize.spec.js",
+    "test:text-intelligence:schema": "vitest run interfaces/text-intelligence/tests/schema_validation.test.js",
+    "test:text-intelligence": "vitest run interfaces/text-intelligence/conformance/analyze.spec.js"
   },
   "keywords": [],
   "author": "",
   "license": "",
   "packageManager": "pnpm@10.15.0",
   "devDependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
     "vitest": "3.2.4"
   }
 }
