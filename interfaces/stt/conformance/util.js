@@ -1,16 +1,8 @@
-import path from "node:path";
-import fs from "node:fs";
-import { fileURLToPath } from "node:url";
-import { validate, audioBytes, badAudio, BASE_URL, AUTH, requestId } from "../../conformance/util.js";
+import crypto from "node:crypto";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// Base URL for STT conformance tests
+export const BASE_URL = process.env.BASE_URL || "http://localhost:8787";
 
-const schemaDir = path.resolve(__dirname, "..", "schema");
-const readJSON = (p) => JSON.parse(fs.readFileSync(p, "utf8"));
-
-export const TRANSCRIPT_SCHEMA = readJSON(path.join(schemaDir, "transcript.json"));
-export const ERROR_SCHEMA = readJSON(path.join(schemaDir, "error.json"));
-
-export { validate, audioBytes, badAudio, BASE_URL, AUTH, requestId };
+// Generate unique request ID for tracing
+export const requestId = () => crypto.randomUUID();
 
