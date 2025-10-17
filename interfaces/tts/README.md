@@ -1,47 +1,70 @@
-# Text-to-Speech REST Contract
+# TTS Interface Contract
 
-one sentence: what it does and for whom.
+Minimal Text-to-Speech scaffolding for Deepgram starter applications. Send text, get audio.
+
+**Purpose:** This contract provides the bare minimum structure for internal developers to quickly build TTS starter apps. It's scaffolding, not a production-ready demo.
 
 ## Transport
 
-HTTP or Websocket
+HTTP REST API
 
 ## Endpoint
 
-URL path(s), method(s), query params.
+```http
+POST /tts/synthesize
+```
 
-## Auth
+## Query Parameters
 
-Authorization: Bearer <token>
+See [query.json](./schema/query.json).
 
-## Content Types
+## Request Body
 
-request and response (and any alternates).
+See [request.json](./schema/request.json).
 
-## Input 
+## Responses
 
-JSON Schema for JSON inputs; for binary, state the allowed MIME types.
+### 200 OK
 
-## Output
+Binary audio data (`application/octet-stream` or `audio/*`)
 
-JSON Schema or binary type, plus any metadata headers.
+### 4XX Errors
 
-## Errors
+See [error.json](./schema/error.json)
 
-list the possible error.code values for this interface.
- 
-## State and Sequencing
+## Conformance Requirements & Testing
 
-only for WebSocket: message types, allowed order, and state transitions.
+Starter applications implementing this interface at a minimum should pass the [conformance tests](./conformance/synthesize.spec.js). These conformance tests validate that your minimal starter app correctly implements the TTS scaffolding contract.
 
-## Examples
+### Prerequisites
 
-2 happy path, 2 failure cases (copy-pasteable).
+1. **Your starter app must be running** and accessible via HTTP
+2. **Implement the `/tts/synthesize` endpoint** according to this specification in your Starter App.
+3. **Install dependencies** in this contracts repo:
 
-## Conformance Tests
+   ```bash
+   cd starter-contracts
+   npm install
+   ```
 
-bullet list of assertions; link to fixtures.
- 
-## Breaking Change Rules
- 
-what you may change without bumping the major.
+### Running Conformance Tests
+
+#### Against Your Local Development Server
+
+```bash
+# Start your starter app (example - your commands will vary)
+cd my-tts-starter
+npm start  # Runs on http://localhost:3000
+
+# In another terminal, run conformance tests
+cd starter-contracts
+BASE_URL=http://localhost:3000 npm run test:tts
+```
+
+#### Against Your Deployed Starter App
+
+```bash
+# Test your deployed app
+BASE_URL=https://my-tts-app.vercel.app npm run test:tts
+```
+

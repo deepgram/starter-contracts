@@ -1,6 +1,6 @@
 > Temp file to be use for feature decisions for Starter Contracts
 
-## Minimal Functionality STT
+## Minimal Functionality STT - DONE
 
 ### Auth
 - Can authorize with API key
@@ -14,7 +14,7 @@
 - Request File
 
 
-## Minimal Functionality TTS > TODO
+## Minimal Functionality TTS > WIP
 
 ### Auth
 - Authorize with API key
@@ -24,9 +24,6 @@ TODO:
 ## Minimal Query Params TTS
 
 - model
-- encoding
-- container
-- tag
 
 ## can send text
  - Request Text
@@ -37,7 +34,7 @@ TODO:
 ### Auth
 - Authorize with API key
 
-## Minimal Query Params Text Intelligence > TODO
+## Minimal Query Params Text Intelligence
 
 - language
 - topics
