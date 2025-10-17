@@ -14,7 +14,7 @@
 - Request File
 
 
-## Minimal Functionality TTS > WIP
+## Minimal Functionality TTS > DONE
 
 ### Auth
 - Authorize with API key

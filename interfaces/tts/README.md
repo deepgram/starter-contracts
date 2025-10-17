@@ -26,7 +26,7 @@ See [request.json](./schema/request.json).
 
 ### 200 OK
 
-Binary audio data (`application/octet-stream` or `audio/*`)
+Binary audio data (`application/octet-stream`)
 
 ### 4XX Errors
 
