@@ -1,47 +1,73 @@
-# Text Intelligence REST Contract
+# Text Intelligence Interface Contract
 
-one sentence: what it does and for whom.
+Minimal Text Intelligence scaffolding for Deepgram starter applications. Send text, get intelligence insights.
+
+**Purpose:** This contract provides the bare minimum structure for internal developers to quickly build Text Intelligence starter apps. It's scaffolding, not a production-ready demo.
 
 ## Transport
 
-HTTP or Websocket
+HTTP REST API
 
 ## Endpoint
 
-URL path(s), method(s), query params.
+```http
+POST /text-intelligence/analyze
+```
 
-## Auth
+## Query Parameters
 
-Authorization: Bearer <token>
+See [query.json](./schema/query.json).
 
-## Content Types
+**Minimal parameters:**
+- `language` - Language code (en only. defaults to 'en')
+- `summarize` - Enable summarization (minimal parameter required for successful request)
 
-request and response (and any alternates).
+## Request Body
 
-## Input 
+See [request.json](./schema/request.json).
 
-JSON Schema for JSON inputs; for binary, state the allowed MIME types.
+## Responses
 
-## Output
+### 200 OK
 
-JSON Schema or binary type, plus any metadata headers.
+See [response.json](./schema/response.json)
 
-## Errors
+### 4XX Errors
 
-list the possible error.code values for this interface.
- 
-## State and Sequencing
+See [error.json](./schema/error.json)
 
-only for WebSocket: message types, allowed order, and state transitions.
+## Conformance Requirements & Testing
 
-## Examples
+Starter applications implementing this interface at a minimum should pass the [conformance tests](./conformance/analyze.spec.js). These conformance tests validate that your minimal starter app correctly implements the Text Intelligence scaffolding contract.
 
-2 happy path, 2 failure cases (copy-pasteable).
+### Prerequisites
 
-## Conformance Tests
+1. **Your starter app must be running** and accessible via HTTP
+2. **Implement the `/text-intelligence/analyze` endpoint** according to this specification in your Starter App.
+3. **Install dependencies** in this contracts repo:
 
-bullet list of assertions; link to fixtures.
- 
-## Breaking Change Rules
- 
-what you may change without bumping the major.
+   ```bash
+   cd starter-contracts
+   npm install
+   ```
+
+### Running Conformance Tests
+
+#### Against Your Local Development Server
+
+```bash
+# Start your starter app (example - your commands will vary)
+cd my-text-intelligence-starter
+npm start  # Runs on http://localhost:3000
+
+# In another terminal, run conformance tests
+cd starter-contracts
+BASE_URL=http://localhost:3000 npm run test:text-intelligence
+```
+
+#### Against Your Deployed Starter App
+
+```bash
+# Test your deployed app
+BASE_URL=https://my-text-intelligence-app.vercel.app npm run test:text-intelligence
+```
