@@ -1,64 +1,71 @@
-# Speech-to-Text REST Contract
+# STT Interface Contract
 
-Send audio, get a transcript JSON.
+Minimal Speech-to-Text scaffolding for Deepgram starter applications. Send audio URL, get transcript JSON.
+
+**Purpose:** This contract provides the bare minimum structure for internal developers to quickly build STT starter apps. It's scaffolding, not a production-ready demo.
 
 ## Transport
 
-HTTP
+HTTP REST API
 
 ## Endpoint
 
-```txt
-POST /v1/listen
-Content-Type: application/octet-stream
-Accept: application/json
+```http
+POST /stt/transcribe
 ```
 
-## Auth
+## Query Parameters
 
-`Authorization: Bearer <token>`
+See [query.json](./schema/query.json).
 
-## Content Types
+## Request Body
 
-request and response (and any alternates).
+See [request.json](./schema/request.json).
 
-## Input 
+## Responses
 
-### Body
+### 200 OK
 
-`$/schema/request.json`
+See [transcript.json](./schema/transcript.json)
 
-### Query Parameters
+### 4XX Errors
 
-`$/schema/query.json`
+See [error.json](./schema/error.json)
 
-## Output
+## Conformance Requirements & Testing
 
-### 200 OK:
+Starter applications implementing this interface at a minimum should pass the [conformance tests](./conformance/transcribe.spec.js). These conformance tests validate that your minimal starter app correctly implements the STT scaffolding contract.
 
-`$/schema/transcript.json`
+### Prerequisites
 
-## Errors
+1. **Your starter app must be running** and accessible via HTTP
+2. **Implement the `/stt/transcribe` endpoint** according to this specification in your Starter App.
+3. **Install dependencies** in this contracts repo:
 
-`$/schema/error.json`
+   ```bash
+   cd starter-contracts
+   npm install
+   ```
 
-`err_code` is one of:
+### Running Conformance Tests
 
-- `UNSUPPORTED_MEDIA_TYPE`
-- `AUDIO_TOO_LONG`
-- `BAD_AUDIO`
-- `MODEL_NOT_FOUND`
+#### Against Your Local Development Server
 
-## Examples
+```bash
+# Start your starter app (example - your commands will vary)
+cd my-stt-starter
+npm start  # Runs on http://localhost:3000
 
-2 happy path, 2 failure cases (copy-pasteable).
+# In another terminal, run conformance tests
+cd starter-contracts
+BASE_URL=http://localhost:3000 npm run test:stt
+```
 
-## Conformance Tests
+#### Against Your Deployed Starter App
 
-- Reject non-audio `Content-Type` with `415` and `UNSUPPORTED_MEDIA_TYPE`.
-- Echo `X-Request-Id`.
-- Produce `transcript` non-empty for valid audio.
- 
-## Breaking Change Rules
- 
-what you may change without bumping the major.
+```bash
+# Test your deployed app
+BASE_URL=https://my-stt-app.vercel.app npm run test:stt
+```
+
+
