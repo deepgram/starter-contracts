@@ -11,43 +11,23 @@ WebSocket
 ## Endpoint
 
 ```
-ws://localhost:PORT?stream_url=STREAM_URL&model=MODEL&language=LANGUAGE
+wss://{host}:{port}/live-stt/stream?stream_url=STREAM_URL
 ```
-
-### Example
-
-```
-ws://localhost:3000?stream_url=http://stream.live.vc.bbcmedia.co.uk/bbc_world_service&model=nova-3&language=en
-```
-
 ## Query Parameters
 
 See [query.json](./schema/query.json).
 
-**Minimal parameters:**
-- `stream_url` - URL of live audio stream (required)
-- `model` - STT model (defaults to 'nova-3')
-- `language` - Language code (defaults to 'en')
-
-## Request
-
-Binary audio data (containerized formats like WebM, MP3, AAC).
-
-The starter app fetches audio from the `stream_url` and streams it to Deepgram. Clients receive transcription results over the WebSocket connection.
+## Request Body
 
 See [request.json](./schema/request.json).
 
 ## Responses
 
-### Transcript Results
-
-Real-time transcription events (both interim and final results).
+### 200 OK
 
 See [response.json](./schema/response.json)
 
-### Errors
-
-WebSocket error messages.
+### 4XX Errors
 
 See [error.json](./schema/error.json)
 

@@ -17,9 +17,9 @@ info:
     url: https://developers.deepgram.com
 servers:
   starter-app:
-    host: localhost:3000
-    protocol: ws
-    description: Local starter app development server
+    host: "{host}:{port}"
+    protocol: wss
+    description: Starter app development server
     security:
       - $ref: "#/components/securitySchemes/ApiKeyAuth"
 components:
