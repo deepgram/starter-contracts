@@ -1,47 +1,88 @@
-# Speech-to-Text Websocket Contract
+# Live STT Interface Contract
 
-one sentence: what it does and for whom.
+Minimal live speech-to-text scaffolding for Deepgram starter applications. Stream live audio, get real-time transcripts.
+
+**Purpose:** This contract provides the bare minimum structure for internal developers to quickly build live STT starter apps. It's scaffolding, not a production-ready demo.
 
 ## Transport
 
-HTTP or Websocket
+WebSocket
 
 ## Endpoint
 
-URL path(s), method(s), query params.
+```
+ws://localhost:PORT?stream_url=STREAM_URL&model=MODEL&language=LANGUAGE
+```
 
-## Auth
+### Example
 
-Authorization: Bearer <token>
+```
+ws://localhost:3000?stream_url=http://stream.live.vc.bbcmedia.co.uk/bbc_world_service&model=nova-3&language=en
+```
 
-## Content Types
+## Query Parameters
 
-request and response (and any alternates).
+See [query.json](./schema/query.json).
 
-## Input 
+**Minimal parameters:**
+- `stream_url` - URL of live audio stream (required)
+- `model` - STT model (defaults to 'nova-3')
+- `language` - Language code (defaults to 'en')
 
-JSON Schema for JSON inputs; for binary, state the allowed MIME types.
+## Request
 
-## Output
+Binary audio data (containerized formats like WebM, MP3, AAC).
 
-JSON Schema or binary type, plus any metadata headers.
+The starter app fetches audio from the `stream_url` and streams it to Deepgram. Clients receive transcription results over the WebSocket connection.
 
-## Errors
+See [request.json](./schema/request.json).
 
-list the possible error.code values for this interface.
- 
-## State and Sequencing
+## Responses
 
-only for WebSocket: message types, allowed order, and state transitions.
+### Transcript Results
 
-## Examples
+Real-time transcription events (both interim and final results).
 
-2 happy path, 2 failure cases (copy-pasteable).
+See [response.json](./schema/response.json)
 
-## Conformance Tests
+### Errors
 
-bullet list of assertions; link to fixtures.
- 
-## Breaking Change Rules
- 
-what you may change without bumping the major.
+WebSocket error messages.
+
+See [error.json](./schema/error.json)
+
+## Conformance Requirements & Testing
+
+Starter applications implementing this interface at a minimum should pass the [conformance tests](./conformance/stream.spec.js). These conformance tests validate that your minimal starter app correctly implements the live STT scaffolding contract.
+
+### Prerequisites
+
+1. **Your starter app must be running** and accessible via WebSocket
+2. **Implement the WebSocket endpoint** according to this specification in your Starter App.
+3. **Install dependencies** in this contracts repo:
+
+   ```bash
+   cd starter-contracts
+   npm install
+   ```
+
+### Running Conformance Tests
+
+#### Against Your Local Development Server
+
+```bash
+# Start your starter app (example - your commands will vary)
+cd my-live-stt-starter
+npm start  # Runs on ws://localhost:3000
+
+# In another terminal, run conformance tests
+cd starter-contracts
+WS_URL=ws://localhost:3000 npm run test:live-stt
+```
+
+#### Against Your Deployed Starter App
+
+```bash
+# Test your deployed app
+WS_URL=wss://my-live-stt-app.vercel.app npm run test:live-stt
+```
