@@ -1,6 +1,6 @@
 > Temp file to be use for feature decisions for Starter Contracts
 
-## Minimal Functionality STT
+## Minimal Functionality STT - DONE
 
 ### Auth
 - Can authorize with API key
