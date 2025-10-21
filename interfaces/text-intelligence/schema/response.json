@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Response",
+  "description": "Text Intelligence analysis response",
+  "type": "object",
+  "required": [
+    "results"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "results": {
+      "type": "object",
+      "required": [
+        "summary"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "summary": {
+          "type": "object",
+          "required": [
+            "text"
+          ],
+          "properties": {
+            "text": {
+              "type": "string",
+              "description": "Generated summary of the analyzed text"
+            }
+          }
+        }
+      }
+    }
+  }
+}

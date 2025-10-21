@@ -13,42 +13,27 @@
 - Request URL
 - Request File
 
-
 ## Minimal Functionality TTS > DONE
 
 ### Auth
 - Authorize with API key
 
-TODO:
-
-## Minimal Query Params TTS
+## Minimal Query Params > DONE
 
 - model
 
 ## can send text
  - Request Text
 
-
-## Minimal functionality Text Intelligence > TODO
+## Minimal functionality Text Intelligence > DONE
 
 ### Auth
 - Authorize with API key
 
 ## Minimal Query Params Text Intelligence
 
-- language
-- topics
-- sentiment
-- summarize
-- intents
-- tag
+- language: Defaults to EN
+- summarize only
 
 ## can send text or URL
  - Request Text
- - Request URL
-
-
- # OpenAPI / Async API Specs
-
- - Do we need full or partial specs?
- - Should the API Spec offer more than what is available in conformance tests?
