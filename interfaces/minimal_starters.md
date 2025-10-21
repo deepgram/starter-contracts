@@ -1,6 +1,6 @@
 > Temp file to be use for feature decisions for Starter Contracts
 
-## Minimal Functionality STT - DONE
+## Minimal Functionality STT > DONE
 
 ### Auth
 - Can authorize with API key
@@ -18,7 +18,7 @@
 ### Auth
 - Authorize with API key
 
-## Minimal Query Params > DONE
+## Minimal Query Params
 
 - model
 
@@ -37,3 +37,15 @@
 
 ## can send text or URL
  - Request Text
+
+## Minimal Functionality STT LIVE > WIP
+
+### Auth
+- Can authorize with API key
+
+## Minimal Query Params STT
+- language: Defaults to EN
+- model:  Defaults to Nova-3
+
+### Can send containerized audio from a live stream
+- "stream_url": "http://stream.live.vc.bbcmedia.co.uk/bbc_world_service"
