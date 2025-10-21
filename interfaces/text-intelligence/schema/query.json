@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "QueryParameters",
+  "description": "Minimal query parameters for Text Intelligence analysis scaffolding",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "language": {
+      "type": "string",
+      "description": "Language code for analysis (en-only) Defaults to 'en'."
+    },
+    "summarize": {
+      "oneOf": [
+        {
+          "type": "boolean",
+          "description": "Enable summarization (Read API boolean option)"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "v1",
+            "v2"
+          ],
+          "description": "Summarization version (Listen API string option)"
+        }
+      ],
+      "description": "Enable text summarization. Required for successful analysis."
+    }
+  }
+}

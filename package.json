@@ -6,7 +6,8 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "test:stt": "vitest run interfaces/stt/conformance/transcribe.spec.js"
+    "test:stt": "vitest run interfaces/stt/conformance/transcribe.spec.js",
+    "test:text-intelligence": "vitest run interfaces/text-intelligence/conformance/analyze.spec.js"
   },
   "keywords": [],
   "author": "",
