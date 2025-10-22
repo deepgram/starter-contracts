@@ -7,11 +7,12 @@ const ENDPOINT = "/live-tts/stream";
 describe("Live TTS Interface Conformance:", () => {
 
   it("should connect and receive audio", async () => {
+    console.log('Attempting to connect to:', `${WS_URL}${ENDPOINT}`);
     const ws = new WebSocket(`${WS_URL}${ENDPOINT}`);
 
     await new Promise((resolve, reject) => {
       ws.on('open', () => {
-        console.log('WebSocket connected');
+        console.log('WebSocket connected successfully');
         resolve();
       });
       ws.on('error', (error) => {
@@ -20,6 +21,7 @@ describe("Live TTS Interface Conformance:", () => {
       });
     });
 
+    console.log('Sending text message...');
     // Send text message
     const textMessage = {
       type: "Speak",
@@ -27,9 +29,11 @@ describe("Live TTS Interface Conformance:", () => {
     };
     ws.send(JSON.stringify(textMessage));
 
+    console.log('Waiting for audio chunks...');
     // Wait for audio chunks
     const audioChunks = await waitForAudioChunks(ws, 15000);
 
+    console.log('Received', audioChunks.length, 'audio chunks');
     expect(audioChunks.length).toBeGreaterThan(0);
     expect(audioChunks[0]).toBeInstanceOf(Buffer);
 

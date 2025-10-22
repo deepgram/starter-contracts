@@ -17,9 +17,20 @@ export const waitForMessages = (ws, timeout = 5000) => {
     const messageHandler = (data) => {
       try {
         const message = JSON.parse(data.toString());
+        console.log('Received JSON message:', message.type);
         messages.push(message);
+
+        // Resolve after receiving metadata or error
+        if (message.type === 'Metadata' || message.type === 'Error') {
+          clearTimeout(timer);
+          ws.removeListener('message', messageHandler);
+          ws.removeListener('close', closeHandler);
+          console.log('Received target message, returning', messages.length, 'messages');
+          resolve(messages);
+        }
       } catch (error) {
         // Binary data (audio chunks)
+        console.log('Received binary data, size:', data.length);
         messages.push({ type: 'binary', data: data });
       }
     };
@@ -28,6 +39,7 @@ export const waitForMessages = (ws, timeout = 5000) => {
       clearTimeout(timer);
       ws.removeListener('message', messageHandler);
       ws.removeListener('close', closeHandler);
+      console.log('WebSocket closed, returning', messages.length, 'messages');
       resolve(messages);
     };
 
@@ -49,6 +61,15 @@ export const waitForAudioChunks = (ws, timeout = 5000) => {
       if (Buffer.isBuffer(data) || data instanceof ArrayBuffer) {
         console.log('Received binary audio chunk, size:', data.length);
         audioChunks.push(data);
+
+        // Resolve after receiving a reasonable amount of audio data
+        if (audioChunks.length >= 5) {
+          clearTimeout(timer);
+          ws.removeListener('message', messageHandler);
+          ws.removeListener('close', closeHandler);
+          console.log('Received sufficient audio chunks, returning', audioChunks.length, 'chunks');
+          resolve(audioChunks);
+        }
       } else {
         // Try to parse as JSON to see if it's a message
         try {
@@ -59,6 +80,15 @@ export const waitForAudioChunks = (ws, timeout = 5000) => {
           // If it's not JSON and not binary, it might still be audio
           console.log('Received non-JSON data, treating as audio, size:', data.length);
           audioChunks.push(data);
+
+          // Resolve after receiving a reasonable amount of audio data
+          if (audioChunks.length >= 5) {
+            clearTimeout(timer);
+            ws.removeListener('message', messageHandler);
+            ws.removeListener('close', closeHandler);
+            console.log('Received sufficient audio chunks, returning', audioChunks.length, 'chunks');
+            resolve(audioChunks);
+          }
         }
       }
     };
