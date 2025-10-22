@@ -8,13 +8,15 @@
   "scripts": {
     "test:stt": "vitest run interfaces/stt/conformance/transcribe.spec.js",
     "test:tts": "vitest run interfaces/tts/conformance/synthesize.spec.js",
-    "test:text-intelligence": "vitest run interfaces/text-intelligence/conformance/analyze.spec.js"
+    "test:text-intelligence": "vitest run interfaces/text-intelligence/conformance/analyze.spec.js",
+    "test:live-tts": "vitest run interfaces/live-tts/conformance/synthesize.spec.js"
   },
   "keywords": [],
   "author": "",
   "license": "",
   "packageManager": "pnpm@10.15.0",
   "devDependencies": {
-    "vitest": "3.2.4"
+    "vitest": "3.2.4",
+    "ws": "^8.18.0"
   }
 }

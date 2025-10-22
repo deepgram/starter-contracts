@@ -1,0 +1,77 @@
+import crypto from "node:crypto";
+
+// WebSocket URL for live TTS conformance tests
+export const WS_URL = process.env.WS_URL || "ws://localhost:3000";
+
+// Generate unique request ID for tracing
+export const requestId = () => crypto.randomUUID();
+
+// Helper function to wait for WebSocket messages
+export const waitForMessages = (ws, timeout = 5000) => {
+  return new Promise((resolve, reject) => {
+    const messages = [];
+    const timer = setTimeout(() => {
+      reject(new Error(`Timeout waiting for messages after ${timeout}ms`));
+    }, timeout);
+
+    const messageHandler = (data) => {
+      try {
+        const message = JSON.parse(data.toString());
+        messages.push(message);
+      } catch (error) {
+        // Binary data (audio chunks)
+        messages.push({ type: 'binary', data: data });
+      }
+    };
+
+    const closeHandler = () => {
+      clearTimeout(timer);
+      ws.removeListener('message', messageHandler);
+      ws.removeListener('close', closeHandler);
+      resolve(messages);
+    };
+
+    ws.on('message', messageHandler);
+    ws.on('close', closeHandler);
+  });
+};
+
+// Helper function to wait for audio chunks
+export const waitForAudioChunks = (ws, timeout = 5000) => {
+  return new Promise((resolve, reject) => {
+    const audioChunks = [];
+    const timer = setTimeout(() => {
+      reject(new Error(`Timeout waiting for audio chunks after ${timeout}ms`));
+    }, timeout);
+
+    const messageHandler = (data) => {
+      // Check if it's binary data (audio chunks)
+      if (Buffer.isBuffer(data) || data instanceof ArrayBuffer) {
+        console.log('Received binary audio chunk, size:', data.length);
+        audioChunks.push(data);
+      } else {
+        // Try to parse as JSON to see if it's a message
+        try {
+          const message = JSON.parse(data.toString());
+          console.log('Received JSON message:', message.type);
+          // If it's not audio, we can continue waiting
+        } catch (error) {
+          // If it's not JSON and not binary, it might still be audio
+          console.log('Received non-JSON data, treating as audio, size:', data.length);
+          audioChunks.push(data);
+        }
+      }
+    };
+
+    const closeHandler = () => {
+      clearTimeout(timer);
+      ws.removeListener('message', messageHandler);
+      ws.removeListener('close', closeHandler);
+      console.log('WebSocket closed, returning', audioChunks.length, 'audio chunks');
+      resolve(audioChunks);
+    };
+
+    ws.on('message', messageHandler);
+    ws.on('close', closeHandler);
+  });
+};
