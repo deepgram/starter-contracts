@@ -5,7 +5,6 @@
 
 ### Auth
 - Can authorize with API key
-	@@ -13,13 +14,13 @@
 - Request URL
 - Request File
 
