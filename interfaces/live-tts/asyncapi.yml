@@ -179,14 +179,30 @@ operations:
       - $ref: "#/components/operationTraits/AuthTrait"
     messages:
       - $ref: "#/channels/LiveTTSStream/messages/TextMessage"
-  ReceiveAudio:
+  ReceiveAudioChunk:
     action: receive
     channel:
       $ref: "#/channels/LiveTTSStream"
-    description: Receive real-time audio synthesis
+    description: Receive real-time synthesized audio chunks
     traits:
       - $ref: "#/components/operationTraits/AuthTrait"
     messages:
       - $ref: "#/channels/LiveTTSStream/messages/AudioChunk"
+  ReceiveMetadata:
+    action: receive
+    channel:
+      $ref: "#/channels/LiveTTSStream"
+    description: Receive connection metadata and model information
+    traits:
+      - $ref: "#/components/operationTraits/AuthTrait"
+    messages:
       - $ref: "#/channels/LiveTTSStream/messages/MetadataEvent"
+  ReceiveError:
+    action: receive
+    channel:
+      $ref: "#/channels/LiveTTSStream"
+    description: Receive error events from the live synthesis stream
+    traits:
+      - $ref: "#/components/operationTraits/AuthTrait"
+    messages:
       - $ref: "#/channels/LiveTTSStream/messages/ErrorEvent"
