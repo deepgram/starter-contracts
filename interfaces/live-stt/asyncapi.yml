@@ -251,14 +251,30 @@ operations:
       - $ref: "#/components/operationTraits/AuthTrait"
     messages:
       - $ref: "#/channels/LiveSTTStream/messages/AudioData"
-  ReceiveTranscripts:
+  ReceiveTranscriptResult:
     action: receive
     channel:
       $ref: "#/channels/LiveSTTStream"
-    description: Receive real-time transcription results
+    description: Receive real-time transcription results (interim and final)
     traits:
       - $ref: "#/components/operationTraits/AuthTrait"
     messages:
       - $ref: "#/channels/LiveSTTStream/messages/TranscriptResult"
+  ReceiveMetadata:
+    action: receive
+    channel:
+      $ref: "#/channels/LiveSTTStream"
+    description: Receive connection metadata and model information
+    traits:
+      - $ref: "#/components/operationTraits/AuthTrait"
+    messages:
       - $ref: "#/channels/LiveSTTStream/messages/MetadataEvent"
+  ReceiveError:
+    action: receive
+    channel:
+      $ref: "#/channels/LiveSTTStream"
+    description: Receive error events from the live transcription stream
+    traits:
+      - $ref: "#/components/operationTraits/AuthTrait"
+    messages:
       - $ref: "#/channels/LiveSTTStream/messages/ErrorEvent"
