@@ -103,7 +103,7 @@ describe("Flux Interface Conformance:", () => {
     const firstEvent = turnInfoEvents[0];
     expect(firstEvent.type).toBe("TurnInfo");
     expect(firstEvent.event).toBeDefined();
-    expect(['StartOfTurn', 'EndOfTurn']).toContain(firstEvent.event);
+    expect(['Update', 'StartOfTurn', 'EndOfTurn']).toContain(firstEvent.event);
     expect(firstEvent.transcript).toBeDefined();
     expect(firstEvent.words).toBeDefined();
     expect(Array.isArray(firstEvent.words)).toBe(true);

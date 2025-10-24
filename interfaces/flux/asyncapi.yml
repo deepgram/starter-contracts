@@ -96,9 +96,10 @@ components:
         event:
           type: string
           enum:
+            - Update
             - StartOfTurn
             - EndOfTurn
-          description: Type of turn event
+          description: Type of turn event (Update, StartOfTurn, EndOfTurn)
         turn_index:
           type: number
           description: Index of the current turn
