@@ -52,3 +52,14 @@
 - "stream_url": "http://stream.live.vc.bbcmedia.co.uk/bbc_world_service"
 
 ---
+## Minimal Functionality FLux > WIP
+
+### Auth
+- Can authorize with API key
+
+### Minimal Query Params
+- Model, Defaults to flux-general-en
+
+
+### Can send audio from a live stream
+- "stream_url": "http://stream.live.vc.bbcmedia.co.uk/bbc_world_service"
