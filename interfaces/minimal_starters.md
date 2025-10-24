@@ -47,7 +47,7 @@
 - "stream_url": "http://stream.live.vc.bbcmedia.co.uk/bbc_world_service"
 
 ---
-## Minimal Functionality TTS LIVE > WIP
+## Minimal Functionality TTS LIVE > DONE
 
 ### Auth
 - Can authorize with API key
