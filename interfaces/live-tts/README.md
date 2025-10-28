@@ -1,47 +1,68 @@
-# Text-to-Speech Websocket Contract
+# Live TTS Interface Contract
 
-one sentence: what it does and for whom.
+Minimal live text-to-speech scaffolding for Deepgram starter applications. Send text, get real-time audio via WebSocket.
+
+**Purpose:** This contract provides the bare minimum structure for internal developers to quickly build live TTS starter apps. It's scaffolding, not a production-ready demo.
 
 ## Transport
 
-HTTP or Websocket
+WebSocket
 
 ## Endpoint
 
-URL path(s), method(s), query params.
+```
+wss://{host}:{port}/live-tts/stream?model=MODEL
+```
+## Query Parameters
 
-## Auth
+See [query.json](./schema/query.json).
 
-Authorization: Bearer <token>
+## Request Body
 
-## Content Types
+See [request.json](./schema/request.json).
 
-request and response (and any alternates).
+## Responses
 
-## Input 
+### 200 OK
 
-JSON Schema for JSON inputs; for binary, state the allowed MIME types.
+See [response.json](./schema/response.json)
 
-## Output
+### 4XX Errors
 
-JSON Schema or binary type, plus any metadata headers.
+See [error.json](./schema/error.json)
 
-## Errors
+## Conformance Requirements & Testing
 
-list the possible error.code values for this interface.
- 
-## State and Sequencing
+Starter applications implementing this interface at a minimum should pass the [conformance tests](./conformance/synthesize.spec.js). These conformance tests validate that your minimal starter app correctly implements the live TTS scaffolding contract.
 
-only for WebSocket: message types, allowed order, and state transitions.
+### Prerequisites
 
-## Examples
+1. **Your starter app must be running** and accessible via WebSocket
+2. **Implement the WebSocket endpoint** according to this specification in your Starter App.
+3. **Install dependencies** in this contracts repo:
 
-2 happy path, 2 failure cases (copy-pasteable).
+   ```bash
+   cd starter-contracts
+   npm install
+   ```
 
-## Conformance Tests
+### Running Conformance Tests
 
-bullet list of assertions; link to fixtures.
- 
-## Breaking Change Rules
- 
-what you may change without bumping the major.
+#### Against Your Local Development Server
+
+```bash
+# Start your starter app (example - your commands will vary)
+cd my-live-tts-starter
+npm start  # Runs on ws://localhost:3000
+
+# In another terminal, run conformance tests
+cd starter-contracts
+WS_URL=ws://localhost:3000 npm run test:live-tts
+```
+
+#### Against Your Deployed Starter App
+
+```bash
+# Test your deployed app
+WS_URL=wss://my-live-tts-app.vercel.app npm run test:live-tts
+```
