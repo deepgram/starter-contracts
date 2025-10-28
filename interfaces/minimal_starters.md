@@ -5,12 +5,6 @@
 
 ### Auth
 - Can authorize with API key
-
-## Minimal Query Params STT
-- language: Defaults to EN
-- model:  Defaults to Nova-3
-
-### Can send both a URL and File
 - Request URL
 - Request File
 
@@ -24,9 +18,10 @@
 - model
 
 ## can send text
- - Request Text
+-  Request Text
 
-## Minimal functionality Text Intelligence > DONE
+---
+## Minimal Query Params Text Intelligence > DONE
 
 ### Auth
 - Authorize with API key
@@ -52,3 +47,13 @@
 - "stream_url": "http://stream.live.vc.bbcmedia.co.uk/bbc_world_service"
 
 ---
+## Minimal Functionality TTS LIVE > DONE
+
+### Auth
+- Can authorize with API key
+
+## Minimal Query Params
+- model
+
+## can send text
+ - Request Text
