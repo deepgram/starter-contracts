@@ -1,47 +1,73 @@
-# Agent Websocket Contract
+# Agent Interface Contract
 
-one sentence: what it does and for whom.
+Minimal Voice Agent scaffolding for Deepgram starter applications. Connect via WebSocket for conversational AI with speech-to-text, LLM processing, and text-to-speech.
+
+**Purpose:** This contract provides the bare minimum structure for internal developers to quickly build Voice Agent starter apps. It's scaffolding, not a production-ready demo.
 
 ## Transport
 
-HTTP or Websocket
+WebSocket
 
 ## Endpoint
 
-URL path(s), method(s), query params.
+```
+wss://{host}:{port}/agent/converse
+```
 
-## Auth
+## Query Parameters
 
-Authorization: Bearer <token>
+See [query.json](./schema/query.json).
 
-## Content Types
+## Request Body
 
-request and response (and any alternates).
+See [request.json](./schema/request.json).
 
-## Input 
+## Responses
 
-JSON Schema for JSON inputs; for binary, state the allowed MIME types.
+### WebSocket Messages
 
-## Output
+See [response.json](./schema/response.json)
 
-JSON Schema or binary type, plus any metadata headers.
+### Errors
 
-## Errors
+See [error.json](./schema/error.json)
 
-list the possible error.code values for this interface.
- 
-## State and Sequencing
+### Warnings
 
-only for WebSocket: message types, allowed order, and state transitions.
+See [warning.json](./schema/warning.json)
 
-## Examples
+## Conformance Requirements & Testing
 
-2 happy path, 2 failure cases (copy-pasteable).
+Starter applications implementing this interface at a minimum should pass the [conformance tests](./conformance/converse.spec.js). These conformance tests validate that your minimal starter app correctly implements the Voice Agent pass-through proxy, forwarding messages between the browser and Deepgram's Agent API.
 
-## Conformance Tests
+### Prerequisites
 
-bullet list of assertions; link to fixtures.
- 
-## Breaking Change Rules
- 
-what you may change without bumping the major.
+1. **Your starter app must be running** and accessible via WebSocket
+2. **Implement the `/agent/converse` WebSocket endpoint** according to this specification in your Starter App.
+3. **Install dependencies** in this contracts repo:
+
+   ```bash
+   cd starter-contracts
+   pnpm install
+   ```
+
+### Running Conformance Tests
+
+#### Against Your Local Development Server
+
+```bash
+# Start your starter app (example - your commands will vary)
+cd my-agent-starter
+npm start  # Runs on ws://localhost:3000
+
+# In another terminal, run conformance tests
+cd starter-contracts
+WS_URL=ws://localhost:3000 pnpm run test:agent
+```
+
+#### Against Your Deployed Starter App
+
+```bash
+# Test your deployed app
+WS_URL=wss://my-agent-app.example.com pnpm run test:agent
+```
