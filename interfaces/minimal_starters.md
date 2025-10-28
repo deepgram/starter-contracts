@@ -49,11 +49,14 @@
 ---
 ## Minimal Functionality TTS LIVE > DONE
 
+## Minimal Functionaity Flux > DONE
+
 ### Auth
 - Can authorize with API key
 
-## Minimal Query Params
-- model
+### Minimal Query Params
+- Model, Defaults to flux-general-en
 
-## can send text
- - Request Text
+
+### Can send audio from a live stream
+- "stream_url": "http://stream.live.vc.bbcmedia.co.uk/bbc_world_service"
