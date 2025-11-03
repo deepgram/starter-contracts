@@ -11,7 +11,8 @@
     "test:text-intelligence": "vitest run interfaces/text-intelligence/conformance/analyze.spec.js",
     "test:live-stt": "vitest run interfaces/live-stt/conformance/stream.spec.js",
     "test:live-tts": "vitest run interfaces/live-tts/conformance/synthesize.spec.js",
-    "test:flux": "vitest run interfaces/flux/conformance/stream.spec.js"
+    "test:flux": "vitest run interfaces/flux/conformance/stream.spec.js",
+    "test:agent": "vitest run interfaces/agent/conformance/converse.spec.js"
   },
   "keywords": [],
   "author": "",
