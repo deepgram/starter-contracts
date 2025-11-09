@@ -1,6 +1,6 @@
 # STT Interface Contract
 
-Minimal Speech-to-Text scaffolding for Deepgram starter applications. Send audio URL, get transcript JSON.
+Minimal Speech-to-Text scaffolding for Deepgram starter applications. Upload audio file or send URL via multipart form data, get transcript JSON.
 
 **Purpose:** This contract provides the bare minimum structure for internal developers to quickly build STT starter apps. It's scaffolding, not a production-ready demo.
 
@@ -14,13 +14,16 @@ HTTP REST API
 POST /stt/transcribe
 ```
 
-## Query Parameters
-
-See [query.json](./schema/query.json).
-
-## Request Body
+## Request Body (multipart/form-data)
 
 See [request.json](./schema/request.json).
+
+Required (one of):
+- `file` - Audio/video file (binary)
+- `url` - URL to audio file (string)
+
+Optional:
+- `model` - STT model to use (string, e.g., 'nova-3', 'nova-2', 'base')
 
 ## Responses
 

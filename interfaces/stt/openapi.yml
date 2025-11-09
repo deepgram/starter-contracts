@@ -4,38 +4,34 @@ info:
   version: 1.0.0
   description: >
     Minimal Speech-to-Text scaffolding for Deepgram starter applications.
-    Send audio URL, get a transcript JSON.
+    Upload audio file or provide URL via multipart form data, get a transcript JSON.
 
 paths:
   /stt/transcribe:
     post:
-      summary: Transcribe audio from URL
-      description: Accepts audio URL and returns transcription.
-      parameters:
-        - name: model
-          in: query
-          required: false
-          schema:
-            type: string
-            description: STT model to use for transcription (e.g., 'nova-3', 'nova-2', 'base')
-        - name: X-Request-Id
-          in: header
-          required: false
-          schema:
-            type: string
-            description: Request identifier for tracing
+      summary: Transcribe audio file or URL
+      description: Accepts audio file upload or URL via multipart form data and returns transcription.
       requestBody:
         required: true
         content:
-          application/json:
+          multipart/form-data:
             schema:
               type: object
-              required: [url]
               properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Audio or video file to transcribe
                 url:
                   type: string
                   format: uri
                   description: URL pointing to audio file to transcribe
+                model:
+                  type: string
+                  description: STT model to use for transcription (e.g., 'nova-3', 'nova-2', 'base')
+              oneOf:
+                - required: [file]
+                - required: [url]
       responses:
         "200":
           description: Successful transcription response
