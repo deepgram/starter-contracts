@@ -106,6 +106,6 @@ Refer to individual READMEs for detailed setup instructions:
 
 * Report an [issue or bug](https://github.com/deepgram/starter-contracts/issues)
 
-## 📄 License
+## License
 
 This project is licensed under the [LICENSE](./LICENSE) file in the repository root.
