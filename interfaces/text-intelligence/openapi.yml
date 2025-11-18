@@ -10,7 +10,7 @@ paths:
   /text-intelligence/analyze:
     post:
       summary: Analyze text for intelligence insights
-      description: Accepts text input and returns analysis results.
+      description: Accepts text directly or URL via multipart form data and returns analysis results.
       parameters:
         - name: language
           in: query
@@ -38,14 +38,20 @@ paths:
       requestBody:
         required: true
         content:
-          application/json:
+          multipart/form-data:
             schema:
               type: object
-              required: [text]
               properties:
                 text:
                   type: string
                   description: Text to analyze for intelligence insights
+                url:
+                  type: string
+                  format: uri
+                  description: URL pointing to text file to analyze
+              oneOf:
+                - required: [text]
+                - required: [url]
       responses:
         "200":
           description: Successful analysis response
