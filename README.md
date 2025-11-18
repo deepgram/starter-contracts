@@ -46,7 +46,7 @@ cd starter-apps/starter-contracts
  pnpm i
  ```
 
-## 📁 Repository Structure
+## Repository Structure
 
 ```
 interfaces/
@@ -64,7 +64,7 @@ Each interface directory contains:
 - `conformance/` - Conformance tests and documentation
 - `README.md` - Interface-specific documentation
 
-## 🧪 Testing Starter Apps
+## Testing Starter Apps
 
 ### Overview
 
@@ -72,7 +72,9 @@ This repository includes comprehensive conformance tests for validating that you
 
 ### Available Test Suites
 
-Refer to individual READMEs for the test suites.
+These are integration tests that require a running starter application implementing the interface you want to test.
+
+Refer to individual READMEs for detailed setup instructions:
 
 **REST**
 - [STT](./interfaces/stt/README.md)
@@ -80,22 +82,11 @@ Refer to individual READMEs for the test suites.
 - [TTS](./interfaces/tts/README.md)
 
 **Websockets**
-- STT Live (coming soon)
-- TTS Live (coming soon)
-- Flux (coming soon)
-- Agent (coming soon)
+- [STT Live](./interfaces/live-stt/README.md)
+- [TTS Live](./interfaces/live-tts/README.md)
+- [Flux](./interfaces/flux/README.md)
+- [Agent](./interfaces/agent/README.md)
 
-
-```bash
-# Test Speech-to-Text interface
-pnpm test:stt
-
-# Test Text-to-Speech interface
-pnpm test:tts
-
-# Test Text Intelligence interface
-pnpm test:text-intelligence
-```
 
 ### Adding New Interface Specifications
 
