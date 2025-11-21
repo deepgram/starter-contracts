@@ -112,5 +112,205 @@ describe("Text Intelligence Interface Conformance:", () => {
     expect(result.results.summary).toBeDefined();
   });
 
+  // URL Support Tests
+  it("should analyze text from URL with summarize=true", async () => {
+    // Note: This test requires a publicly accessible URL with text content
+    // For now, we test the endpoint accepts URL format:
+    const testUrl = "https://gist.githubusercontent.com/jpvajda/34a0f88244ef8ff7592568892189006c/raw/2e9e7ad79a32f7130e19f7172d856fbe0b6b5891/sample-text.txt";
+    // When node text intelligence starter is public, switch to this URL:
+    // const testURL="https://raw.githubusercontent.com/deepgram-starters/node-text-intelligence/refs/heads/main/sample-text.txt?token=GHSAT0AAAAAADLGYAD3GT27XG4CZOFNRJCU2I7TOFQ"
+
+    const response = await fetch(`${BASE_URL}${ENDPOINT}?summarize=true`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Request-Id": requestId()
+      },
+      body: JSON.stringify({ url: testUrl })
+    });
+
+    // Should either succeed or fail gracefully (URL might not exist in test env)
+    expect([200, 400]).toContain(response.status);
+
+    if (response.status === 200) {
+      const result = await response.json();
+      expect(result.results).toBeDefined();
+      expect(result.results.summary).toBeDefined();
+    }
+  });
+
+  it("should return error when both text and url provided", async () => {
+    const response = await fetch(`${BASE_URL}${ENDPOINT}?summarize=true`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Request-Id": requestId()
+      },
+      body: JSON.stringify({ text: SAMPLE_TEXT, url: "https://example.com/text.txt" })
+    });
+
+    expect(response.status).toBe(400);
+    const result = await response.json();
+    expect(result.error).toBeDefined();
+    expect(result.error.code).toBeDefined();
+  });
+
+  it("should return error for invalid URL format", async () => {
+    const response = await fetch(`${BASE_URL}${ENDPOINT}?summarize=true`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Request-Id": requestId()
+      },
+      body: JSON.stringify({ url: "not-a-valid-url" })
+    });
+
+    expect(response.status).toBe(400);
+    const result = await response.json();
+    expect(result.error).toBeDefined();
+    expect(result.error.code).toBe("INVALID_URL");
+  });
+
+  it("should return error for unreachable URL", async () => {
+    const response = await fetch(`${BASE_URL}${ENDPOINT}?summarize=true`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Request-Id": requestId()
+      },
+      body: JSON.stringify({ url: "https://nonexistent-deepgram-test-domain-12345.com/file.txt" })
+    });
+
+    expect(response.status).toBe(400);
+    const result = await response.json();
+    expect(result.error).toBeDefined();
+    expect(result.error.code).toBe("INVALID_URL");
+  });
+
+  // Optional Feature Tests
+  it("should include topics with segments structure when topics=true", async () => {
+    const response = await fetch(`${BASE_URL}${ENDPOINT}?topics=true`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Request-Id": requestId()
+      },
+      body: JSON.stringify({ text: SAMPLE_TEXT })
+    });
+
+    expect(response.status).toBe(200);
+    const result = await response.json();
+    expect(result.results).toBeDefined();
+    expect(result.results.topics).toBeDefined();
+    expect(result.results.topics.segments).toBeDefined();
+    expect(Array.isArray(result.results.topics.segments)).toBe(true);
+
+    if (result.results.topics.segments.length > 0) {
+      const segment = result.results.topics.segments[0];
+      expect(segment).toHaveProperty('text');
+      expect(segment).toHaveProperty('start_word');
+      expect(segment).toHaveProperty('end_word');
+      expect(segment).toHaveProperty('topics');
+      expect(Array.isArray(segment.topics)).toBe(true);
+
+      if (segment.topics.length > 0) {
+        expect(segment.topics[0]).toHaveProperty('topic');
+        expect(segment.topics[0]).toHaveProperty('confidence_score');
+        expect(typeof segment.topics[0].topic).toBe('string');
+        expect(typeof segment.topics[0].confidence_score).toBe('number');
+      }
+    }
+  });
+
+  it("should include sentiments with segments and average when sentiment=true", async () => {
+    const response = await fetch(`${BASE_URL}${ENDPOINT}?sentiment=true`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Request-Id": requestId()
+      },
+      body: JSON.stringify({ text: SAMPLE_TEXT })
+    });
+
+    expect(response.status).toBe(200);
+    const result = await response.json();
+    expect(result.results).toBeDefined();
+    expect(result.results.sentiments).toBeDefined();
+    expect(result.results.sentiments.segments).toBeDefined();
+    expect(Array.isArray(result.results.sentiments.segments)).toBe(true);
+    expect(result.results.sentiments.average).toBeDefined();
+
+    if (result.results.sentiments.segments.length > 0) {
+      const segment = result.results.sentiments.segments[0];
+      expect(segment).toHaveProperty('text');
+      expect(segment).toHaveProperty('start_word');
+      expect(segment).toHaveProperty('end_word');
+      expect(segment).toHaveProperty('sentiment');
+      expect(segment).toHaveProperty('sentiment_score');
+      expect(['positive', 'negative', 'neutral']).toContain(segment.sentiment);
+      expect(typeof segment.sentiment_score).toBe('number');
+    }
+
+    expect(result.results.sentiments.average).toHaveProperty('sentiment');
+    expect(result.results.sentiments.average).toHaveProperty('sentiment_score');
+    expect(['positive', 'negative', 'neutral']).toContain(result.results.sentiments.average.sentiment);
+    expect(typeof result.results.sentiments.average.sentiment_score).toBe('number');
+  });
+
+  it("should include intents with segments structure when intents=true", async () => {
+    const response = await fetch(`${BASE_URL}${ENDPOINT}?intents=true`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Request-Id": requestId()
+      },
+      body: JSON.stringify({ text: SAMPLE_TEXT })
+    });
+
+    expect(response.status).toBe(200);
+    const result = await response.json();
+    expect(result.results).toBeDefined();
+    expect(result.results.intents).toBeDefined();
+    expect(result.results.intents.segments).toBeDefined();
+    expect(Array.isArray(result.results.intents.segments)).toBe(true);
+
+    if (result.results.intents.segments.length > 0) {
+      const segment = result.results.intents.segments[0];
+      expect(segment).toHaveProperty('text');
+      expect(segment).toHaveProperty('start_word');
+      expect(segment).toHaveProperty('end_word');
+      expect(segment).toHaveProperty('intents');
+      expect(Array.isArray(segment.intents)).toBe(true);
+
+      if (segment.intents.length > 0) {
+        expect(segment.intents[0]).toHaveProperty('intent');
+        expect(segment.intents[0]).toHaveProperty('confidence_score');
+        expect(typeof segment.intents[0].intent).toBe('string');
+        expect(typeof segment.intents[0].confidence_score).toBe('number');
+      }
+    }
+  });
+
+  it("should handle multiple features simultaneously", async () => {
+    const response = await fetch(`${BASE_URL}${ENDPOINT}?summarize=true&topics=true&sentiment=true&intents=true`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Request-Id": requestId()
+      },
+      body: JSON.stringify({ text: SAMPLE_TEXT })
+    });
+
+    expect(response.status).toBe(200);
+    const result = await response.json();
+    expect(result.results).toBeDefined();
+
+    // All features should be present
+    expect(result.results.summary).toBeDefined();
+    expect(result.results.topics).toBeDefined();
+    expect(result.results.sentiments).toBeDefined();
+    expect(result.results.intents).toBeDefined();
+  });
+
 });
 

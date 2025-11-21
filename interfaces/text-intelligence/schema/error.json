@@ -28,7 +28,8 @@
             "TEXT_TOO_LONG",
             "INVALID_TEXT",
             "MODEL_NOT_FOUND",
-            "EMPTY_TEXT"
+            "EMPTY_TEXT",
+            "INVALID_URL"
           ]
         },
         "message": {

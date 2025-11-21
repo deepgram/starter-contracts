@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "QueryParameters",
-  "description": "Minimal query parameters for Text Intelligence analysis scaffolding",
+  "description": "Query parameters for Text Intelligence analysis",
   "type": "object",
   "additionalProperties": false,
   "properties": {
@@ -18,13 +18,24 @@
         {
           "type": "string",
           "enum": [
-            "v1",
             "v2"
           ],
-          "description": "Summarization version (Listen API string option)"
+          "description": "Summarization version (v1 no longer supported)"
         }
       ],
-      "description": "Enable text summarization. Required for successful analysis."
+      "description": "Enable text summarization"
+    },
+    "topics": {
+      "type": "boolean",
+      "description": "Enable topic detection"
+    },
+    "sentiment": {
+      "type": "boolean",
+      "description": "Enable sentiment analysis"
+    },
+    "intents": {
+      "type": "boolean",
+      "description": "Enable intent recognition"
     }
   }
 }
