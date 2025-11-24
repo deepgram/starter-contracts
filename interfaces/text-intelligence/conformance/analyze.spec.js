@@ -114,11 +114,9 @@ describe("Text Intelligence Interface Conformance:", () => {
 
   // URL Support Tests
   it("should analyze text from URL with summarize=true", async () => {
-    // Note: This test requires a publicly accessible URL with text content
-    // For now, we test the endpoint accepts URL format:
-    const testUrl = "https://gist.githubusercontent.com/jpvajda/34a0f88244ef8ff7592568892189006c/raw/2e9e7ad79a32f7130e19f7172d856fbe0b6b5891/sample-text.txt";
-    // When node text intelligence starter is public, switch to this URL:
-    // const testURL="https://raw.githubusercontent.com/deepgram-starters/node-text-intelligence/refs/heads/main/sample-text.txt?token=GHSAT0AAAAAADLGYAD3GT27XG4CZOFNRJCU2I7TOFQ"
+    // Note: This test requires a publicly accessible URL with text content.
+    // The node text intelligence starter hosts this public file.
+    const testUrl = "https://raw.githubusercontent.com/deepgram-starters/node-text-intelligence/refs/heads/main/sample-text.txt"
 
     const response = await fetch(`${BASE_URL}${ENDPOINT}?summarize=true`, {
       method: "POST",
