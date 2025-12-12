@@ -53,16 +53,16 @@ Starter applications implementing this interface at a minimum should pass the [c
 ```bash
 # Start your starter app (example - your commands will vary)
 cd my-live-stt-starter
-npm start  # Runs on ws://localhost:3000
+pnpm start  # Runs on ws://localhost:3000
 
 # In another terminal, run conformance tests
 cd starter-contracts
-WS_URL=ws://localhost:3000 npm run test:live-stt
+WS_URL=ws://localhost:3000 pnpm run test:live-stt
 ```
 
 #### Against Your Deployed Starter App
 
 ```bash
 # Test your deployed app
-WS_URL=wss://my-live-stt-app.vercel.app npm run test:live-stt
+WS_URL=wss://my-live-stt-app.vercel.app pnpm run test:live-stt
 ```

@@ -43,7 +43,7 @@ Starter applications implementing this interface at a minimum should pass the [c
 
    ```bash
    cd starter-contracts
-   npm install
+   pnpm install
    ```
 
 ### Running Conformance Tests
@@ -53,17 +53,17 @@ Starter applications implementing this interface at a minimum should pass the [c
 ```bash
 # Start your starter app (example - your commands will vary)
 cd my-flux-starter
-npm start  # Runs on ws://localhost:3000
+pnpm start  # Runs on ws://localhost:3000
 
 # In another terminal, run conformance tests
 cd starter-contracts
-WS_URL=ws://localhost:3000 npm run test:flux
+WS_URL=ws://localhost:3000 pnpm run test:flux
 ```
 
 #### Against Your Deployed Starter App
 
 ```bash
 # Test your deployed app
-WS_URL=wss://my-flux-app.vercel.app npm run test:flux
+WS_URL=wss://my-flux-app.vercel.app pnpm run test:flux
 ```
 
