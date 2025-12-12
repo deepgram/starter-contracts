@@ -73,7 +73,7 @@ describe("Live STT Interface Conformance:", () => {
     ws.on('message', (data) => {
       try {
         const result = JSON.parse(data);
-        if (result.type === "Error") {
+        if (result.error) {
           errors.push(result);
         }
       } catch (e) {
@@ -98,6 +98,8 @@ describe("Live STT Interface Conformance:", () => {
     });
 
     expect(errors.length).toBeGreaterThan(0);
+    expect(errors[0]).toHaveProperty('error');
+    expect(errors[0]).not.toHaveProperty('type');
     expect(errors[0].error.code).toBe("INVALID_STREAM_URL");
   }, 10000);
 
@@ -108,7 +110,7 @@ describe("Live STT Interface Conformance:", () => {
     ws.on('message', (data) => {
       try {
         const result = JSON.parse(data);
-        if (result.type === "Error") {
+        if (result.error) {
           errors.push(result);
         }
       } catch (e) {
@@ -132,6 +134,8 @@ describe("Live STT Interface Conformance:", () => {
     });
 
     expect(errors.length).toBeGreaterThan(0);
+    expect(errors[0]).toHaveProperty('error');
+    expect(errors[0]).not.toHaveProperty('type');
     expect(errors[0].error.code).toBe("INVALID_STREAM_URL");
   }, 10000);
 
@@ -142,7 +146,7 @@ describe("Live STT Interface Conformance:", () => {
     ws.on('message', (data) => {
       try {
         const result = JSON.parse(data);
-        if (result.type === "Error") {
+        if (result.error) {
           errors.push(result);
         }
       } catch (e) {
@@ -166,6 +170,8 @@ describe("Live STT Interface Conformance:", () => {
     });
 
     expect(errors.length).toBeGreaterThan(0);
+    expect(errors[0]).toHaveProperty('error');
+    expect(errors[0]).not.toHaveProperty('type');
     expect(errors[0].error.code).toBe("STREAM_UNREACHABLE");
   }, 10000);
 

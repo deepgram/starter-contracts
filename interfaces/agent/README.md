@@ -58,7 +58,7 @@ Starter applications implementing this interface at a minimum should pass the [c
 ```bash
 # Start your starter app (example - your commands will vary)
 cd my-agent-starter
-npm start  # Runs on ws://localhost:3000
+pnpm start  # Runs on ws://localhost:3000
 
 # In another terminal, run conformance tests
 cd starter-contracts

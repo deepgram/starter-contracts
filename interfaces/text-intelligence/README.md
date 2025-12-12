@@ -48,7 +48,7 @@ Starter applications implementing this interface at a minimum should pass the [c
 
    ```bash
    cd starter-contracts
-   npm install
+   pnpm install
    ```
 
 ### Running Conformance Tests
@@ -58,16 +58,16 @@ Starter applications implementing this interface at a minimum should pass the [c
 ```bash
 # Start your starter app (example - your commands will vary)
 cd my-text-intelligence-starter
-npm start  # Runs on http://localhost:3000
+pnpm start  # Runs on http://localhost:3000
 
 # In another terminal, run conformance tests
 cd starter-contracts
-BASE_URL=http://localhost:3000 npm run test:text-intelligence
+BASE_URL=http://localhost:3000 pnpm run test:text-intelligence
 ```
 
 #### Against Your Deployed Starter App
 
 ```bash
-# Test your deployed app
-BASE_URL=https://my-text-intelligence-app.vercel.app npm run test:text-intelligence
+# Test your deployed app[
+BASE_URL=https://my-text-intelligence-app.vercel.app pnpm run test:text-intelligence
 ```
