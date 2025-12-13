@@ -29,7 +29,7 @@ describe("Live STT Interface Conformance:", () => {
   }, 10000);
 
   it("should accept model parameter", async () => {
-    const ws = new WebSocket(`${WS_URL}${ENDPOINT}?stream_url=${encodeURIComponent(SAMPLE_STREAM_URL)}&model=nova-2`);
+    const ws = new WebSocket(`${WS_URL}${ENDPOINT}?stream_url=${encodeURIComponent(SAMPLE_STREAM_URL)}&model=nova-3`);
 
     await new Promise((resolve, reject) => {
       ws.on('open', () => {
@@ -271,7 +271,7 @@ describe("Live STT Interface Conformance:", () => {
   }, 15000);
 
   it("should accept model parameter in binary mode", async () => {
-    const ws = new WebSocket(`${WS_URL}${ENDPOINT}?mode=binary&model=nova-2`);
+    const ws = new WebSocket(`${WS_URL}${ENDPOINT}?mode=binary&model=nova-3`);
 
     await new Promise((resolve, reject) => {
       ws.on('open', () => {
