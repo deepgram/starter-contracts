@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import WebSocket from "ws";
-import { WS_URL, requestId, waitForMessages, waitForAudioChunks } from "./util.js";
+import { WS_URL, requestId, waitForMessages, waitForAudioChunks, waitForOpen } from "./util.js";
 
 const ENDPOINT = "/live-tts/stream";
 
@@ -20,6 +20,10 @@ describe("Live TTS Interface Conformance:", () => {
         reject(error);
       });
     });
+
+    console.log('Waiting for server Open event...');
+    // Wait for server to signal that Deepgram connection is ready
+    await waitForOpen(ws);
 
     console.log('Sending text message...');
     // Send text message
@@ -47,6 +51,9 @@ describe("Live TTS Interface Conformance:", () => {
       ws.on('open', resolve);
       ws.on('error', reject);
     });
+
+    // Wait for server to signal that Deepgram connection is ready
+    await waitForOpen(ws);
 
     // Send text message
     const textMessage = {
@@ -76,6 +83,9 @@ describe("Live TTS Interface Conformance:", () => {
       ws.on('open', resolve);
       ws.on('error', reject);
     });
+
+    // Wait for server to signal that Deepgram connection is ready
+    await waitForOpen(ws);
 
     // Send text message
     const textMessage = {
