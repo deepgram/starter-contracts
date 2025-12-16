@@ -4,7 +4,7 @@ info:
   version: 1.0.0
   description: |
     Minimal live speech-to-text scaffolding for Deepgram starter applications.
-    Stream live audio from URLs, get real-time transcripts via WebSocket.
+    Send binary audio data, get real-time transcripts via WebSocket.
   contact:
     email: devrel@deepgram.com
     url: https://community.deepgram.com
@@ -34,12 +34,6 @@ components:
       security:
         - $ref: "#/components/securitySchemes/ApiKeyAuth"
   schemas:
-    StreamUrl:
-      type: string
-      format: uri
-      description: URL of live audio stream to transcribe
-      examples:
-        - http://stream.live.vc.bbcmedia.co.uk/bbc_world_service
     Model:
       type: string
       description: STT model to use for transcription
@@ -184,13 +178,13 @@ components:
     AudioData:
       type: string
       format: binary
-      description: Containerized audio data from live stream
+      description: Binary audio data (any format supported by Deepgram)
       contentType: application/octet-stream
   messages:
     AudioDataMessage:
       name: AudioDataMessage
       title: Audio Data
-      description: Containerized audio chunks from live stream
+      description: Binary audio chunks sent from client to server
       contentType: application/octet-stream
       payload:
         $ref: "#/components/schemas/AudioData"
@@ -223,11 +217,7 @@ channels:
       ws:
         query:
           type: object
-          required:
-            - stream_url
           properties:
-            stream_url:
-              $ref: "#/components/schemas/StreamUrl"
             model:
               $ref: "#/components/schemas/Model"
             language:
@@ -246,7 +236,7 @@ operations:
     action: send
     channel:
       $ref: "#/channels/LiveSTTStream"
-    description: Connect to live STT stream with audio URL
+    description: Connect to live STT and send binary audio data
     traits:
       - $ref: "#/components/operationTraits/AuthTrait"
     messages:
