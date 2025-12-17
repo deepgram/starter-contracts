@@ -180,6 +180,23 @@ components:
       format: binary
       description: Binary audio data (any format supported by Deepgram)
       contentType: application/octet-stream
+    ControlMessage:
+      type: object
+      description: "Control messages for managing the Live STT WebSocket connection"
+      required:
+        - type
+      properties:
+        type:
+          type: string
+          enum:
+            - KeepAlive
+            - Finalize
+            - CloseStream
+          description: |
+            Control message type:
+            - KeepAlive: Keep the WebSocket connection open
+            - Finalize: Finalize and flush any remaining audio in the buffer
+            - CloseStream: Request graceful closure of the transcription stream
   messages:
     AudioDataMessage:
       name: AudioDataMessage
@@ -209,6 +226,13 @@ components:
       contentType: application/json
       payload:
         $ref: "#/components/schemas/ErrorEvent"
+    ControlMessage:
+      name: ControlMessage
+      title: Control Message
+      description: Control messages for managing the Live STT WebSocket connection
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/ControlMessage"
 channels:
   LiveSTTStream:
     address: /live-stt/stream
@@ -231,6 +255,8 @@ channels:
         $ref: "#/components/messages/MetadataEventMessage"
       ErrorEvent:
         $ref: "#/components/messages/ErrorEventMessage"
+      Control:
+        $ref: "#/components/messages/ControlMessage"
 operations:
   ConnectToStream:
     action: send
@@ -241,6 +267,15 @@ operations:
       - $ref: "#/components/operationTraits/AuthTrait"
     messages:
       - $ref: "#/channels/LiveSTTStream/messages/AudioData"
+  SendControl:
+    action: send
+    channel:
+      $ref: "#/channels/LiveSTTStream"
+    description: "Send control messages (KeepAlive, Finalize, CloseStream) to manage the WebSocket connection"
+    traits:
+      - $ref: "#/components/operationTraits/AuthTrait"
+    messages:
+      - $ref: "#/channels/LiveSTTStream/messages/Control"
   ReceiveTranscriptResult:
     action: receive
     channel:

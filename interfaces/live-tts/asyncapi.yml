@@ -120,6 +120,42 @@ components:
               type: object
               description: Additional error context
               additionalProperties: true
+    ControlMessage:
+      type: object
+      description: "Control messages for managing the Text to Speech WebSocket connection"
+      required:
+        - type
+      properties:
+        type:
+          type: string
+          enum:
+            - Flush
+            - Clear
+            - Close
+          description: |
+            Control message type:
+            - Flush: Flush forces the generation of audio the internal text buffer
+            - Clear: Clear internal text buffer (useful for handling interruptions)
+            - Close: Close the websocket connection immediately
+    ControlEvent:
+      type: object
+      description: "Server acknowledgment of control messages"
+      required:
+        - type
+        - sequence_id
+      properties:
+        type:
+          type: string
+          enum:
+            - Flushed
+            - Cleared
+          description: |
+            Control event type (server acknowledgment):
+            - Flushed: Acknowledgment that buffer has been flushed
+            - Cleared: Acknowledgment that buffer has been cleared
+        sequence_id:
+          type: number
+          description: The sequence ID of the control message being acknowledged
   messages:
     TextMessage:
       name: TextMessage
@@ -149,6 +185,20 @@ components:
       contentType: application/json
       payload:
         $ref: "#/components/schemas/ErrorEvent"
+    ControlMessage:
+      name: ControlMessage
+      title: Control Message
+      description: Control messages for managing the Text to Speech WebSocket connection
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/ControlMessage"
+    ControlEventMessage:
+      name: ControlEventMessage
+      title: Control Event
+      description: Server acknowledgment of control messages
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/ControlEvent"
 channels:
   LiveTTSStream:
     address: /live-tts/stream
@@ -169,6 +219,10 @@ channels:
         $ref: "#/components/messages/MetadataEventMessage"
       ErrorEvent:
         $ref: "#/components/messages/ErrorEventMessage"
+      Control:
+        $ref: "#/components/messages/ControlMessage"
+      ControlEvent:
+        $ref: "#/components/messages/ControlEventMessage"
 operations:
   SendText:
     action: send
@@ -179,6 +233,15 @@ operations:
       - $ref: "#/components/operationTraits/AuthTrait"
     messages:
       - $ref: "#/channels/LiveTTSStream/messages/TextMessage"
+  SendControl:
+    action: send
+    channel:
+      $ref: "#/channels/LiveTTSStream"
+    description: "Send control messages (Flush, Clear, Close) to manage the WebSocket connection"
+    traits:
+      - $ref: "#/components/operationTraits/AuthTrait"
+    messages:
+      - $ref: "#/channels/LiveTTSStream/messages/Control"
   ReceiveAudioChunk:
     action: receive
     channel:
@@ -206,3 +269,12 @@ operations:
       - $ref: "#/components/operationTraits/AuthTrait"
     messages:
       - $ref: "#/channels/LiveTTSStream/messages/ErrorEvent"
+  ReceiveControlEvent:
+    action: receive
+    channel:
+      $ref: "#/channels/LiveTTSStream"
+    description: Receive control event acknowledgments (Flushed, Cleared) from the server
+    traits:
+      - $ref: "#/components/operationTraits/AuthTrait"
+    messages:
+      - $ref: "#/channels/LiveTTSStream/messages/ControlEvent"
