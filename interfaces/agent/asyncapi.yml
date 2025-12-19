@@ -191,6 +191,20 @@ components:
           type: string
           format: uuid
           description: Unique request identifier
+    InjectUserMessageMessage:
+      type: object
+      description: Send a text based message to the agent
+      required:
+        - type
+        - content
+      properties:
+        type:
+          type: string
+          const: InjectUserMessage
+          description: Message type identifier for injecting a user message
+        content:
+          type: string
+          description: The specific phrase or statement the agent should respond to
     SettingsAppliedEvent:
       type: object
       description: Confirmation that settings were applied
@@ -332,6 +346,13 @@ components:
       contentType: application/json
       payload:
         $ref: "#/components/schemas/WelcomeMessage"
+    InjectUserMessageMessage:
+      name: InjectUserMessageMessage
+      title: Inject User Message
+      description: Send a text based message to the agent
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/InjectUserMessageMessage"
     SettingsAppliedEventMessage:
       name: SettingsAppliedEventMessage
       title: Settings Applied
@@ -399,6 +420,8 @@ channels:
         $ref: "#/components/messages/AudioDataMessage"
       Welcome:
         $ref: "#/components/messages/WelcomeMessage"
+      InjectUserMessage:
+        $ref: "#/components/messages/InjectUserMessageMessage"
       SettingsApplied:
         $ref: "#/components/messages/SettingsAppliedEventMessage"
       ConversationText:
@@ -425,6 +448,15 @@ operations:
       - $ref: "#/components/operationTraits/AuthTrait"
     messages:
       - $ref: "#/channels/AgentConverse/messages/Settings"
+  SendInjectUserMessage:
+    action: send
+    channel:
+      $ref: "#/channels/AgentConverse"
+    description: Send a text message to the agent
+    traits:
+      - $ref: "#/components/operationTraits/AuthTrait"
+    messages:
+      - $ref: "#/channels/AgentConverse/messages/InjectUserMessage"
   SendAudioData:
     action: send
     channel:

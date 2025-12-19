@@ -97,3 +97,9 @@ export const createMinimalSettings = () => ({
   }
 });
 
+// Create InjectUserMessage payload
+export const createInjectUserMessage = (content) => ({
+  type: "InjectUserMessage",
+  content
+});
+
