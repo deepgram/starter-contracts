@@ -1,0 +1,106 @@
+openapi: 3.0.0
+info:
+  title: Starter App Metadata API
+  version: 1.0.0
+  description: |
+    Shared metadata endpoint for all Deepgram starter applications.
+    Returns project metadata from the deepgram.toml [meta] block.
+  contact:
+    email: devrel@deepgram.com
+    url: https://community.deepgram.com
+    name: Deepgram Developer Relations
+  license:
+    name: Privacy Notice
+    url: https://deepgram.com/privacy/
+paths:
+  /metadata:
+    get:
+      summary: Get starter app metadata
+      description: Returns metadata from the deepgram.toml [meta] block
+      operationId: getMetadata
+      responses:
+        '200':
+          description: Successful response with app metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Metadata'
+              examples:
+                node-live-transcription:
+                  value:
+                    title: "Node Live Transcription Starter"
+                    description: "Get started using Deepgram's Live Transcription with this Node demo app"
+                    author: "Deepgram DX Team <devrel@deepgram.com> (https://developers.deepgram.com)"
+                    useCase: "Live STT"
+                    language: "JavaScript"
+                    framework: "Node"
+                    sdk: "4.11.2"
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Metadata:
+      type: object
+      description: Starter app metadata from deepgram.toml
+      required:
+        - title
+        - description
+        - author
+        - useCase
+        - language
+        - framework
+        - sdk
+      properties:
+        title:
+          type: string
+          description: Human-readable title of the starter app
+          example: "Node Live Transcription Starter"
+        description:
+          type: string
+          description: Brief description of what the starter demonstrates
+          example: "Get started using Deepgram's Live Transcription with this Node demo app"
+        author:
+          type: string
+          description: Author information (name, email, URL)
+          example: "Deepgram DX Team <devrel@deepgram.com> (https://developers.deepgram.com)"
+        useCase:
+          type: string
+          description: Primary Deepgram use case demonstrated
+          enum:
+            - Live STT
+            - Prerecorded STT
+            - Live TTS
+            - Prerecorded TTS
+            - Text Intelligence
+            - Voice Agent
+          example: "Live STT"
+        language:
+          type: string
+          description: Programming language
+          example: "JavaScript"
+        framework:
+          type: string
+          description: Framework or runtime
+          example: "Node"
+        sdk:
+          type: string
+          description: Deepgram SDK version
+          example: "4.11.2"
+    Error:
+      type: object
+      required:
+        - error
+        - message
+      properties:
+        error:
+          type: string
+          description: Error type
+          example: "INTERNAL_SERVER_ERROR"
+        message:
+          type: string
+          description: Human-readable error message
+          example: "Failed to read metadata from deepgram.toml"

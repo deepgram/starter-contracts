@@ -38,7 +38,7 @@ See [error.json](./schema/error.json)
 
 ## Conformance Requirements & Testing
 
-Starter applications implementing this interface at a minimum should pass the [conformance tests](./conformance/analyze.spec.js). These conformance tests validate that your minimal starter app correctly implements the Text Intelligence scaffolding contract.
+Starter applications implementing this interface at a minimum should pass the [conformance tests](./test/test.conformance.js). These conformance tests validate that your minimal starter app correctly implements the Text Intelligence scaffolding contract.
 
 ### Prerequisites
 
@@ -58,11 +58,11 @@ Starter applications implementing this interface at a minimum should pass the [c
 ```bash
 # Start your starter app (example - your commands will vary)
 cd my-text-intelligence-starter
-pnpm start  # Runs on http://localhost:3000
+pnpm start  # Runs on http://localhost:8080
 
 # In another terminal, run conformance tests
 cd starter-contracts
-BASE_URL=http://localhost:3000 pnpm run test:text-intelligence
+BASE_URL=http://localhost:8080 pnpm run test:text-intelligence
 ```
 
 #### Against Your Deployed Starter App

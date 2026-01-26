@@ -50,12 +50,13 @@ cd starter-apps/starter-contracts
 
 ```
 interfaces/
-├── agent/              # Agent service specifications
-├── live-stt/           # Live Speech-to-Text (WebSocket)
-├── live-tts/           # Live Text-to-Speech (WebSocket)
-├── stt/                # Speech-to-Text (REST API)
-├── text-intelligence/  # Text Intelligence services
-└── tts/                # Text-to-Speech services
+├── live-text-to-speech/  # Live Text-to-Speech (WebSocket)
+├── live-transcription/   # Live Speech-to-Text (WebSocket)
+├── shared/               # Shared API specifications
+├── text-intelligence/    # Text Intelligence services
+├── text-to-speech/       # Text-to-Speech services
+├── transcription/        # Speech-to-Text (REST API)
+└── voice-agent/          # Voice Agent service specifications
 ```
 
 Each interface directory contains:
@@ -77,15 +78,15 @@ These are integration tests that require a running starter application implement
 Refer to individual READMEs for detailed setup instructions:
 
 **REST**
-- [STT](./interfaces/stt/README.md)
-- [Text-intelligence](./interfaces/text-intelligence/README.md)
-- [TTS](./interfaces/tts/README.md)
+- [Transcription](./interfaces/transcription/README.md)
+- [Text Intelligence](./interfaces/text-intelligence/README.md)
+- [Text-to-Speech](./interfaces/text-to-speech/README.md)
 
-**Websockets**
-- [STT Live](./interfaces/live-stt/README.md)
-- [TTS Live](./interfaces/live-tts/README.md)
+**WebSockets**
+- [Live Transcription](./interfaces/live-transcription/README.md)
+- [Live Text-to-Speech](./interfaces/live-text-to-speech/README.md)
 - [Flux](./interfaces/flux/README.md)
-- [Agent](./interfaces/agent/README.md)
+- [Voice Agent](./interfaces/voice-agent/README.md)
 
 
 ### Adding New Interface Specifications

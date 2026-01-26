@@ -1,0 +1,74 @@
+asyncapi: 3.0.0
+info:
+  title: Live Transcription Interface Contract
+  version: 1.0.0
+  description: |
+    WebSocket proxy to Deepgram's Live Transcription API.
+    Passes through all messages (text and binary) between client and Deepgram.
+  contact:
+    email: devrel@deepgram.com
+    url: https://community.deepgram.com
+    name: Deepgram Developer Relations
+  license:
+    name: Privacy Notice
+    url: https://deepgram.com/privacy/
+  externalDocs:
+    description: Deepgram Live Transcription API documentation
+    url: https://developers.deepgram.com/docs/streaming
+servers:
+  starter-app:
+    host: "{host}:{port}"
+    protocol: wss
+    description: Starter app WebSocket proxy server
+components:
+  schemas:
+    TextMessage:
+      type: object
+      description: Any JSON message (proxied to/from Deepgram Live Transcription API)
+      additionalProperties: true
+    BinaryMessage:
+      type: string
+      format: binary
+      description: Binary audio data (proxied to/from Deepgram Live Transcription API)
+      contentType: application/octet-stream
+  messages:
+    TextMessage:
+      name: TextMessage
+      title: JSON Message
+      description: Any JSON message sent to or received from Deepgram Live Transcription API
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/TextMessage"
+    BinaryMessage:
+      name: BinaryMessage
+      title: Binary Audio
+      description: Binary audio data sent to or received from Deepgram Live Transcription API
+      contentType: application/octet-stream
+      payload:
+        $ref: "#/components/schemas/BinaryMessage"
+channels:
+  LiveSTTStream:
+    address: /live-stt/stream
+    description: WebSocket proxy to Deepgram Live Transcription API
+    messages:
+      TextMessage:
+        $ref: "#/components/messages/TextMessage"
+      BinaryMessage:
+        $ref: "#/components/messages/BinaryMessage"
+operations:
+  SendMessage:
+    action: send
+    channel:
+      $ref: "#/channels/LiveSTTStream"
+    description: Send any message (JSON or binary) to Deepgram Live Transcription API
+    messages:
+      - $ref: "#/channels/LiveSTTStream/messages/TextMessage"
+      - $ref: "#/channels/LiveSTTStream/messages/BinaryMessage"
+  ReceiveMessage:
+    action: receive
+    channel:
+      $ref: "#/channels/LiveSTTStream"
+    description: Receive any message (JSON or binary) from Deepgram Live Transcription API
+    messages:
+      - $ref: "#/channels/LiveSTTStream/messages/TextMessage"
+      - $ref: "#/channels/LiveSTTStream/messages/BinaryMessage"
