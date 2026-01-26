@@ -6,13 +6,14 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "test:stt": "vitest run interfaces/stt/conformance/transcribe.spec.js",
-    "test:tts": "vitest run interfaces/tts/conformance/synthesize.spec.js",
-    "test:text-intelligence": "vitest run interfaces/text-intelligence/conformance/analyze.spec.js",
-    "test:live-stt": "vitest run interfaces/live-stt/conformance/stream.spec.js",
-    "test:live-tts": "vitest run interfaces/live-tts/conformance/synthesize.spec.js",
-    "test:flux": "vitest run interfaces/flux/conformance/stream.spec.js",
-    "test:agent": "vitest run interfaces/agent/conformance/converse.spec.js"
+    "test:transcription": "vitest run interfaces/transcription/test/test.conformance.js",
+    "test:text-to-speech": "vitest run interfaces/text-to-speech/test/test.conformance.js",
+    "test:text-intelligence": "vitest run interfaces/text-intelligence/test/test.conformance.js",
+    "test:live-transcription": "vitest run interfaces/live-transcription/test/test.conformance.js",
+    "test:live-text-to-speech": "vitest run interfaces/live-text-to-speech/test/test.conformance.js",
+    "test:flux": "vitest run interfaces/flux/test/test.conformance.js",
+    "test:voice-agent": "vitest run interfaces/voice-agent/test/test.conformance.js",
+    "test:metadata": "vitest run interfaces/shared/test/test.conformance.js"
   },
   "keywords": [],
   "author": "",
