@@ -26,6 +26,11 @@ parse_toml_lifecycle() {
   local toml_file="$1"
   local lifecycle_name="$2"
 
+  if [[ -z "$lifecycle_name" ]]; then
+    echo "Error: lifecycle_name parameter required" >&2
+    return 1
+  fi
+
   if [[ ! -f "$toml_file" ]]; then
     echo "Error: TOML file not found: $toml_file" >&2
     return 1
@@ -35,12 +40,11 @@ parse_toml_lifecycle() {
   sed -n "/^\[lifecycle\.${lifecycle_name}\]/,/^\[/p" "$toml_file" | \
     grep '^command' | \
     sed 's/command[[:space:]]*=[[:space:]]*//' | \
-    sed 's/^"//' | \
-    sed 's/"$//'
+    sed 's/^"\(.*\)"$/\1/'
 }
 
-# Check if TOML file is valid (basic check)
-validate_toml() {
+# Check if TOML file has at least one section
+check_toml_has_sections() {
   local toml_file="$1"
 
   if [[ ! -f "$toml_file" ]]; then
