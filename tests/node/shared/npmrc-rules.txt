@@ -1,0 +1,9 @@
+node-linker=pnpm
+ignore-scripts=true
+enable-pre-post-scripts=false
+minimum-release-age=14400
+verify-store-integrity=true
+trust-policy=strict
+strict-peer-dependencies=true
+symlink=true
+frozen-lockfile=false
