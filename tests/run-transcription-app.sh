@@ -101,6 +101,9 @@ echo ""
 echo "🎭 Running UI tests..."
 echo "---------------------------------------------------"
 
+# Reset BASE_URL to frontend port for UI tests
+export BASE_URL="http://localhost:8080"
+
 # Check if playwright browsers are installed
 if ! npx playwright --version > /dev/null 2>&1; then
   echo "Installing Playwright browsers..."
