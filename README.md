@@ -87,6 +87,49 @@ Refer to individual READMEs for detailed setup instructions:
 - [Flux](./interfaces/flux/README.md)
 - [Agent](./interfaces/agent/README.md)
 
+## Test Harness for Starter Apps
+
+### Overview
+
+In addition to interface-specific conformance tests, this repository provides a comprehensive test harness for validating complete starter applications. The test harness performs automated contract testing to ensure starter apps correctly implement core Deepgram SDK features.
+
+### Supported Platforms
+
+- **Node.js**: Full SDK feature testing
+- **Python**: Full SDK feature testing
+- **Browser**: JavaScript SDK testing
+
+### Quick Start
+
+```bash
+# Set up environment
+cp tests/.env.example tests/.env
+# Edit tests/.env with your DEEPGRAM_API_KEY
+
+# Run tests for a starter app
+npm run test:harness /path/to/starter-app node
+npm run test:harness /path/to/starter-app python
+npm run test:harness /path/to/starter-app browser
+```
+
+### What the Test Harness Validates
+
+- ✅ **Speech-to-Text**: Prerecorded transcription with various models and features
+- ✅ **Text-to-Speech**: Audio synthesis with different voices and formats
+- ✅ **Live Transcription**: WebSocket streaming and control messages
+- ✅ **Error Handling**: Invalid inputs, network failures, and edge cases
+- ✅ **SDK Integration**: Proper use of Deepgram SDK methods and signatures
+
+### Documentation
+
+For detailed information about the test harness, including:
+- Setup and configuration
+- Running specific test suites
+- Troubleshooting common issues
+- Adding new tests
+- CI/CD integration
+
+See the [Test Harness README](./tests/README.md).
 
 ### Adding New Interface Specifications
 
