@@ -34,19 +34,19 @@ if [[ ! -f "$TOML_FILE" ]]; then
   echo "   repository = \"https://github.com/org/repo\""
   echo ""
   echo "   [check]"
-  echo "   command = [\"git --version\", \"node --version\"]"
+  echo "   command = [\"your\", \"check\", \"commands\"]"
   echo ""
   echo "   [install]"
-  echo "   command = [\"npm install\"]"
+  echo "   command = [\"your\", \"install\", \"commands\"]"
   echo ""
   echo "   [start]"
-  echo "   command = [\"npm start\"]"
+  echo "   command = [\"your\", \"start\", \"commands\"]"
   echo ""
   echo "   [update]"
-  echo "   command = [\"git pull\"]"
+  echo "   command = [\"your\", \"update\", \"commands\"]"
   echo ""
   echo "   [clean]"
-  echo "   command = [\"rm -rf node_modules\"]"
+  echo "   command = [\"your\", \"clean\", \"commands\"]"
   echo ""
   exit 1
 fi
@@ -117,7 +117,7 @@ for lifecycle in "${required_lifecycles[@]}"; do
       echo ""
       errors=1
     else
-      echo "✅ [${lifecycle}] exists with command: $command"
+      echo "✅ [${lifecycle}] section exists with command property"
     fi
   fi
 done
@@ -133,27 +133,27 @@ if [[ ${#missing_sections[@]} -gt 0 ]]; then
     case "$section" in
       check)
         echo "   [check]"
-        echo "   command = [\"git --version\", \"node --version\"]  # Check prerequisites"
+        echo "   command = [\"your\", \"check\", \"commands\"]  # Check prerequisites"
         echo ""
         ;;
       install)
         echo "   [install]"
-        echo "   command = [\"npm install\"]  # or pnpm install, pip install -r requirements.txt, etc."
+        echo "   command = [\"your\", \"install\", \"commands\"]  # Install dependencies"
         echo ""
         ;;
       start)
         echo "   [start]"
-        echo "   command = [\"npm start\"]  # or node server.js, python app.py, etc."
+        echo "   command = [\"your\", \"start\", \"commands\"]  # Start the application"
         echo ""
         ;;
       update)
         echo "   [update]"
-        echo "   command = [\"git pull\", \"npm install\"]  # Update dependencies"
+        echo "   command = [\"your\", \"update\", \"commands\"]  # Update dependencies"
         echo ""
         ;;
       clean)
         echo "   [clean]"
-        echo "   command = [\"rm -rf node_modules\"]  # Clean build artifacts"
+        echo "   command = [\"your\", \"clean\", \"commands\"]  # Clean build artifacts"
         echo ""
         ;;
     esac
@@ -174,21 +174,19 @@ if [[ ! -f "$MAKEFILE" ]]; then
   echo "   .PHONY: check install start update clean"
   echo ""
   echo "   check:"
-  echo "   	@git --version"
-  echo "   	@node --version"
+  echo "   	# Add your check commands here"
   echo ""
   echo "   install:"
-  echo "   	npm install"
+  echo "   	# Add your install commands here"
   echo ""
   echo "   start:"
-  echo "   	npm start"
+  echo "   	# Add your start commands here"
   echo ""
   echo "   update:"
-  echo "   	git pull"
-  echo "   	npm install"
+  echo "   	# Add your update commands here"
   echo ""
   echo "   clean:"
-  echo "   	rm -rf node_modules"
+  echo "   	# Add your clean commands here"
   echo ""
   exit 1
 fi
