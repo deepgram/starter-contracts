@@ -45,17 +45,17 @@ echo "Checking lifecycle sections..."
 required_lifecycles=("check" "install" "start" "update" "clean" "test")
 
 for lifecycle in "${required_lifecycles[@]}"; do
-  if ! grep -q "^\[lifecycle\.${lifecycle}\]" "$TOML_FILE"; then
-    echo "❌ Error: [lifecycle.${lifecycle}] section not found"
+  if ! grep -q "^\[${lifecycle}\]" "$TOML_FILE"; then
+    echo "❌ Error: [${lifecycle}] section not found"
     errors=1
   else
     # Check if command property exists
     command=$(parse_toml_lifecycle "$TOML_FILE" "$lifecycle")
     if [[ -z "$command" ]]; then
-      echo "❌ Error: [lifecycle.${lifecycle}] missing 'command' property"
+      echo "❌ Error: [${lifecycle}] missing 'command' property"
       errors=1
     else
-      echo "✅ [lifecycle.${lifecycle}] exists with command: $command"
+      echo "✅ [${lifecycle}] exists with command: $command"
     fi
   fi
 done

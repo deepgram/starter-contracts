@@ -37,10 +37,12 @@ parse_toml_lifecycle() {
   fi
 
   # Extract specific lifecycle section and get command value
-  sed -n "/^\[lifecycle\.${lifecycle_name}\]/,/^\[/p" "$toml_file" | \
+  # Supports both [section] and [section.pre]/[section.post]
+  sed -n "/^\[${lifecycle_name}\]/,/^\[/p" "$toml_file" | \
     grep '^command' | \
     sed 's/command[[:space:]]*=[[:space:]]*//' | \
-    sed 's/^"\(.*\)"$/\1/'
+    sed 's/^"\(.*\)"$/\1/' | \
+    sed 's/^\[\(.*\)\]$/\1/'
 }
 
 # Check if TOML file has at least one section
@@ -72,7 +74,9 @@ list_toml_lifecycles() {
     return 1
   fi
 
-  grep '^\[lifecycle\.' "$toml_file" | \
-    sed 's/^\[lifecycle\.//' | \
+  # Find core lifecycle sections (check, install, start, update, clean, test)
+  # Excludes [meta] and variants like [install.pre]
+  grep -E '^\[(check|install|start|update|clean|test)\]' "$toml_file" | \
+    sed 's/^\[//' | \
     sed 's/\]$//'
 }
