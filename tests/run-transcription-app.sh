@@ -83,11 +83,12 @@ cd "$REPO_ROOT/contracts"
 # Install dependencies if needed
 if [[ ! -d "node_modules" ]]; then
   echo "Installing test dependencies..."
-  npm install
+  NPM_CONFIG_LOGLEVEL=error npm install
 fi
 
 export BASE_URL="http://localhost:8081"
 export REPO_PATH="$REPO_ROOT"
+export NPM_CONFIG_LOGLEVEL=error
 
 if npm run test:stt -- tests/transcription/api/; then
   echo "✅ API tests passed"
@@ -105,12 +106,12 @@ echo "---------------------------------------------------"
 export BASE_URL="http://localhost:8080"
 
 # Check if playwright browsers are installed
-if ! npx playwright --version > /dev/null 2>&1; then
+if ! NPM_CONFIG_LOGLEVEL=error npx playwright --version > /dev/null 2>&1; then
   echo "Installing Playwright browsers..."
-  npx playwright install
+  NPM_CONFIG_LOGLEVEL=error npx playwright install
 fi
 
-if npx playwright test tests/transcription/ui/workflow.spec.js; then
+if NPM_CONFIG_LOGLEVEL=error npx playwright test tests/transcription/ui/workflow.spec.js; then
   echo "✅ UI tests passed"
 else
   echo "❌ UI tests failed"
