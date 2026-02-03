@@ -86,7 +86,7 @@ if [[ ! -d "node_modules" ]]; then
   npm install
 fi
 
-export BASE_URL="http://localhost:8080"
+export BASE_URL="http://localhost:8081"
 export REPO_PATH="$REPO_ROOT"
 
 if npm run test:stt -- tests/transcription/api/; then
