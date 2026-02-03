@@ -32,8 +32,8 @@ test.describe('Transcription UI Workflow', () => {
       timeout: 30000
     });
 
-    // 6. Extract transcript text from page
-    const transcriptText = await page.textContent('body');
+    // 6. Extract transcript text from the specific transcript element
+    const transcriptText = await page.textContent('.transcript-text');
 
     // 7. Normalize both texts (lowercase, collapse whitespace)
     const normalizedTranscript = transcriptText
@@ -46,8 +46,12 @@ test.describe('Transcription UI Workflow', () => {
       .replace(/\s+/g, ' ')
       .trim();
 
-    // 8. Fuzzy match with similarity threshold
-    const similarity = compareTwoStrings(normalizedTranscript, normalizedExpected);
+    // 8. Extract the beginning portion of the transcript (same length as expected)
+    // The audio contains the full debate, but we only validate the opening excerpt
+    const transcriptExcerpt = normalizedTranscript.substring(0, normalizedExpected.length + 50);
+
+    // 9. Fuzzy match with similarity threshold
+    const similarity = compareTwoStrings(transcriptExcerpt, normalizedExpected);
 
     console.log(`Transcript similarity: ${(similarity * 100).toFixed(2)}%`);
     expect(similarity).toBeGreaterThanOrEqual(SIMILARITY_THRESHOLD);
