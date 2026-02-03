@@ -12,7 +12,15 @@
     "test:live-stt": "vitest run interfaces/live-stt/conformance/stream.spec.js",
     "test:live-tts": "vitest run interfaces/live-tts/conformance/synthesize.spec.js",
     "test:flux": "vitest run interfaces/flux/conformance/stream.spec.js",
-    "test:agent": "vitest run interfaces/agent/conformance/converse.spec.js"
+    "test:agent": "vitest run interfaces/agent/conformance/converse.spec.js",
+    "test:node": "./tests/run-node-app.sh",
+    "test:node:stt": "./tests/run-node-app.sh stt",
+    "test:node:tts": "./tests/run-node-app.sh tts",
+    "test:node:live-stt": "./tests/run-node-app.sh live-stt",
+    "test:transcription": "./tests/run-transcription-app.sh",
+    "test:transcription:stt": "./tests/run-transcription-app.sh stt",
+    "test:transcription:tts": "./tests/run-transcription-app.sh tts",
+    "test:transcription:live-stt": "./tests/run-transcription-app.sh live-stt"
   },
   "keywords": [],
   "author": "",
