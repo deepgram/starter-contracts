@@ -1,55 +1,49 @@
-/**
- * Test Helper Utilities
- * Shared utilities for JavaScript tests
- */
-
-const fs = require("fs");
-const path = require("path");
+import fs from 'fs';
+import path from 'path';
 
 /**
- * Parse a TOML file
- * @param {string} filePath - Path to the TOML file
- * @returns {object} Parsed TOML data
+ * Simple TOML parser for deepgram.toml [meta] section
+ * @param {string} filePath - Path to TOML file
+ * @returns {Object} Parsed TOML with meta section
  */
-function parseToml(filePath) {
-    const tomlContent = fs.readFileSync(filePath, "utf-8");
+export function parseToml(filePath) {
+  if (!fs.existsSync(filePath)) {
+    throw new Error(`TOML file not found: ${filePath}`);
+  }
 
-    // Simple TOML parser for key-value pairs
-    const result = {};
-    const lines = tomlContent.split("\n");
+  const content = fs.readFileSync(filePath, 'utf-8');
 
-    for (const line of lines) {
-        const trimmed = line.trim();
-        if (trimmed && !trimmed.startsWith("#")) {
-            const match = trimmed.match(/^(\w+)\s*=\s*"(.+)"$/);
-            if (match) {
-                result[match[1]] = match[2];
-            }
-        }
-    }
+  // Parse [meta] section
+  const metaMatch = content.match(/\[meta\]([\s\S]*?)(?=\n\[|$)/);
+  const meta = {};
 
-    return result;
+  if (metaMatch) {
+    metaMatch[1].split('\n').forEach(line => {
+      // Match key = "value" or key = value
+      const match = line.match(/^\s*(\w+)\s*=\s*"?([^"]*)"?\s*$/);
+      if (match && match[1] && match[2]) {
+        meta[match[1]] = match[2];
+      }
+    });
+  }
+
+  return { meta };
 }
 
 /**
- * Normalize text for comparison
+ * Normalize text for comparison (lowercase, collapse whitespace)
  * @param {string} text - Text to normalize
  * @returns {string} Normalized text
  */
-function normalizeText(text) {
-    return text
-        .toLowerCase()
-        .replace(/\s+/g, " ")
-        .trim();
+export function normalizeText(text) {
+  return text
+    .toLowerCase()
+    .replace(/\s+/g, ' ')
+    .trim();
 }
 
-// Constants
-const BASE_URL = process.env.BASE_URL || "http://localhost:3000";
-const REPO_PATH = path.resolve(__dirname, "../..");
-
-module.exports = {
-    parseToml,
-    normalizeText,
-    BASE_URL,
-    REPO_PATH,
-};
+/**
+ * Environment variables with defaults
+ */
+export const BASE_URL = process.env.BASE_URL || 'http://localhost:8080';
+export const REPO_PATH = process.env.REPO_PATH || process.cwd();
