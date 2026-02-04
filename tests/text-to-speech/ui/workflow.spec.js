@@ -20,25 +20,7 @@ test.describe('Text-to-Speech UI Workflow', () => {
       );
     }
 
-    // 2. Wait for text input to be available
-    try {
-      await page.waitForSelector('textarea[name="Enter Text"], input[type="text"]', {
-        state: 'visible',
-        timeout: 10000
-      });
-    } catch (error) {
-      throw new Error(
-        `❌ Could not find text input field\n` +
-        `💡 Likely cause: Frontend didn't load correctly or HTML structure changed\n` +
-        `🔧 How to fix:\n` +
-        `   1. Check that frontend submodule is up to date: git submodule update --remote\n` +
-        `   2. Verify frontend built correctly: cd frontend && pnpm install\n` +
-        `   3. Check browser console for JavaScript errors\n` +
-        `Original error: ${error.message}`
-      );
-    }
-
-    // 3. Enter text in the input field
+    // 2. Enter text in the input field
     try {
       const textInput = page.getByRole('textbox', { name: 'Enter Text' });
       await textInput.click();
@@ -46,13 +28,16 @@ test.describe('Text-to-Speech UI Workflow', () => {
     } catch (error) {
       throw new Error(
         `❌ Could not enter text in input field\n` +
-        `💡 Likely cause: Input field not interactive or has wrong attributes\n` +
-        `🔧 How to fix: Check that the text input has proper role and name attributes\n` +
+        `💡 Likely cause: Text input field not found or not interactive\n` +
+        `🔧 How to fix:\n` +
+        `   1. Check that frontend submodule is up to date: git submodule update --remote\n` +
+        `   2. Verify text input has role="textbox" and accessible name\n` +
+        `   3. Check browser console for JavaScript errors\n` +
         `Original error: ${error.message}`
       );
     }
 
-    // 4. Click generate audio button
+    // 3. Click generate audio button
     try {
       const generateButton = page.getByRole('button', { name: 'Generate Audio' });
       await generateButton.click();
@@ -67,7 +52,7 @@ test.describe('Text-to-Speech UI Workflow', () => {
       );
     }
 
-    // 5. Wait for audio generation and verify result
+    // 4. Wait for audio generation and verify result
     try {
       // Wait for the main content area to show the input text (confirmation)
       await expect(page.locator('#mainContent')).toContainText(SAMPLE_TEXT, {
@@ -86,11 +71,10 @@ test.describe('Text-to-Speech UI Workflow', () => {
       );
     }
 
-    // 6. Verify audio player appears
+    // 5. Verify audio player appears in main content
     try {
-      await page.waitForSelector('audio', { state: 'visible', timeout: 5000 });
-      const audioPlayer = page.locator('audio');
-      await expect(audioPlayer).toBeVisible();
+      const audioPlayer = page.locator('#mainContent audio');
+      await expect(audioPlayer).toBeVisible({ timeout: 5000 });
     } catch (error) {
       throw new Error(
         `❌ Audio player did not appear after generation\n` +
