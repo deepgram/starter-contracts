@@ -87,7 +87,9 @@ if [[ ! -d "node_modules" ]]; then
 fi
 
 export BASE_URL="http://localhost:8081"
+export WS_URL="ws://localhost:8081"
 export REPO_PATH="$REPO_ROOT"
+export NPM_CONFIG_LOGLEVEL=error
 
 if npm run test:live-stt -- tests/live-transcription/api/; then
   echo "✅ API tests passed"
