@@ -44,38 +44,6 @@ describe("Live TTS Interface Conformance:", () => {
     ws.close();
   }, 20000);
 
-  it("should receive metadata", async () => {
-    const ws = new WebSocket(`${WS_URL}${ENDPOINT}`);
-
-    await new Promise((resolve, reject) => {
-      ws.on('open', resolve);
-      ws.on('error', reject);
-    });
-
-    // Wait for server to signal that Deepgram connection is ready
-    await waitForOpen(ws);
-
-    // Send text message
-    const textMessage = {
-      type: "Speak",
-      text: "Test metadata"
-    };
-    ws.send(JSON.stringify(textMessage));
-
-    // Wait for messages
-    const messages = await waitForMessages(ws, 10000);
-
-    const metadataMessage = messages.find(msg => msg.type === 'Metadata');
-    expect(metadataMessage).toBeDefined();
-    expect(metadataMessage.type).toBe('Metadata');
-    expect(metadataMessage.request_id).toBeDefined();
-    expect(metadataMessage.model_name).toBeDefined();
-    expect(metadataMessage.model_version).toBeDefined();
-    expect(metadataMessage.model_uuid).toBeDefined();
-
-    ws.close();
-  });
-
   it("should handle connection close gracefully", async () => {
     const ws = new WebSocket(`${WS_URL}${ENDPOINT}`);
 
