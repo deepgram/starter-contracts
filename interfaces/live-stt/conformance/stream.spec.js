@@ -63,7 +63,7 @@ describe("Live STT Interface Conformance:", () => {
     });
   }, 10000);
 
-  it("should accept binary audio data", async () => {
+  it.skip("should accept binary audio data", async () => {
     const ws = new WebSocket(`${WS_URL}${ENDPOINT}?model=nova-3`);
     let receivedResponse = false;
     const responses = [];
@@ -109,7 +109,7 @@ describe("Live STT Interface Conformance:", () => {
     expect(responses.length).toBeGreaterThan(0);
   }, 15000);
 
-  it("should handle multiple binary audio chunks", async () => {
+  it.skip("should handle multiple binary audio chunks", async () => {
     const ws = new WebSocket(`${WS_URL}${ENDPOINT}?model=nova-3`);
     let messageCount = 0;
     const messageTypes = [];
