@@ -3,7 +3,10 @@ import { test, expect } from '@playwright/test';
 const BASE_URL = process.env.BASE_URL || 'http://localhost:8080';
 
 test.describe('Live Transcription UI Workflow', () => {
-  test('should connect and disconnect from live transcription', async ({ page }) => {
+  test('should connect and disconnect from live transcription', async ({ page, context }) => {
+    // Grant microphone permissions
+    await context.grantPermissions(['microphone']);
+
     // 1. Navigate to app
     try {
       await page.goto(BASE_URL);
