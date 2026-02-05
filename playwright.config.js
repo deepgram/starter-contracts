@@ -12,5 +12,11 @@ export default defineConfig({
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     permissions: ['microphone'],
+    launchOptions: {
+      args: [
+        '--use-fake-ui-for-media-stream',
+        '--use-fake-device-for-media-stream',
+      ],
+    },
   },
 });
