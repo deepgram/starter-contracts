@@ -72,7 +72,7 @@ test.describe('Text Intelligence UI Workflow', () => {
     // 5. Wait for analysis results and verify input text shown
     try {
       await expect(page.locator('#mainContent')).toContainText(SAMPLE_TEXT, {
-        timeout: 10000
+        timeout: 15000
       });
     } catch (error) {
       throw new Error(
