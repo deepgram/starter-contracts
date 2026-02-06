@@ -1,10 +1,5 @@
-import crypto from "node:crypto";
-
 // Base WebSocket URL for Flux conformance tests
 export const WS_URL = process.env.WS_URL || "ws://localhost:3000";
-
-// Generate unique request ID for tracing
-export const requestId = () => crypto.randomUUID();
 
 // Helper to wait for a specific number of turn info events
 export const waitForTurnInfoEvents = (events, count, timeout = 30000) => {

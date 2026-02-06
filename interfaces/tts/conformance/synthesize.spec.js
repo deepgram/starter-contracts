@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { BASE_URL, requestId } from "./util.js";
+import { BASE_URL } from "./util.js";
 
 const ENDPOINT = "/tts/synthesize";
 const SAMPLE_TEXT = "Hello, this is a test of the Deepgram text to speech.";
@@ -10,8 +10,7 @@ describe("TTS Interface Conformance:", () => {
     const response = await fetch(`${BASE_URL}${ENDPOINT}`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        "X-Request-Id": requestId()
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({ text: SAMPLE_TEXT })
     });
@@ -28,8 +27,7 @@ describe("TTS Interface Conformance:", () => {
     const response = await fetch(`${BASE_URL}${ENDPOINT}?model=aura-2-apollo-en`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        "X-Request-Id": requestId()
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({ text: SAMPLE_TEXT })
     });
@@ -43,8 +41,7 @@ describe("TTS Interface Conformance:", () => {
     const response = await fetch(`${BASE_URL}${ENDPOINT}`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        "X-Request-Id": requestId()
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({ text: "" })
     });
@@ -60,8 +57,7 @@ describe("TTS Interface Conformance:", () => {
     const response = await fetch(`${BASE_URL}${ENDPOINT}?invalid_param=value`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        "X-Request-Id": requestId()
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({ text: SAMPLE_TEXT })
     });
@@ -76,8 +72,7 @@ describe("TTS Interface Conformance:", () => {
     const response = await fetch(`${BASE_URL}${ENDPOINT}`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        "X-Request-Id": requestId()
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({ text: longText })
     });

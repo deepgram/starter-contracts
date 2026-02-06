@@ -47,12 +47,6 @@ paths:
           schema:
             type: boolean
             description: Enable intent recognition
-        - name: X-Request-Id
-          in: header
-          required: false
-          schema:
-            type: string
-            description: Request identifier for tracing
       requestBody:
         required: true
         content:
@@ -76,22 +70,12 @@ paths:
       responses:
         "200":
           description: Successful analysis response
-          headers:
-            X-Request-Id:
-              description: Request identifier (echoed from request header)
-              schema:
-                type: string
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/AnalysisResult"
         "4XX":
           description: Error response
-          headers:
-            X-Request-Id:
-              description: Request identifier (echoed from request header)
-              schema:
-                type: string
           content:
             application/json:
               schema:

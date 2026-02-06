@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { BASE_URL, requestId } from "./util.js";
+import { BASE_URL } from "./util.js";
 
 const ENDPOINT = "/stt/transcribe";
 const SAMPLE_AUDIO_URL = "https://dpgr.am/spacewalk.wav";

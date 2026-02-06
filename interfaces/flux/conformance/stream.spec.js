@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import WebSocket from "ws";
-import { WS_URL, requestId } from "./util.js";
+import { WS_URL } from "./util.js";
 
 const ENDPOINT = "/flux/stream";
 const SAMPLE_STREAM_URL = "http://stream.live.vc.bbcmedia.co.uk/bbc_world_service";

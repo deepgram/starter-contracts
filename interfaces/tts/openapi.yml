@@ -18,12 +18,6 @@ paths:
           schema:
             type: string
             description: TTS model to use for synthesis (e.g., 'aura-2-apollo-en', 'aura-2-asteria-en', 'aura-2-iris-en')
-        - name: X-Request-Id
-          in: header
-          required: false
-          schema:
-            type: string
-            description: Request identifier for tracing
       requestBody:
         required: true
         content:
@@ -38,11 +32,6 @@ paths:
       responses:
         "200":
           description: Successful synthesis response
-          headers:
-            X-Request-Id:
-              description: Request identifier (echoed from request header)
-              schema:
-                type: string
           content:
             application/octet-stream:
               schema:
@@ -51,11 +40,6 @@ paths:
                 description: Raw audio bytes
         "4XX":
           description: Error response
-          headers:
-            X-Request-Id:
-              description: Request identifier (echoed from request header)
-              schema:
-                type: string
           content:
             application/json:
               schema:

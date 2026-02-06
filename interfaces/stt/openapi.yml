@@ -35,22 +35,12 @@ paths:
       responses:
         "200":
           description: Successful transcription response
-          headers:
-            X-Request-Id:
-              description: Request identifier (echoed from request header)
-              schema:
-                type: string
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Transcript"
         "4XX":
           description: Error response
-          headers:
-            X-Request-Id:
-              description: Request identifier (echoed from request header)
-              schema:
-                type: string
           content:
             application/json:
               schema:
