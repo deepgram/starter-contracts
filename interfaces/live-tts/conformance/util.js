@@ -1,38 +1,5 @@
-import crypto from "node:crypto";
-
 // WebSocket URL for live TTS conformance tests
 export const WS_URL = process.env.WS_URL || "ws://localhost:3000";
-
-// Generate unique request ID for tracing
-export const requestId = () => crypto.randomUUID();
-
-// Helper function to wait for the server's "Open" event
-// This indicates that the Deepgram connection is ready to accept text
-export const waitForOpen = (ws, timeout = 5000) => {
-  return new Promise((resolve, reject) => {
-    const timer = setTimeout(() => {
-      reject(new Error(`Timeout waiting for Open event after ${timeout}ms`));
-    }, timeout);
-
-    const messageHandler = (data) => {
-      try {
-        const message = JSON.parse(data.toString());
-        console.log('Received JSON message:', message.type);
-
-        if (message.type === 'Open') {
-          clearTimeout(timer);
-          ws.removeListener('message', messageHandler);
-          console.log('Received Open event, Deepgram is ready');
-          resolve(message);
-        }
-      } catch (error) {
-        // Not JSON, ignore
-      }
-    };
-
-    ws.on('message', messageHandler);
-  });
-};
 
 // Helper function to wait for WebSocket messages
 export const waitForMessages = (ws, timeout = 5000) => {

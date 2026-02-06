@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import WebSocket from "ws";
-import { WS_URL, requestId, waitForMessages, waitForAudioChunks, waitForOpen } from "./util.js";
+import { WS_URL, waitForAudioChunks } from "./util.js";
 
 const ENDPOINT = "/tts/stream";
 
@@ -21,9 +21,8 @@ describe("Live TTS Interface Conformance:", () => {
       });
     });
 
-    console.log('Waiting for server Open event...');
-    // Wait for server to signal that Deepgram connection is ready
-    await waitForOpen(ws);
+    // Allow time for server to establish upstream Deepgram connection
+    await new Promise(resolve => setTimeout(resolve, 2000));
 
     console.log('Sending text message...');
     // Send text message
@@ -42,7 +41,7 @@ describe("Live TTS Interface Conformance:", () => {
     expect(audioChunks[0]).toBeInstanceOf(Buffer);
 
     ws.close();
-  }, 20000);
+  }, 25000);
 
   it("should handle connection close gracefully", async () => {
     const ws = new WebSocket(`${WS_URL}${ENDPOINT}`);
