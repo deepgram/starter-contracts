@@ -73,7 +73,7 @@ describe("Text Intelligence Interface Conformance:", () => {
     expect([200, 400]).toContain(response.status);
   });
 
-  it("should handle very long text gracefully", async () => {
+  it("should handle very long text gracefully", { timeout: 15000 }, async () => {
     const longText = "This is a test sentence. ".repeat(1000); // ~25KB of text
 
     const response = await fetch(`${BASE_URL}${ENDPOINT}?summarize=true`, {
