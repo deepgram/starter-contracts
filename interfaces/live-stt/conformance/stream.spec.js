@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import WebSocket from "ws";
 import { WS_URL } from "./util.js";
 
-const ENDPOINT = "/stt/stream";
+const ENDPOINT = process.env.LIVE_STT_ENDPOINT || "/api/live-transcription";
 
 describe("Live STT Interface Conformance:", () => {
 

@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { BASE_URL } from "./util.js";
 
-const ENDPOINT = "/tts/synthesize";
+const ENDPOINT = process.env.TTS_ENDPOINT || "/api/text-to-speech";
 const SAMPLE_TEXT = "Hello, this is a test of the Deepgram text to speech.";
 
 describe("TTS Interface Conformance:", () => {

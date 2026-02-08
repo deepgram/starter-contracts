@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { BASE_URL } from "./util.js";
 
-const ENDPOINT = "/stt/transcribe";
+const ENDPOINT = process.env.STT_ENDPOINT || "/api/transcription";
 const SAMPLE_AUDIO_URL = "https://dpgr.am/spacewalk.wav";
 
 describe("STT Interface Conformance:", () => {

@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import WebSocket from "ws";
 import { WS_URL, waitForAudioChunks } from "./util.js";
 
-const ENDPOINT = "/tts/stream";
+const ENDPOINT = process.env.LIVE_TTS_ENDPOINT || "/api/live-text-to-speech";
 
 describe("Live TTS Interface Conformance:", () => {
 

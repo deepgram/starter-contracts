@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import WebSocket from "ws";
 import { WS_URL, createMinimalSettings, createInjectUserMessage, waitForMessageType, waitForMessageTypes } from "./util.js";
 
-const ENDPOINT = "/agent/converse";
+const ENDPOINT = process.env.AGENT_ENDPOINT || "/api/voice-agent";
 
 describe("Agent Interface Conformance:", () => {
 

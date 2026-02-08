@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { BASE_URL } from "./util.js";
 
-const ENDPOINT = "/text-intelligence/analyze";
+const ENDPOINT = process.env.TEXT_INTEL_ENDPOINT || "/api/text-intelligence";
 const SAMPLE_TEXT = "This is a sample text for analysis. It contains multiple sentences. We can test the text intelligence features with this content. The system should be able to analyze and summarize this text effectively.";
 
 describe("Text Intelligence Interface Conformance:", () => {
