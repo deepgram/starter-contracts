@@ -2,9 +2,9 @@ import { describe, it, expect } from "vitest";
 import WebSocket from "ws";
 import { WS_URL, waitForAudioChunks } from "./util.js";
 
-const ENDPOINT = process.env.LIVE_TTS_ENDPOINT || "/api/live-text-to-speech";
+const ENDPOINT = process.env.LIVE_TEXT_TO_SPEECH_ENDPOINT || "/api/live-text-to-speech";
 
-describe("Live TTS Interface Conformance:", () => {
+describe("Live Text-to-Speech Interface Conformance:", () => {
 
   it("should connect and receive audio", async () => {
     console.log('Attempting to connect to:', `${WS_URL}${ENDPOINT}`);

@@ -1,2 +1,2 @@
-// Reuse live-tts conformance tests for live text-to-speech
-import "../../../interfaces/live-tts/conformance/synthesize.spec.js";
+// Reuse live-text-to-speech conformance tests for live text-to-speech
+import "../../../interfaces/live-text-to-speech/conformance/synthesize.spec.js";

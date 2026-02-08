@@ -1,4 +1,4 @@
-// Base WebSocket URL for live STT conformance tests
+// Base WebSocket URL for live transcription conformance tests
 export const WS_URL = process.env.WS_URL || "ws://localhost:3000";
 
 // Helper to wait for a specific number of transcripts

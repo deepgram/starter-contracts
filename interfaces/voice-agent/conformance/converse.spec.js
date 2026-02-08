@@ -2,9 +2,9 @@ import { describe, it, expect } from "vitest";
 import WebSocket from "ws";
 import { WS_URL, createMinimalSettings, createInjectUserMessage, waitForMessageType, waitForMessageTypes } from "./util.js";
 
-const ENDPOINT = process.env.AGENT_ENDPOINT || "/api/voice-agent";
+const ENDPOINT = process.env.VOICE_AGENT_ENDPOINT || "/api/voice-agent";
 
-describe("Agent Interface Conformance:", () => {
+describe("Voice Agent Interface Conformance:", () => {
 
   it("should connect to WebSocket endpoint", async () => {
     const ws = new WebSocket(`${WS_URL}${ENDPOINT}`);

@@ -1,4 +1,4 @@
-// WebSocket URL for live TTS conformance tests
+// WebSocket URL for live text-to-speech conformance tests
 export const WS_URL = process.env.WS_URL || "ws://localhost:3000";
 
 // Helper function to wait for WebSocket messages

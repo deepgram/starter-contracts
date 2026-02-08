@@ -1,4 +1,4 @@
-# Agent Interface Contract
+# Voice Agent Interface Contract
 
 Minimal Voice Agent scaffolding for Deepgram starter applications. Connect via WebSocket for conversational AI with speech-to-text, LLM processing, and text-to-speech.
 
@@ -11,7 +11,7 @@ WebSocket
 ## Endpoint
 
 ```
-wss://{host}:{port}/agent/converse
+wss://{host}:{port}/api/voice-agent
 ```
 
 ## Query Parameters
@@ -43,7 +43,7 @@ Starter applications implementing this interface at a minimum should pass the [c
 ### Prerequisites
 
 1. **Your starter app must be running** and accessible via WebSocket
-2. **Implement the `/agent/converse` WebSocket endpoint** according to this specification in your Starter App.
+2. **Implement the `/api/voice-agent` WebSocket endpoint** according to this specification in your Starter App.
 3. **Install dependencies** in this contracts repo:
 
    ```bash
@@ -57,17 +57,17 @@ Starter applications implementing this interface at a minimum should pass the [c
 
 ```bash
 # Start your starter app (example - your commands will vary)
-cd my-agent-starter
-pnpm start  # Runs on ws://localhost:3000
+cd my-voice-agent-starter
+pnpm start  # Runs on ws://localhost:8081
 
 # In another terminal, run conformance tests
 cd starter-contracts
-WS_URL=ws://localhost:3000 pnpm run test:agent
+WS_URL=ws://localhost:8081 pnpm run test:voice-agent
 ```
 
 #### Against Your Deployed Starter App
 
 ```bash
 # Test your deployed app
-WS_URL=wss://my-agent-app.example.com pnpm run test:agent
+WS_URL=wss://my-voice-agent-app.example.com pnpm run test:voice-agent
 ```

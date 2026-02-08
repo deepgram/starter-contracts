@@ -90,7 +90,7 @@ export BASE_URL="http://localhost:8081"
 export REPO_PATH="$REPO_ROOT"
 export NPM_CONFIG_LOGLEVEL=error
 
-if npm run test:stt -- tests/transcription/api/; then
+if npm run test:transcription -- tests/transcription/api/; then
   echo "✅ API tests passed"
 else
   echo "❌ API tests failed"

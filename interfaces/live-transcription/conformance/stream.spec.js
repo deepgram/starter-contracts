@@ -2,9 +2,9 @@ import { describe, it, expect } from "vitest";
 import WebSocket from "ws";
 import { WS_URL } from "./util.js";
 
-const ENDPOINT = process.env.LIVE_STT_ENDPOINT || "/api/live-transcription";
+const ENDPOINT = process.env.LIVE_TRANSCRIPTION_ENDPOINT || "/api/live-transcription";
 
-describe("Live STT Interface Conformance:", () => {
+describe("Live Transcription Interface Conformance:", () => {
 
   it("should connect to WebSocket endpoint", async () => {
     const ws = new WebSocket(`${WS_URL}${ENDPOINT}`);

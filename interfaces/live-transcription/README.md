@@ -1,8 +1,8 @@
-# Live TTS Interface Contract
+# Live Transcription Interface Contract
 
-Minimal live text-to-speech scaffolding for Deepgram starter applications. Send text, get real-time audio via WebSocket.
+Minimal live transcription scaffolding for Deepgram starter applications. Stream live audio, get real-time transcripts.
 
-**Purpose:** This contract provides the bare minimum structure for internal developers to quickly build live TTS starter apps. It's scaffolding, not a production-ready demo.
+**Purpose:** This contract provides the bare minimum structure for internal developers to quickly build live transcription starter apps. It's scaffolding, not a production-ready demo.
 
 ## Transport
 
@@ -11,7 +11,7 @@ WebSocket
 ## Endpoint
 
 ```
-wss://{host}:{port}/live-tts/stream?model=MODEL
+wss://{host}:{port}/api/live-transcription?stream_url=STREAM_URL
 ```
 ## Query Parameters
 
@@ -33,7 +33,7 @@ See [error.json](./schema/error.json)
 
 ## Conformance Requirements & Testing
 
-Starter applications implementing this interface at a minimum should pass the [conformance tests](./conformance/synthesize.spec.js). These conformance tests validate that your minimal starter app correctly implements the live TTS scaffolding contract.
+Starter applications implementing this interface at a minimum should pass the [conformance tests](./conformance/stream.spec.js). These conformance tests validate that your minimal starter app correctly implements the live transcription scaffolding contract.
 
 ### Prerequisites
 
@@ -52,17 +52,17 @@ Starter applications implementing this interface at a minimum should pass the [c
 
 ```bash
 # Start your starter app (example - your commands will vary)
-cd my-live-tts-starter
-npm start  # Runs on ws://localhost:3000
+cd my-live-transcription-starter
+pnpm start  # Runs on ws://localhost:8081
 
 # In another terminal, run conformance tests
 cd starter-contracts
-WS_URL=ws://localhost:3000 npm run test:live-tts
+WS_URL=ws://localhost:8081 pnpm run test:live-transcription
 ```
 
 #### Against Your Deployed Starter App
 
 ```bash
 # Test your deployed app
-WS_URL=wss://my-live-tts-app.vercel.app npm run test:live-tts
+WS_URL=wss://my-live-transcription-app.vercel.app pnpm run test:live-transcription
 ```

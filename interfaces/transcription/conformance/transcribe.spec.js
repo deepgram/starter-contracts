@@ -1,10 +1,10 @@
 import { describe, it, expect } from "vitest";
 import { BASE_URL } from "./util.js";
 
-const ENDPOINT = process.env.STT_ENDPOINT || "/api/transcription";
+const ENDPOINT = process.env.TRANSCRIPTION_ENDPOINT || "/api/transcription";
 const SAMPLE_AUDIO_URL = "https://dpgr.am/spacewalk.wav";
 
-describe("STT Interface Conformance:", () => {
+describe("Transcription Interface Conformance:", () => {
   it("should transcribe audio from URL via multipart/form-data", async () => {
     const formData = new FormData();
     formData.append("url", SAMPLE_AUDIO_URL);

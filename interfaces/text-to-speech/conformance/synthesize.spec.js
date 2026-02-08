@@ -1,10 +1,10 @@
 import { describe, it, expect } from "vitest";
 import { BASE_URL } from "./util.js";
 
-const ENDPOINT = process.env.TTS_ENDPOINT || "/api/text-to-speech";
+const ENDPOINT = process.env.TEXT_TO_SPEECH_ENDPOINT || "/api/text-to-speech";
 const SAMPLE_TEXT = "Hello, this is a test of the Deepgram text to speech.";
 
-describe("TTS Interface Conformance:", () => {
+describe("Text-to-Speech Interface Conformance:", () => {
 
   it("should synthesize text to audio", async () => {
     const response = await fetch(`${BASE_URL}${ENDPOINT}`, {

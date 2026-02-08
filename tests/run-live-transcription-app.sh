@@ -91,7 +91,7 @@ export WS_URL="ws://localhost:8081"
 export REPO_PATH="$REPO_ROOT"
 export NPM_CONFIG_LOGLEVEL=error
 
-if npm run test:live-stt -- tests/live-transcription/api/; then
+if npm run test:live-transcription -- tests/live-transcription/api/; then
   echo "✅ API tests passed"
 else
   echo "❌ API tests failed"

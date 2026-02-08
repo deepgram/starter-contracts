@@ -93,7 +93,7 @@ fi
 
 # 3. Validate lifecycle sections
 echo "Checking lifecycle sections..."
-required_lifecycles=("check" "install" "start" "update" "clean")
+required_lifecycles=("check" "install" "start" "update" "clean" "eject-frontend")
 missing_sections=()
 
 for lifecycle in "${required_lifecycles[@]}"; do
