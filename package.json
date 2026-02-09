@@ -13,6 +13,7 @@
     "test:live-text-to-speech": "vitest run interfaces/live-text-to-speech/conformance/synthesize.spec.js",
     "test:flux": "vitest run interfaces/flux/conformance/stream.spec.js",
     "test:voice-agent": "vitest run interfaces/voice-agent/conformance/converse.spec.js",
+    "test:session": "vitest run interfaces/shared/conformance/session.spec.js",
     "test:node": "./tests/run-node-app.sh",
     "test:node:stt": "./tests/run-node-app.sh stt",
     "test:node:tts": "./tests/run-node-app.sh tts",

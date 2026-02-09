@@ -1,13 +1,14 @@
 import { describe, it, expect } from "vitest";
 import WebSocket from "ws";
-import { WS_URL, createMinimalSettings, createInjectUserMessage, waitForMessageType, waitForMessageTypes } from "./util.js";
+import { WS_URL, HTTP_BASE_URL, getWsProtocols, createMinimalSettings, createInjectUserMessage, waitForMessageType, waitForMessageTypes } from "./util.js";
 
 const ENDPOINT = process.env.VOICE_AGENT_ENDPOINT || "/api/voice-agent";
 
 describe("Voice Agent Interface Conformance:", () => {
 
   it("should connect to WebSocket endpoint", async () => {
-    const ws = new WebSocket(`${WS_URL}${ENDPOINT}`);
+    const protocols = await getWsProtocols(HTTP_BASE_URL);
+    const ws = new WebSocket(`${WS_URL}${ENDPOINT}`, protocols);
 
     await new Promise((resolve, reject) => {
       ws.on('open', () => {
@@ -26,7 +27,8 @@ describe("Voice Agent Interface Conformance:", () => {
   }, 10000);
 
   it("should receive Welcome message after connection", async () => {
-    const ws = new WebSocket(`${WS_URL}${ENDPOINT}`);
+    const protocols = await getWsProtocols(HTTP_BASE_URL);
+    const ws = new WebSocket(`${WS_URL}${ENDPOINT}`, protocols);
     const messages = [];
 
     ws.on('message', (data) => {
@@ -59,7 +61,8 @@ describe("Voice Agent Interface Conformance:", () => {
   }, 20000);
 
   it("should accept minimal Settings message and respond with SettingsApplied", async () => {
-    const ws = new WebSocket(`${WS_URL}${ENDPOINT}`);
+    const protocols = await getWsProtocols(HTTP_BASE_URL);
+    const ws = new WebSocket(`${WS_URL}${ENDPOINT}`, protocols);
     const messages = [];
 
     ws.on('message', (data) => {
@@ -99,7 +102,8 @@ describe("Voice Agent Interface Conformance:", () => {
   }, 25000);
 
   it("should reject invalid Settings message (missing audio)", async () => {
-    const ws = new WebSocket(`${WS_URL}${ENDPOINT}`);
+    const protocols = await getWsProtocols(HTTP_BASE_URL);
+    const ws = new WebSocket(`${WS_URL}${ENDPOINT}`, protocols);
     const messages = [];
 
     ws.on('message', (data) => {
@@ -162,7 +166,8 @@ describe("Voice Agent Interface Conformance:", () => {
   }, 25000);
 
   it("should reject invalid Settings message (missing agent.listen)", async () => {
-    const ws = new WebSocket(`${WS_URL}${ENDPOINT}`);
+    const protocols = await getWsProtocols(HTTP_BASE_URL);
+    const ws = new WebSocket(`${WS_URL}${ENDPOINT}`, protocols);
     const messages = [];
 
     ws.on('message', (data) => {
@@ -230,7 +235,8 @@ describe("Voice Agent Interface Conformance:", () => {
   }, 25000);
 
   it("should reject invalid Settings message (missing agent.think)", async () => {
-    const ws = new WebSocket(`${WS_URL}${ENDPOINT}`);
+    const protocols = await getWsProtocols(HTTP_BASE_URL);
+    const ws = new WebSocket(`${WS_URL}${ENDPOINT}`, protocols);
     const messages = [];
 
     ws.on('message', (data) => {
@@ -298,7 +304,8 @@ describe("Voice Agent Interface Conformance:", () => {
   }, 25000);
 
   it("should reject invalid Settings message (missing agent.speak)", async () => {
-    const ws = new WebSocket(`${WS_URL}${ENDPOINT}`);
+    const protocols = await getWsProtocols(HTTP_BASE_URL);
+    const ws = new WebSocket(`${WS_URL}${ENDPOINT}`, protocols);
     const messages = [];
 
     ws.on('message', (data) => {
@@ -366,7 +373,8 @@ describe("Voice Agent Interface Conformance:", () => {
   }, 25000);
 
   it("should accept InjectUserMessage and trigger agent response", async () => {
-    const ws = new WebSocket(`${WS_URL}${ENDPOINT}`);
+    const protocols = await getWsProtocols(HTTP_BASE_URL);
+    const ws = new WebSocket(`${WS_URL}${ENDPOINT}`, protocols);
     const messages = [];
 
     ws.on('message', (data) => {
@@ -440,7 +448,8 @@ describe("Voice Agent Interface Conformance:", () => {
   }, 45000);
 
   it("should reject invalid InjectUserMessage (missing content)", async () => {
-    const ws = new WebSocket(`${WS_URL}${ENDPOINT}`);
+    const protocols = await getWsProtocols(HTTP_BASE_URL);
+    const ws = new WebSocket(`${WS_URL}${ENDPOINT}`, protocols);
     const messages = [];
 
     ws.on('message', (data) => {
@@ -491,7 +500,8 @@ describe("Voice Agent Interface Conformance:", () => {
   }, 30000);
 
   it("should handle connection close gracefully", async () => {
-    const ws = new WebSocket(`${WS_URL}${ENDPOINT}`);
+    const protocols = await getWsProtocols(HTTP_BASE_URL);
+    const ws = new WebSocket(`${WS_URL}${ENDPOINT}`, protocols);
     let connectionClosed = false;
 
     await new Promise((resolve, reject) => {

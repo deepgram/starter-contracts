@@ -1,5 +1,12 @@
+import { getTestSessionToken, getWsProtocols } from "../../../tests/shared/test-helpers.js";
+
 // WebSocket URL for live text-to-speech conformance tests
 export const WS_URL = process.env.WS_URL || "ws://localhost:3000";
+
+// HTTP base URL for fetching session tokens (derived from WS_URL)
+export const HTTP_BASE_URL = process.env.BASE_URL || WS_URL.replace(/^ws/, "http");
+
+export { getTestSessionToken, getWsProtocols };
 
 // Helper function to wait for WebSocket messages
 export const waitForMessages = (ws, timeout = 5000) => {

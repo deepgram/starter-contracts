@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { BASE_URL } from "./util.js";
+import { BASE_URL, authHeaders } from "./util.js";
 
 const ENDPOINT = process.env.TEXT_TO_SPEECH_ENDPOINT || "/api/text-to-speech";
 const SAMPLE_TEXT = "Hello, this is a test of the Deepgram text to speech.";
@@ -10,7 +10,8 @@ describe("Text-to-Speech Interface Conformance:", () => {
     const response = await fetch(`${BASE_URL}${ENDPOINT}`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        ...await authHeaders(BASE_URL)
       },
       body: JSON.stringify({ text: SAMPLE_TEXT })
     });
@@ -27,7 +28,8 @@ describe("Text-to-Speech Interface Conformance:", () => {
     const response = await fetch(`${BASE_URL}${ENDPOINT}?model=aura-2-apollo-en`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        ...await authHeaders(BASE_URL)
       },
       body: JSON.stringify({ text: SAMPLE_TEXT })
     });
@@ -41,7 +43,8 @@ describe("Text-to-Speech Interface Conformance:", () => {
     const response = await fetch(`${BASE_URL}${ENDPOINT}`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        ...await authHeaders(BASE_URL)
       },
       body: JSON.stringify({ text: "" })
     });
@@ -57,7 +60,8 @@ describe("Text-to-Speech Interface Conformance:", () => {
     const response = await fetch(`${BASE_URL}${ENDPOINT}?invalid_param=value`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        ...await authHeaders(BASE_URL)
       },
       body: JSON.stringify({ text: SAMPLE_TEXT })
     });
@@ -72,7 +76,8 @@ describe("Text-to-Speech Interface Conformance:", () => {
     const response = await fetch(`${BASE_URL}${ENDPOINT}`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        ...await authHeaders(BASE_URL)
       },
       body: JSON.stringify({ text: longText })
     });

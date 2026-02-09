@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import WebSocket from "ws";
-import { WS_URL } from "./util.js";
+import { WS_URL, HTTP_BASE_URL, getWsProtocols } from "./util.js";
 
 const ENDPOINT = "/flux/stream";
 const SAMPLE_STREAM_URL = "http://stream.live.vc.bbcmedia.co.uk/bbc_world_service";
@@ -10,7 +10,8 @@ const UNREACHABLE_STREAM_URL = "http://nonexistent-domain-12345.com/audio.mp3";
 describe("Flux Interface Conformance:", () => {
 
   it("should connect to WebSocket endpoint with valid stream URL and model", async () => {
-    const ws = new WebSocket(`${WS_URL}${ENDPOINT}?stream_url=${encodeURIComponent(SAMPLE_STREAM_URL)}&model=flux-general-en`);
+    const protocols = await getWsProtocols(HTTP_BASE_URL);
+    const ws = new WebSocket(`${WS_URL}${ENDPOINT}?stream_url=${encodeURIComponent(SAMPLE_STREAM_URL)}&model=flux-general-en`, protocols);
 
     await new Promise((resolve, reject) => {
       ws.on('open', () => {
@@ -29,7 +30,8 @@ describe("Flux Interface Conformance:", () => {
   }, 10000);
 
   it("should receive Connected event after connection", async () => {
-    const ws = new WebSocket(`${WS_URL}${ENDPOINT}?stream_url=${encodeURIComponent(SAMPLE_STREAM_URL)}&model=flux-general-en`);
+    const protocols = await getWsProtocols(HTTP_BASE_URL);
+    const ws = new WebSocket(`${WS_URL}${ENDPOINT}?stream_url=${encodeURIComponent(SAMPLE_STREAM_URL)}&model=flux-general-en`, protocols);
     let connectedEvent = null;
 
     ws.on('message', (data) => {
@@ -67,7 +69,8 @@ describe("Flux Interface Conformance:", () => {
   }, 10000);
 
   it("should receive TurnInfo events during streaming", async () => {
-    const ws = new WebSocket(`${WS_URL}${ENDPOINT}?stream_url=${encodeURIComponent(SAMPLE_STREAM_URL)}&model=flux-general-en`);
+    const protocols = await getWsProtocols(HTTP_BASE_URL);
+    const ws = new WebSocket(`${WS_URL}${ENDPOINT}?stream_url=${encodeURIComponent(SAMPLE_STREAM_URL)}&model=flux-general-en`, protocols);
     const turnInfoEvents = [];
 
     ws.on('message', (data) => {
@@ -111,7 +114,8 @@ describe("Flux Interface Conformance:", () => {
   }, 25000);
 
   it("should return error for missing stream_url parameter", async () => {
-    const ws = new WebSocket(`${WS_URL}${ENDPOINT}?model=flux-general-en`);
+    const protocols = await getWsProtocols(HTTP_BASE_URL);
+    const ws = new WebSocket(`${WS_URL}${ENDPOINT}?model=flux-general-en`, protocols);
     const errors = [];
 
     ws.on('message', (data) => {
@@ -146,7 +150,8 @@ describe("Flux Interface Conformance:", () => {
   }, 10000);
 
   it("should return error for missing model parameter", async () => {
-    const ws = new WebSocket(`${WS_URL}${ENDPOINT}?stream_url=${encodeURIComponent(SAMPLE_STREAM_URL)}`);
+    const protocols = await getWsProtocols(HTTP_BASE_URL);
+    const ws = new WebSocket(`${WS_URL}${ENDPOINT}?stream_url=${encodeURIComponent(SAMPLE_STREAM_URL)}`, protocols);
     const errors = [];
 
     ws.on('message', (data) => {
@@ -180,7 +185,8 @@ describe("Flux Interface Conformance:", () => {
   }, 10000);
 
   it("should return error for invalid stream_url format", async () => {
-    const ws = new WebSocket(`${WS_URL}${ENDPOINT}?stream_url=${INVALID_STREAM_URL_FORMAT}&model=flux-general-en`);
+    const protocols = await getWsProtocols(HTTP_BASE_URL);
+    const ws = new WebSocket(`${WS_URL}${ENDPOINT}?stream_url=${INVALID_STREAM_URL_FORMAT}&model=flux-general-en`, protocols);
     const errors = [];
 
     ws.on('message', (data) => {
@@ -214,7 +220,8 @@ describe("Flux Interface Conformance:", () => {
   }, 10000);
 
   it("should return error for unreachable stream_url", async () => {
-    const ws = new WebSocket(`${WS_URL}${ENDPOINT}?stream_url=${UNREACHABLE_STREAM_URL}&model=flux-general-en`);
+    const protocols = await getWsProtocols(HTTP_BASE_URL);
+    const ws = new WebSocket(`${WS_URL}${ENDPOINT}?stream_url=${UNREACHABLE_STREAM_URL}&model=flux-general-en`, protocols);
     const errors = [];
 
     ws.on('message', (data) => {
@@ -248,7 +255,8 @@ describe("Flux Interface Conformance:", () => {
   }, 10000);
 
   it("should handle connection close gracefully", async () => {
-    const ws = new WebSocket(`${WS_URL}${ENDPOINT}?stream_url=${encodeURIComponent(SAMPLE_STREAM_URL)}&model=flux-general-en`);
+    const protocols = await getWsProtocols(HTTP_BASE_URL);
+    const ws = new WebSocket(`${WS_URL}${ENDPOINT}?stream_url=${encodeURIComponent(SAMPLE_STREAM_URL)}&model=flux-general-en`, protocols);
     let connectionClosed = false;
 
     await new Promise((resolve, reject) => {

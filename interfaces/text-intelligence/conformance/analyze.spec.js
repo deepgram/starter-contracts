@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { BASE_URL } from "./util.js";
+import { BASE_URL, authHeaders } from "./util.js";
 
 const ENDPOINT = process.env.TEXT_INTEL_ENDPOINT || "/api/text-intelligence";
 const SAMPLE_TEXT = "This is a sample text for analysis. It contains multiple sentences. We can test the text intelligence features with this content. The system should be able to analyze and summarize this text effectively.";
@@ -10,7 +10,8 @@ describe("Text Intelligence Interface Conformance:", () => {
     const response = await fetch(`${BASE_URL}${ENDPOINT}?summarize=true`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        ...await authHeaders(BASE_URL)
       },
       body: JSON.stringify({ text: SAMPLE_TEXT })
     });
@@ -30,7 +31,8 @@ describe("Text Intelligence Interface Conformance:", () => {
     const response = await fetch(`${BASE_URL}${ENDPOINT}?summarize=true`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        ...await authHeaders(BASE_URL)
       },
       body: JSON.stringify({ text: SAMPLE_TEXT })
     });
@@ -44,7 +46,8 @@ describe("Text Intelligence Interface Conformance:", () => {
     const response = await fetch(`${BASE_URL}${ENDPOINT}?summarize=true`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        ...await authHeaders(BASE_URL)
       },
       body: JSON.stringify({ text: "" })
     });
@@ -60,7 +63,8 @@ describe("Text Intelligence Interface Conformance:", () => {
     const response = await fetch(`${BASE_URL}${ENDPOINT}?summarize=true&invalid_param=value`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        ...await authHeaders(BASE_URL)
       },
       body: JSON.stringify({ text: SAMPLE_TEXT })
     });
@@ -75,7 +79,8 @@ describe("Text Intelligence Interface Conformance:", () => {
     const response = await fetch(`${BASE_URL}${ENDPOINT}?summarize=true`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        ...await authHeaders(BASE_URL)
       },
       body: JSON.stringify({ text: longText })
     });
@@ -96,7 +101,8 @@ describe("Text Intelligence Interface Conformance:", () => {
     const response = await fetch(`${BASE_URL}${ENDPOINT}?summarize=true&language=en`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        ...await authHeaders(BASE_URL)
       },
       body: JSON.stringify({ text: SAMPLE_TEXT })
     });
@@ -115,7 +121,8 @@ describe("Text Intelligence Interface Conformance:", () => {
     const response = await fetch(`${BASE_URL}${ENDPOINT}?summarize=true`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        ...await authHeaders(BASE_URL)
       },
       body: JSON.stringify({ url: testUrl })
     });
@@ -134,7 +141,8 @@ describe("Text Intelligence Interface Conformance:", () => {
     const response = await fetch(`${BASE_URL}${ENDPOINT}?summarize=true`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        ...await authHeaders(BASE_URL)
       },
       body: JSON.stringify({ text: SAMPLE_TEXT, url: "https://example.com/text.txt" })
     });
@@ -149,7 +157,8 @@ describe("Text Intelligence Interface Conformance:", () => {
     const response = await fetch(`${BASE_URL}${ENDPOINT}?summarize=true`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        ...await authHeaders(BASE_URL)
       },
       body: JSON.stringify({ url: "not-a-valid-url" })
     });
@@ -164,7 +173,8 @@ describe("Text Intelligence Interface Conformance:", () => {
     const response = await fetch(`${BASE_URL}${ENDPOINT}?summarize=true`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        ...await authHeaders(BASE_URL)
       },
       body: JSON.stringify({ url: "https://nonexistent-deepgram-test-domain-12345.com/file.txt" })
     });
@@ -180,7 +190,8 @@ describe("Text Intelligence Interface Conformance:", () => {
     const response = await fetch(`${BASE_URL}${ENDPOINT}?topics=true`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        ...await authHeaders(BASE_URL)
       },
       body: JSON.stringify({ text: SAMPLE_TEXT })
     });
@@ -213,7 +224,8 @@ describe("Text Intelligence Interface Conformance:", () => {
     const response = await fetch(`${BASE_URL}${ENDPOINT}?sentiment=true`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        ...await authHeaders(BASE_URL)
       },
       body: JSON.stringify({ text: SAMPLE_TEXT })
     });
@@ -247,7 +259,8 @@ describe("Text Intelligence Interface Conformance:", () => {
     const response = await fetch(`${BASE_URL}${ENDPOINT}?intents=true`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        ...await authHeaders(BASE_URL)
       },
       body: JSON.stringify({ text: SAMPLE_TEXT })
     });
@@ -280,7 +293,8 @@ describe("Text Intelligence Interface Conformance:", () => {
     const response = await fetch(`${BASE_URL}${ENDPOINT}?summarize=true&topics=true&sentiment=true&intents=true`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        ...await authHeaders(BASE_URL)
       },
       body: JSON.stringify({ text: SAMPLE_TEXT })
     });

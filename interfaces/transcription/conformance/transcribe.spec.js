@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { BASE_URL } from "./util.js";
+import { BASE_URL, authHeaders } from "./util.js";
 
 const ENDPOINT = process.env.TRANSCRIPTION_ENDPOINT || "/api/transcription";
 const SAMPLE_AUDIO_URL = "https://dpgr.am/spacewalk.wav";
@@ -11,6 +11,7 @@ describe("Transcription Interface Conformance:", () => {
 
     const response = await fetch(`${BASE_URL}${ENDPOINT}`, {
       method: "POST",
+      headers: { ...await authHeaders(BASE_URL) },
       body: formData,
     });
 
@@ -30,6 +31,7 @@ describe("Transcription Interface Conformance:", () => {
 
     const response = await fetch(`${BASE_URL}${ENDPOINT}`, {
       method: "POST",
+      headers: { ...await authHeaders(BASE_URL) },
       body: formData,
     });
 
@@ -49,6 +51,7 @@ describe("Transcription Interface Conformance:", () => {
 
     const response = await fetch(`${BASE_URL}${ENDPOINT}`, {
       method: "POST",
+      headers: { ...await authHeaders(BASE_URL) },
       body: formData,
     });
 
@@ -73,6 +76,7 @@ describe("Transcription Interface Conformance:", () => {
 
     const response = await fetch(`${BASE_URL}${ENDPOINT}`, {
       method: "POST",
+      headers: { ...await authHeaders(BASE_URL) },
       body: formData,
     });
 
@@ -87,6 +91,7 @@ describe("Transcription Interface Conformance:", () => {
 
     const response = await fetch(`${BASE_URL}${ENDPOINT}`, {
       method: "POST",
+      headers: { ...await authHeaders(BASE_URL) },
       body: formData,
     });
 
@@ -103,6 +108,7 @@ describe("Transcription Interface Conformance:", () => {
 
     const response = await fetch(`${BASE_URL}${ENDPOINT}`, {
       method: "POST",
+      headers: { ...await authHeaders(BASE_URL) },
       body: formData,
     });
 
@@ -119,6 +125,7 @@ describe("Transcription Interface Conformance:", () => {
 
     const response = await fetch(`${BASE_URL}${ENDPOINT}`, {
       method: "POST",
+      headers: { ...await authHeaders(BASE_URL) },
       body: formData,
     });
 
@@ -131,6 +138,7 @@ describe("Transcription Interface Conformance:", () => {
 
     const response = await fetch(`${BASE_URL}${ENDPOINT}`, {
       method: "POST",
+      headers: { ...await authHeaders(BASE_URL) },
       body: formData,
     });
 

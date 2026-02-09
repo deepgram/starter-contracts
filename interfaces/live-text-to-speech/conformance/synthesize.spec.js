@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import WebSocket from "ws";
-import { WS_URL, waitForAudioChunks } from "./util.js";
+import { WS_URL, HTTP_BASE_URL, getWsProtocols, waitForAudioChunks } from "./util.js";
 
 const ENDPOINT = process.env.LIVE_TEXT_TO_SPEECH_ENDPOINT || "/api/live-text-to-speech";
 
@@ -8,7 +8,8 @@ describe("Live Text-to-Speech Interface Conformance:", () => {
 
   it("should connect and receive audio", async () => {
     console.log('Attempting to connect to:', `${WS_URL}${ENDPOINT}`);
-    const ws = new WebSocket(`${WS_URL}${ENDPOINT}`);
+    const protocols = await getWsProtocols(HTTP_BASE_URL);
+    const ws = new WebSocket(`${WS_URL}${ENDPOINT}`, protocols);
 
     await new Promise((resolve, reject) => {
       ws.on('open', () => {
@@ -44,7 +45,8 @@ describe("Live Text-to-Speech Interface Conformance:", () => {
   }, 25000);
 
   it("should handle connection close gracefully", async () => {
-    const ws = new WebSocket(`${WS_URL}${ENDPOINT}`);
+    const protocols = await getWsProtocols(HTTP_BASE_URL);
+    const ws = new WebSocket(`${WS_URL}${ENDPOINT}`, protocols);
 
     await new Promise((resolve, reject) => {
       ws.on('open', resolve);

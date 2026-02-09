@@ -1,13 +1,14 @@
 import { describe, it, expect } from "vitest";
 import WebSocket from "ws";
-import { WS_URL } from "./util.js";
+import { WS_URL, HTTP_BASE_URL, getWsProtocols } from "./util.js";
 
 const ENDPOINT = process.env.LIVE_TRANSCRIPTION_ENDPOINT || "/api/live-transcription";
 
 describe("Live Transcription Interface Conformance:", () => {
 
   it("should connect to WebSocket endpoint", async () => {
-    const ws = new WebSocket(`${WS_URL}${ENDPOINT}`);
+    const protocols = await getWsProtocols(HTTP_BASE_URL);
+    const ws = new WebSocket(`${WS_URL}${ENDPOINT}`, protocols);
 
     await new Promise((resolve, reject) => {
       ws.on('open', () => {
@@ -26,7 +27,8 @@ describe("Live Transcription Interface Conformance:", () => {
   }, 10000);
 
   it("should accept model parameter", async () => {
-    const ws = new WebSocket(`${WS_URL}${ENDPOINT}?model=nova-3`);
+    const protocols = await getWsProtocols(HTTP_BASE_URL);
+    const ws = new WebSocket(`${WS_URL}${ENDPOINT}?model=nova-3`, protocols);
 
     await new Promise((resolve, reject) => {
       ws.on('open', () => {
@@ -45,7 +47,8 @@ describe("Live Transcription Interface Conformance:", () => {
   }, 10000);
 
   it("should accept language parameter", async () => {
-    const ws = new WebSocket(`${WS_URL}${ENDPOINT}?language=es`);
+    const protocols = await getWsProtocols(HTTP_BASE_URL);
+    const ws = new WebSocket(`${WS_URL}${ENDPOINT}?language=es`, protocols);
 
     await new Promise((resolve, reject) => {
       ws.on('open', () => {
@@ -64,7 +67,8 @@ describe("Live Transcription Interface Conformance:", () => {
   }, 10000);
 
   it.skip("should accept binary audio data", async () => {
-    const ws = new WebSocket(`${WS_URL}${ENDPOINT}?model=nova-3`);
+    const protocols = await getWsProtocols(HTTP_BASE_URL);
+    const ws = new WebSocket(`${WS_URL}${ENDPOINT}?model=nova-3`, protocols);
     let receivedResponse = false;
     const responses = [];
 
@@ -110,7 +114,8 @@ describe("Live Transcription Interface Conformance:", () => {
   }, 15000);
 
   it.skip("should handle multiple binary audio chunks", async () => {
-    const ws = new WebSocket(`${WS_URL}${ENDPOINT}?model=nova-3`);
+    const protocols = await getWsProtocols(HTTP_BASE_URL);
+    const ws = new WebSocket(`${WS_URL}${ENDPOINT}?model=nova-3`, protocols);
     let messageCount = 0;
     const messageTypes = [];
 
@@ -158,7 +163,8 @@ describe("Live Transcription Interface Conformance:", () => {
   }, 15000);
 
   it("should handle connection close gracefully", async () => {
-    const ws = new WebSocket(`${WS_URL}${ENDPOINT}`);
+    const protocols = await getWsProtocols(HTTP_BASE_URL);
+    const ws = new WebSocket(`${WS_URL}${ENDPOINT}`, protocols);
     let connectionClosed = false;
 
     await new Promise((resolve, reject) => {
