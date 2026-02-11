@@ -56,8 +56,32 @@ export const REPO_PATH = process.env.REPO_PATH || process.cwd();
 let _sessionToken = null;
 
 /**
+ * Extracts session nonce from the HTML page's meta tag.
+ * In production, Caddy injects <meta name="session-nonce" content="<uuid>"> into index.html.
+ *
+ * @param {string} baseUrl - Base URL to fetch HTML from (e.g., "https://preview.dx.deepgram.com/node-transcription")
+ * @returns {Promise<string>} Nonce value from the meta tag
+ */
+async function fetchSessionNonce(baseUrl) {
+  const response = await fetch(baseUrl, {
+    headers: { "Accept": "text/html" },
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to fetch HTML for nonce: ${response.status} ${response.statusText}`);
+  }
+  const html = await response.text();
+  const match = html.match(/<meta\s+name="session-nonce"\s+content="([^"]+)"/);
+  if (!match) {
+    throw new Error('No session-nonce meta tag found in HTML page');
+  }
+  return match[1];
+}
+
+/**
  * Fetches a session token from the backend.
  * In dev mode (no SESSION_SECRET), tokens are issued freely without nonce.
+ * When SESSION_AUTH=true (production), fetches the page nonce first and
+ * sends it as X-Session-Nonce header to /api/session.
  * Caches the token for subsequent calls within the same test run.
  *
  * @param {string} baseUrl - Backend base URL (e.g., "http://localhost:8081")
@@ -66,7 +90,13 @@ let _sessionToken = null;
 export async function getTestSessionToken(baseUrl) {
   if (_sessionToken) return _sessionToken;
 
-  const response = await fetch(`${baseUrl}/api/session`);
+  const headers = {};
+  if (process.env.SESSION_AUTH === 'true') {
+    const nonce = await fetchSessionNonce(baseUrl);
+    headers["X-Session-Nonce"] = nonce;
+  }
+
+  const response = await fetch(`${baseUrl}/api/session`, { headers });
   if (!response.ok) {
     throw new Error(`Failed to get session token: ${response.status} ${response.statusText}`);
   }
