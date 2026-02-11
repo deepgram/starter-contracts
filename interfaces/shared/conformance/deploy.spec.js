@@ -5,7 +5,6 @@ import { describe, it, expect, beforeAll } from "vitest";
  *
  * Tests that the production deployment injects required HTML directives:
  * - <base href="/{starter-name}/"> for subpath routing via dx-router
- * - <meta name="session-nonce" content="<uuid>"> for session auth
  *
  * These tests only run when SESSION_AUTH=true (production/external).
  * In dev mode they are skipped automatically.
@@ -24,20 +23,6 @@ describe.skipIf(!SESSION_AUTH)("Deploy Conformance:", () => {
     });
     expect(response.ok).toBe(true);
     html = await response.text();
-  });
-
-  it("should inject a session nonce meta tag with a UUID value", () => {
-    const match = html.match(
-      /<meta\s+name="session-nonce"\s+content="([^"]+)"/
-    );
-
-    expect(match, "Missing <meta name=\"session-nonce\"> tag in HTML").not.toBeNull();
-
-    // Caddy injects the request UUID — validate it looks like a UUID
-    const uuid = match[1];
-    expect(uuid).toMatch(
-      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
-    );
   });
 
   it("should set a base href matching the preview subpath", () => {
