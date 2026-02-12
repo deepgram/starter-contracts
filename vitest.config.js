@@ -3,6 +3,7 @@ import { defineConfig } from 'vitest/config';
 export default defineConfig({
   test: {
     testTimeout: 15000,
+    retry: process.env.CI ? 1 : 0,
     env: {
       // Allow environment variables to be passed through
       BASE_URL: process.env.BASE_URL,
