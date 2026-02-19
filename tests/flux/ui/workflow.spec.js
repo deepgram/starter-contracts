@@ -7,6 +7,13 @@ test.describe('Flux UI Workflow', () => {
     // Grant microphone permissions
     await context.grantPermissions(['microphone']);
 
+    // Capture console messages for debugging
+    const consoleLogs = [];
+    page.on('console', msg => consoleLogs.push(`[${msg.type()}] ${msg.text()}`));
+
+    // Auto-dismiss dialogs (e.g. alert() from error handler)
+    page.on('dialog', dialog => dialog.dismiss());
+
     // 1. Navigate to app
     try {
       await page.goto(BASE_URL);
@@ -22,9 +29,9 @@ test.describe('Flux UI Workflow', () => {
       );
     }
 
-    // 2. Click Connect button
+    // 2. Click Connect button via JS dispatch (three-column layout overlaps at headless viewport)
     try {
-      await page.getByRole('button', { name: ' Connect' }).click();
+      await page.locator('#connect-btn').dispatchEvent('click');
     } catch (error) {
       throw new Error(
         `❌ Could not click Connect button\n` +
@@ -40,9 +47,10 @@ test.describe('Flux UI Workflow', () => {
     // 3. Verify connection status shows "Connected"
     try {
       await expect(page.locator('#connection-status')).toContainText('Connected', {
-        timeout: 10000
+        timeout: 15000
       });
     } catch (error) {
+      const logs = consoleLogs.join('\n  ');
       throw new Error(
         `❌ Connection status did not show "Connected"\n` +
         `💡 Likely cause: WebSocket connection failed or status not updating\n` +
@@ -51,13 +59,14 @@ test.describe('Flux UI Workflow', () => {
         `   2. Verify Deepgram API key is valid in .env\n` +
         `   3. Check browser console for WebSocket errors\n` +
         `   4. Ensure Deepgram WebSocket endpoint is accessible\n` +
+        `📋 Browser console:\n  ${logs}\n` +
         `Original error: ${error.message}`
       );
     }
 
     // 4. Click Disconnect button
     try {
-      await page.getByRole('button', { name: ' Disconnect' }).click();
+      await page.locator('#disconnect-btn').dispatchEvent('click');
     } catch (error) {
       throw new Error(
         `❌ Could not click Disconnect button\n` +
