@@ -23,6 +23,7 @@
     "run:live-transcription": "./tests/run-live-transcription-app.sh",
     "run:live-text-to-speech": "./tests/run-live-text-to-speech-app.sh",
     "run:text-intelligence": "./tests/run-text-intelligence-app.sh",
+    "run:flux": "./tests/run-flux-app.sh",
     "run:voice-agent": "./tests/run-voice-agent-app.sh"
   },
   "keywords": [],
