@@ -1,6 +1,6 @@
 # Flux Interface Contract
 
-Minimal conversational speech recognition scaffolding for Deepgram starter applications. Stream live audio, get real-time turn-based transcripts.
+Minimal Flux WebSocket proxy scaffolding for Deepgram starter applications. Send binary audio data, get real-time transcripts via WebSocket.
 
 **Purpose:** This contract provides the bare minimum structure for internal developers to quickly build Flux starter apps. It's scaffolding, not a production-ready demo.
 
@@ -11,7 +11,7 @@ WebSocket
 ## Endpoint
 
 ```
-wss://{host}:{port}/flux/stream?stream_url=STREAM_URL&model=flux-general-en
+wss://{host}:{port}/api/flux
 ```
 ## Query Parameters
 
@@ -53,11 +53,11 @@ Starter applications implementing this interface at a minimum should pass the [c
 ```bash
 # Start your starter app (example - your commands will vary)
 cd my-flux-starter
-pnpm start  # Runs on ws://localhost:3000
+pnpm start  # Runs on ws://localhost:8081
 
 # In another terminal, run conformance tests
 cd starter-contracts
-WS_URL=ws://localhost:3000 pnpm run test:flux
+WS_URL=ws://localhost:8081 pnpm run test:flux
 ```
 
 #### Against Your Deployed Starter App
@@ -66,4 +66,3 @@ WS_URL=ws://localhost:3000 pnpm run test:flux
 # Test your deployed app
 WS_URL=wss://my-flux-app.vercel.app pnpm run test:flux
 ```
-

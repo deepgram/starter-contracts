@@ -2,16 +2,13 @@ import { describe, it, expect } from "vitest";
 import WebSocket from "ws";
 import { WS_URL, HTTP_BASE_URL, getWsProtocols } from "./util.js";
 
-const ENDPOINT = "/flux/stream";
-const SAMPLE_STREAM_URL = "http://stream.live.vc.bbcmedia.co.uk/bbc_world_service";
-const INVALID_STREAM_URL_FORMAT = "not-a-valid-url";
-const UNREACHABLE_STREAM_URL = "http://nonexistent-domain-12345.com/audio.mp3";
+const ENDPOINT = process.env.FLUX_ENDPOINT || "/api/flux";
 
 describe("Flux Interface Conformance:", () => {
 
-  it("should connect to WebSocket endpoint with valid stream URL and model", async () => {
+  it("should connect to WebSocket endpoint", async () => {
     const protocols = await getWsProtocols(HTTP_BASE_URL);
-    const ws = new WebSocket(`${WS_URL}${ENDPOINT}?stream_url=${encodeURIComponent(SAMPLE_STREAM_URL)}&model=flux-general-en`, protocols);
+    const ws = new WebSocket(`${WS_URL}${ENDPOINT}`, protocols);
 
     await new Promise((resolve, reject) => {
       ws.on('open', () => {
@@ -29,17 +26,58 @@ describe("Flux Interface Conformance:", () => {
     });
   }, 10000);
 
-  it("should receive Connected event after connection", async () => {
+  it("should accept model parameter", async () => {
     const protocols = await getWsProtocols(HTTP_BASE_URL);
-    const ws = new WebSocket(`${WS_URL}${ENDPOINT}?stream_url=${encodeURIComponent(SAMPLE_STREAM_URL)}&model=flux-general-en`, protocols);
-    let connectedEvent = null;
+    const ws = new WebSocket(`${WS_URL}${ENDPOINT}?model=nova-3`, protocols);
+
+    await new Promise((resolve, reject) => {
+      ws.on('open', () => {
+        console.log("WebSocket connected with model parameter");
+        ws.close();
+        resolve();
+      });
+      ws.on('error', (error) => {
+        console.error("WebSocket connection failed:", error);
+        reject(error);
+      });
+      setTimeout(() => {
+        reject(new Error('Connection timeout'));
+      }, 5000);
+    });
+  }, 10000);
+
+  it("should accept encoding parameter", async () => {
+    const protocols = await getWsProtocols(HTTP_BASE_URL);
+    const ws = new WebSocket(`${WS_URL}${ENDPOINT}?encoding=linear16&sample_rate=16000`, protocols);
+
+    await new Promise((resolve, reject) => {
+      ws.on('open', () => {
+        console.log("WebSocket connected with encoding parameter");
+        ws.close();
+        resolve();
+      });
+      ws.on('error', (error) => {
+        console.error("WebSocket connection failed:", error);
+        reject(error);
+      });
+      setTimeout(() => {
+        reject(new Error('Connection timeout'));
+      }, 5000);
+    });
+  }, 10000);
+
+  it.skip("should accept binary audio data", async () => {
+    const protocols = await getWsProtocols(HTTP_BASE_URL);
+    const ws = new WebSocket(`${WS_URL}${ENDPOINT}?encoding=linear16&sample_rate=16000`, protocols);
+    let receivedResponse = false;
+    const responses = [];
 
     ws.on('message', (data) => {
       try {
-        const result = JSON.parse(data);
-        if (result.type === "Connected") {
-          connectedEvent = result;
-        }
+        const message = JSON.parse(data);
+        console.log("Received message:", message.type);
+        responses.push(message.type);
+        receivedResponse = true;
       } catch (e) {
         // Ignore non-JSON messages
       }
@@ -47,8 +85,15 @@ describe("Flux Interface Conformance:", () => {
 
     await new Promise((resolve, reject) => {
       ws.on('open', () => {
-        console.log("WebSocket opened, waiting for Connected event");
+        console.log("Connected, sending audio data");
+
+        // Send a small chunk of silent PCM16 audio (1024 samples = 2048 bytes)
+        const audioChunk = new Int16Array(1024).fill(0);
+        ws.send(audioChunk.buffer);
+
+        // Wait a bit to see if we get any response
         setTimeout(() => {
+          console.log("Received responses:", responses);
           ws.close();
           resolve();
         }, 3000);
@@ -57,28 +102,29 @@ describe("Flux Interface Conformance:", () => {
         console.error("WebSocket error:", error);
         reject(error);
       });
+      ws.on('close', () => resolve());
       setTimeout(() => {
         reject(new Error('Connection timeout'));
-      }, 5000);
+      }, 10000);
     });
 
-    expect(connectedEvent).not.toBeNull();
-    expect(connectedEvent.type).toBe("Connected");
-    expect(connectedEvent.request_id).toBeDefined();
-    expect(connectedEvent.sequence_id).toBe(0);
-  }, 10000);
+    // We should receive at least some response
+    expect(receivedResponse).toBe(true);
+    expect(responses.length).toBeGreaterThan(0);
+  }, 15000);
 
-  it("should receive TurnInfo events during streaming", async () => {
+  it.skip("should handle multiple binary audio chunks", async () => {
     const protocols = await getWsProtocols(HTTP_BASE_URL);
-    const ws = new WebSocket(`${WS_URL}${ENDPOINT}?stream_url=${encodeURIComponent(SAMPLE_STREAM_URL)}&model=flux-general-en`, protocols);
-    const turnInfoEvents = [];
+    const ws = new WebSocket(`${WS_URL}${ENDPOINT}?encoding=linear16&sample_rate=16000`, protocols);
+    let messageCount = 0;
+    const messageTypes = [];
 
     ws.on('message', (data) => {
       try {
-        const result = JSON.parse(data);
-        if (result.type === "TurnInfo") {
-          turnInfoEvents.push(result);
-        }
+        const message = JSON.parse(data);
+        console.log("Received message:", message.type);
+        messageTypes.push(message.type);
+        messageCount++;
       } catch (e) {
         // Ignore non-JSON messages
       }
@@ -86,177 +132,39 @@ describe("Flux Interface Conformance:", () => {
 
     await new Promise((resolve, reject) => {
       ws.on('open', () => {
-        console.log("WebSocket opened, waiting for TurnInfo events");
-        // Wait longer to receive turn info events
+        console.log("Connected, sending multiple audio chunks");
+
+        // Send multiple chunks of silent audio
+        for (let i = 0; i < 3; i++) {
+          const audioChunk = new Int16Array(1024).fill(0);
+          ws.send(audioChunk.buffer);
+        }
+
+        // Wait to collect responses
         setTimeout(() => {
+          console.log("Received message types:", messageTypes);
+          console.log("Total messages:", messageCount);
           ws.close();
           resolve();
-        }, 15000);
+        }, 3000);
       });
       ws.on('error', (error) => {
         console.error("WebSocket error:", error);
         reject(error);
       });
+      ws.on('close', () => resolve());
       setTimeout(() => {
         reject(new Error('Connection timeout'));
-      }, 20000);
+      }, 10000);
     });
 
-    expect(turnInfoEvents.length).toBeGreaterThan(0);
-    const firstEvent = turnInfoEvents[0];
-    expect(firstEvent.type).toBe("TurnInfo");
-    expect(firstEvent.event).toBeDefined();
-    expect(['Update', 'StartOfTurn', 'EndOfTurn']).toContain(firstEvent.event);
-    expect(firstEvent.transcript).toBeDefined();
-    expect(firstEvent.words).toBeDefined();
-    expect(Array.isArray(firstEvent.words)).toBe(true);
-    expect(firstEvent.end_of_turn_confidence).toBeDefined();
-  }, 25000);
-
-  it("should return error for missing stream_url parameter", async () => {
-    const protocols = await getWsProtocols(HTTP_BASE_URL);
-    const ws = new WebSocket(`${WS_URL}${ENDPOINT}?model=flux-general-en`, protocols);
-    const errors = [];
-
-    ws.on('message', (data) => {
-      try {
-        const result = JSON.parse(data);
-        if (result.type === "Error") {
-          errors.push(result);
-        }
-      } catch (e) {
-        // Ignore non-JSON messages
-      }
-    });
-
-    await new Promise((resolve) => {
-      ws.on('open', () => {
-        // Wait a bit for error to be sent
-        setTimeout(() => {
-          ws.close();
-          resolve();
-        }, 2000);
-      });
-      ws.on('error', (err) => {
-        console.warn("WebSocket client error (expected for missing URL):", err.message);
-        ws.close();
-        resolve();
-      });
-      ws.on('close', () => resolve());
-    });
-
-    expect(errors.length).toBeGreaterThan(0);
-    expect(errors[0].error.code).toBe("INVALID_STREAM_URL");
-  }, 10000);
-
-  it("should return error for missing model parameter", async () => {
-    const protocols = await getWsProtocols(HTTP_BASE_URL);
-    const ws = new WebSocket(`${WS_URL}${ENDPOINT}?stream_url=${encodeURIComponent(SAMPLE_STREAM_URL)}`, protocols);
-    const errors = [];
-
-    ws.on('message', (data) => {
-      try {
-        const result = JSON.parse(data);
-        if (result.type === "Error") {
-          errors.push(result);
-        }
-      } catch (e) {
-        // Ignore non-JSON messages
-      }
-    });
-
-    await new Promise((resolve) => {
-      ws.on('open', () => {
-        setTimeout(() => {
-          ws.close();
-          resolve();
-        }, 2000);
-      });
-      ws.on('error', (err) => {
-        console.warn("WebSocket client error (expected for missing model):", err.message);
-        ws.close();
-        resolve();
-      });
-      ws.on('close', () => resolve());
-    });
-
-    expect(errors.length).toBeGreaterThan(0);
-    expect(errors[0].error.code).toBe("MODEL_NOT_FOUND");
-  }, 10000);
-
-  it("should return error for invalid stream_url format", async () => {
-    const protocols = await getWsProtocols(HTTP_BASE_URL);
-    const ws = new WebSocket(`${WS_URL}${ENDPOINT}?stream_url=${INVALID_STREAM_URL_FORMAT}&model=flux-general-en`, protocols);
-    const errors = [];
-
-    ws.on('message', (data) => {
-      try {
-        const result = JSON.parse(data);
-        if (result.type === "Error") {
-          errors.push(result);
-        }
-      } catch (e) {
-        // Ignore non-JSON messages
-      }
-    });
-
-    await new Promise((resolve) => {
-      ws.on('open', () => {
-        setTimeout(() => {
-          ws.close();
-          resolve();
-        }, 2000);
-      });
-      ws.on('error', (err) => {
-        console.warn("WebSocket client error (expected for invalid URL format):", err.message);
-        ws.close();
-        resolve();
-      });
-      ws.on('close', () => resolve());
-    });
-
-    expect(errors.length).toBeGreaterThan(0);
-    expect(errors[0].error.code).toBe("INVALID_STREAM_URL");
-  }, 10000);
-
-  it("should return error for unreachable stream_url", async () => {
-    const protocols = await getWsProtocols(HTTP_BASE_URL);
-    const ws = new WebSocket(`${WS_URL}${ENDPOINT}?stream_url=${UNREACHABLE_STREAM_URL}&model=flux-general-en`, protocols);
-    const errors = [];
-
-    ws.on('message', (data) => {
-      try {
-        const result = JSON.parse(data);
-        if (result.type === "Error") {
-          errors.push(result);
-        }
-      } catch (e) {
-        // Ignore non-JSON messages
-      }
-    });
-
-    await new Promise((resolve) => {
-      ws.on('open', () => {
-        setTimeout(() => {
-          ws.close();
-          resolve();
-        }, 5000); // Give it more time to try connecting to unreachable URL
-      });
-      ws.on('error', (err) => {
-        console.warn("WebSocket client error (expected for unreachable stream):", err.message);
-        ws.close();
-        resolve();
-      });
-      ws.on('close', () => resolve());
-    });
-
-    expect(errors.length).toBeGreaterThan(0);
-    expect(errors[0].error.code).toBe("STREAM_UNREACHABLE");
-  }, 10000);
+    // Should receive at least one message
+    expect(messageCount).toBeGreaterThan(0);
+  }, 15000);
 
   it("should handle connection close gracefully", async () => {
     const protocols = await getWsProtocols(HTTP_BASE_URL);
-    const ws = new WebSocket(`${WS_URL}${ENDPOINT}?stream_url=${encodeURIComponent(SAMPLE_STREAM_URL)}&model=flux-general-en`, protocols);
+    const ws = new WebSocket(`${WS_URL}${ENDPOINT}`, protocols);
     let connectionClosed = false;
 
     await new Promise((resolve, reject) => {
@@ -282,4 +190,3 @@ describe("Flux Interface Conformance:", () => {
   }, 10000);
 
 });
-

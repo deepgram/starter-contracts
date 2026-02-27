@@ -1,92 +1,16 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "TurnInfoEvent",
-  "description": "Flux turn-based transcription result for starter applications",
+  "title": "FluxProxyResponse",
+  "description": "Flux WebSocket proxy passes through responses from the Deepgram API. The response shape depends on the Deepgram API version and features used. This schema documents the minimum expected structure.",
   "type": "object",
   "required": [
-    "type",
-    "request_id",
-    "sequence_id",
-    "event",
-    "turn_index",
-    "audio_window_start",
-    "audio_window_end",
-    "transcript",
-    "words",
-    "end_of_turn_confidence"
+    "type"
   ],
-  "additionalProperties": false,
   "properties": {
     "type": {
       "type": "string",
-      "enum": [
-        "TurnInfo"
-      ],
-      "description": "Message type identifier"
-    },
-    "request_id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "Unique request identifier"
-    },
-    "sequence_id": {
-      "type": "number",
-      "description": "Sequence number incremented for each message"
-    },
-    "event": {
-      "type": "string",
-      "enum": [
-        "Update",
-        "StartOfTurn",
-        "EndOfTurn"
-      ],
-      "description": "Type of turn event (StartOfTurn, EndOfTurn)"
-    },
-    "turn_index": {
-      "type": "number",
-      "description": "Index of the current turn"
-    },
-    "audio_window_start": {
-      "type": "number",
-      "description": "Start time in seconds"
-    },
-    "audio_window_end": {
-      "type": "number",
-      "description": "End time in seconds"
-    },
-    "transcript": {
-      "type": "string",
-      "description": "Transcribed text for the current turn"
-    },
-    "words": {
-      "type": "array",
-      "description": "Word-level information with confidence scores",
-      "items": {
-        "type": "object",
-        "required": [
-          "word",
-          "confidence"
-        ],
-        "additionalProperties": false,
-        "properties": {
-          "word": {
-            "type": "string",
-            "description": "Individual word from transcript"
-          },
-          "confidence": {
-            "type": "number",
-            "minimum": 0,
-            "maximum": 1,
-            "description": "Confidence score (0-1)"
-          }
-        }
-      }
-    },
-    "end_of_turn_confidence": {
-      "type": "number",
-      "minimum": 0,
-      "maximum": 1,
-      "description": "Confidence that no more speech is coming in this turn (0-1)"
+      "description": "Message type identifier from Deepgram API"
     }
-  }
+  },
+  "additionalProperties": true
 }

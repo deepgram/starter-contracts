@@ -1,10 +1,10 @@
 asyncapi: 3.0.0
 info:
   title: Flux Interface Contract
-  version: 1.0.0
+  version: 2.0.0
   description: |
-    Minimal conversational speech recognition scaffolding for Deepgram starter applications.
-    Stream live audio from URLs, get real-time turn-based transcripts via WebSocket using Flux.
+    Minimal Flux WebSocket proxy scaffolding for Deepgram starter applications.
+    Send binary audio data, get real-time transcripts via WebSocket.
   contact:
     email: devrel@deepgram.com
     url: https://community.deepgram.com
@@ -34,102 +34,20 @@ components:
       security:
         - $ref: "#/components/securitySchemes/ApiKeyAuth"
   schemas:
-    StreamUrl:
-      type: string
-      format: uri
-      description: URL of live audio stream to transcribe
-      examples:
-        - http://stream.live.vc.bbcmedia.co.uk/bbc_world_service
     Model:
       type: string
-      description: Flux model to use for conversational transcription
-      default: flux-general-en
-      enum:
-        - flux-general-en
+      description: Deepgram model to use
+      default: nova-3
       examples:
-        - flux-general-en
-    ConnectedEvent:
-      type: object
-      description: Connection established event
-      required:
-        - type
-        - request_id
-        - sequence_id
-      properties:
-        type:
-          type: string
-          enum: [Connected]
-          description: Message type identifier
-        request_id:
-          type: string
-          format: uuid
-          description: Unique request identifier
-        sequence_id:
-          type: number
-          description: Sequence number starting at 0
-    TurnInfoEvent:
-      type: object
-      description: Turn-based transcription information with end-of-turn detection
-      required:
-        - type
-        - request_id
-        - sequence_id
-        - event
-        - turn_index
-        - audio_window_start
-        - audio_window_end
-        - transcript
-        - words
-        - end_of_turn_confidence
-      properties:
-        type:
-          type: string
-          enum: [TurnInfo]
-          description: Message type identifier
-        request_id:
-          type: string
-          format: uuid
-          description: Unique request identifier
-        sequence_id:
-          type: number
-          description: Sequence number incremented for each message
-        event:
-          type: string
-          enum:
-            - Update
-            - StartOfTurn
-            - EndOfTurn
-          description: Type of turn event (Update, StartOfTurn, EndOfTurn)
-        turn_index:
-          type: number
-          description: Index of the current turn
-        audio_window_start:
-          type: number
-          description: Start time in seconds
-        audio_window_end:
-          type: number
-          description: End time in seconds
-        transcript:
-          type: string
-          description: Transcribed text for the turn
-        words:
-          type: array
-          description: Word-level information
-          items:
-            type: object
-            required:
-              - word
-              - confidence
-            properties:
-              word:
-                type: string
-                description: Individual word from transcript
-              confidence:
-                type: number
-                description: Confidence score (0-1)
-        end_of_turn_confidence:
-          type: number
-          description: Confidence that no more speech is coming (0-1)
+        - nova-3
+    Language:
+      type: string
+      description: BCP-47 language tag
+      default: en
+      examples:
+        - en
+        - es
+        - fr
     ErrorEvent:
       type: object
       description: Error event
@@ -154,9 +72,6 @@ components:
             code:
               type: string
               enum:
-                - INVALID_STREAM_URL
-                - STREAM_UNREACHABLE
-                - MODEL_NOT_FOUND
                 - CONNECTION_FAILED
                 - AUDIO_FORMAT_ERROR
               description: Machine-readable error code
@@ -170,30 +85,33 @@ components:
     AudioData:
       type: string
       format: binary
-      description: Containerized audio data from live stream
+      description: Binary audio data (any format supported by Deepgram)
       contentType: application/octet-stream
+    ControlMessage:
+      type: object
+      description: "Control messages for managing the Flux WebSocket connection"
+      required:
+        - type
+      properties:
+        type:
+          type: string
+          enum:
+            - KeepAlive
+            - Finalize
+            - CloseStream
+          description: |
+            Control message type:
+            - KeepAlive: Keep the WebSocket connection open
+            - Finalize: Finalize and flush any remaining audio in the buffer
+            - CloseStream: Request graceful closure of the stream
   messages:
     AudioDataMessage:
       name: AudioDataMessage
       title: Audio Data
-      description: Containerized audio chunks from live stream
+      description: Binary audio chunks sent from client to server
       contentType: application/octet-stream
       payload:
         $ref: "#/components/schemas/AudioData"
-    ConnectedEventMessage:
-      name: ConnectedEventMessage
-      title: Connected Event
-      description: Connection established confirmation
-      contentType: application/json
-      payload:
-        $ref: "#/components/schemas/ConnectedEvent"
-    TurnInfoEventMessage:
-      name: TurnInfoEventMessage
-      title: Turn Info Event
-      description: Real-time turn-based transcription with end-of-turn detection
-      contentType: application/json
-      payload:
-        $ref: "#/components/schemas/TurnInfoEvent"
     ErrorEventMessage:
       name: ErrorEventMessage
       title: Error Event
@@ -201,64 +119,57 @@ components:
       contentType: application/json
       payload:
         $ref: "#/components/schemas/ErrorEvent"
+    ControlMessage:
+      name: ControlMessage
+      title: Control Message
+      description: Control messages for managing the Flux WebSocket connection
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/ControlMessage"
 channels:
   FluxStream:
-    address: /flux/stream
-    description: Conversational speech recognition with turn detection via WebSocket
+    address: /api/flux
+    description: Flux WebSocket proxy — forwards audio to Deepgram API, returns transcription results
     bindings:
       ws:
         query:
           type: object
-          required:
-            - stream_url
-            - model
           properties:
-            stream_url:
-              $ref: "#/components/schemas/StreamUrl"
             model:
               $ref: "#/components/schemas/Model"
+            language:
+              $ref: "#/components/schemas/Language"
     messages:
       AudioData:
         $ref: "#/components/messages/AudioDataMessage"
-      ConnectedEvent:
-        $ref: "#/components/messages/ConnectedEventMessage"
-      TurnInfoEvent:
-        $ref: "#/components/messages/TurnInfoEventMessage"
       ErrorEvent:
         $ref: "#/components/messages/ErrorEventMessage"
+      Control:
+        $ref: "#/components/messages/ControlMessage"
 operations:
   ConnectToStream:
     action: send
     channel:
       $ref: "#/channels/FluxStream"
-    description: Connect to Flux stream with audio URL
+    description: Connect to Flux proxy and send binary audio data
     traits:
       - $ref: "#/components/operationTraits/AuthTrait"
     messages:
       - $ref: "#/channels/FluxStream/messages/AudioData"
-  ReceiveConnected:
-    action: receive
+  SendControl:
+    action: send
     channel:
       $ref: "#/channels/FluxStream"
-    description: Receive connection confirmation
+    description: "Send control messages (KeepAlive, Finalize, CloseStream) to manage the WebSocket connection"
     traits:
       - $ref: "#/components/operationTraits/AuthTrait"
     messages:
-      - $ref: "#/channels/FluxStream/messages/ConnectedEvent"
-  ReceiveTurnInfo:
-    action: receive
-    channel:
-      $ref: "#/channels/FluxStream"
-    description: Receive real-time turn-based transcription updates
-    traits:
-      - $ref: "#/components/operationTraits/AuthTrait"
-    messages:
-      - $ref: "#/channels/FluxStream/messages/TurnInfoEvent"
+      - $ref: "#/channels/FluxStream/messages/Control"
   ReceiveError:
     action: receive
     channel:
       $ref: "#/channels/FluxStream"
-    description: Receive error events from the Flux stream
+    description: Receive error events from the Flux proxy
     traits:
       - $ref: "#/components/operationTraits/AuthTrait"
     messages:
