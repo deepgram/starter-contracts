@@ -18,8 +18,8 @@ importers:
         specifier: 3.2.4
         version: 3.2.4
       ws:
-        specifier: 8.18.0
-        version: 8.18.0
+        specifier: 8.21.0
+        version: 8.21.0
 
 packages:
 
@@ -568,8 +568,8 @@ packages:
     engines: {node: '>=8'}
     hasBin: true
 
-  ws@8.18.0:
-    resolution: {integrity: sha512-8VbfWfHLbbwu3+N6OKsOMpBdT4kXPDDB9cJk2bJ6mh9ucxdlnNvH1e+roYkKmN9Nxw2yjz7VzeO9oOz2zJ04Pw==}
+  ws@8.21.0:
+    resolution: {integrity: sha512-Vsp28b7DRcimFQvrqu2Wek3z1iYxDCWqHYB8Qsnk/S4RfaCQzPGPyBNuVjJV3cd6UiKtUtp6sNM77gWvzcCH+g==}
     engines: {node: '>=10.0.0'}
     peerDependencies:
       bufferutil: ^4.0.1
@@ -1017,4 +1017,4 @@ snapshots:
       siginfo: 2.0.0
       stackback: 0.0.2
 
-  ws@8.18.0: {}
+  ws@8.21.0: {}
