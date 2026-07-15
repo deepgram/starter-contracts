@@ -12,6 +12,7 @@
     "test:live-transcription": "vitest run interfaces/live-transcription/conformance/stream.spec.js",
     "test:live-text-to-speech": "vitest run interfaces/live-text-to-speech/conformance/synthesize.spec.js",
     "test:flux": "vitest run interfaces/flux/conformance/stream.spec.js",
+    "test:flux-tts": "vitest run tests/flux-tts/api/",
     "test:voice-agent": "vitest run interfaces/voice-agent/conformance/converse.spec.js",
     "test:session": "vitest run interfaces/shared/conformance/session.spec.js",
     "test:node": "./tests/run-node-app.sh",
@@ -24,6 +25,7 @@
     "run:live-text-to-speech": "./tests/run-live-text-to-speech-app.sh",
     "run:text-intelligence": "./tests/run-text-intelligence-app.sh",
     "run:flux": "./tests/run-flux-app.sh",
+    "run:flux-tts": "./tests/run-flux-tts-app.sh",
     "run:voice-agent": "./tests/run-voice-agent-app.sh"
   },
   "keywords": [],
