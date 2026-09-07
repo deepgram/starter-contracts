@@ -167,6 +167,7 @@ components:
                 - MODEL_NOT_FOUND
                 - CONNECTION_FAILED
                 - AUDIO_FORMAT_ERROR
+                - INVALID_CLIENT_MESSAGE
               description: Machine-readable error code
             message:
               type: string
