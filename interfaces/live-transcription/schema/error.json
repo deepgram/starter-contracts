@@ -4,10 +4,16 @@
   "description": "Live STT error response for starter applications",
   "type": "object",
   "required": [
+    "type",
     "error"
   ],
   "additionalProperties": false,
   "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["Error"],
+      "description": "Message type identifier"
+    },
     "error": {
       "type": "object",
       "required": [
@@ -29,7 +35,8 @@
             "STREAM_UNREACHABLE",
             "MODEL_NOT_FOUND",
             "CONNECTION_FAILED",
-            "AUDIO_FORMAT_ERROR"
+            "AUDIO_FORMAT_ERROR",
+            "INVALID_CLIENT_MESSAGE"
           ]
         },
         "message": {
